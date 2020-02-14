@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
+	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -21,13 +23,15 @@ func (c *JobCreate) Register() {
 
 // Command business logic
 func (c *JobCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+	var _, filename, _, _ = runtime.Caller(0)
+
 	splitName := strings.Split(strings.ToLower(args), "_")
 	for i, name := range splitName {
 		splitName[i] = strings.Title(name)
 	}
 
 	cName := strings.Join(splitName, "")
-	input, _ := ioutil.ReadFile(filepath.Join("../../raw/job.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/job.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("job"), strings.ToLower(args))

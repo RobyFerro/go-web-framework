@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
+	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -19,6 +21,7 @@ func (c *CmdCreate) Register() {
 }
 
 func (c *CmdCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+	var _, filename, _, _ = runtime.Caller(0)
 
 	splitName := strings.Split(strings.ToLower(args), "_")
 	for i, name := range splitName {
@@ -26,7 +29,7 @@ func (c *CmdCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]
 	}
 
 	cName := strings.Join(splitName, "")
-	input, _ := ioutil.ReadFile(filepath.Join("../../raw/command.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/command.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("app/console/command"), strings.ToLower(args))

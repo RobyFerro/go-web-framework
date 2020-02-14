@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
+	"runtime"
 	"syscall"
 )
 
@@ -23,7 +25,8 @@ func (c *Install) Register() {
 
 // Command business logic
 func (c *Install) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-	if err := Dir(gwf.GetDynamicPath("/"), args); err != nil {
+	var _, filename, _, _ = runtime.Caller(0)
+	if err := Dir(filepath.Join(path.Dir(filename), "../../"), args); err != nil {
 		gwf.ProcessError(err)
 	}
 }
