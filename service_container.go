@@ -73,5 +73,11 @@ func BuildContainer(controllers []interface{}, middleware interface{}) *dig.Cont
 		ProcessError(err)
 	}
 
+	setContainer(container)
+
 	return container
+}
+
+func setContainer(c *dig.Container) {
+	Container = c
 }
