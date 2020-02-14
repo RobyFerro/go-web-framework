@@ -8,11 +8,14 @@ import (
 // Here is where service container is built.
 // As you can see the service container is provided by Uber DIG library.
 // Se its documentation (https://godoc.org/go.uber.org/dig) to implement extra services.
-func BuildContainer() *dig.Container {
+func BuildContainer(controllers []interface{}, middleware interface{}) *dig.Container {
 	container := dig.New()
 
+	Controllers = controllers
+	Middleware = middleware
+
 	err := container.Provide(func() *mux.Router {
-		router, err := WebRouter(Controllers, Middleware)
+		router, err := WebRouter()
 		if err != nil {
 			ProcessError(err)
 		}

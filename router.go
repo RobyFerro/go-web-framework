@@ -32,12 +32,9 @@ type Router struct {
 
 // Parse routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
-func WebRouter(controllers []interface{}, middleware interface{}) (*mux.Router, error) {
+func WebRouter() (*mux.Router, error) {
 	var wg sync.WaitGroup
 	wg.Add(3)
-
-	Controllers = controllers
-	Middleware = middleware
 
 	routes, err := ConfigurationWeb()
 	if err != nil {
