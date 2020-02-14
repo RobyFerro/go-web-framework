@@ -1,4 +1,4 @@
-package go_web_framework
+package gwf
 
 import (
 	"github.com/elastic/go-elasticsearch/v8"

@@ -1,4 +1,4 @@
-package go_web_framework
+package gwf
 
 import (
 	"github.com/RobyFerro/go-web/app/http/controller"
