@@ -1,7 +1,6 @@
 package gwf
 
 import (
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/gorilla/mux"
 	"go.uber.org/dig"
 )
@@ -28,7 +27,7 @@ func BuildContainer(router *mux.Router) *dig.Container {
 		ProcessError(err)
 	}
 
-	err = container.Invoke(func(conf gwf.Conf) {
+	err = container.Invoke(func(conf *Conf) {
 		if len(conf.Redis.Host) > 0 {
 			if err := container.Provide(ConnectRedis); err != nil {
 				ProcessError(err)
