@@ -51,6 +51,6 @@ func GetHttpServer(router *mux.Router, cfg *Conf) *http.Server {
 }
 
 // Create session CookieStore
-func CreateSessionStore(cfg Conf) *sessions.CookieStore {
+func CreateSessionStore(cfg *Conf) *sessions.CookieStore {
 	return sessions.NewCookieStore([]byte(os.Getenv(cfg.App.Key)))
 }

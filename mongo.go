@@ -9,7 +9,7 @@ import (
 )
 
 // Connect to MongoDB
-func ConnectMongo(conf Conf) *mongo.Database {
+func ConnectMongo(conf *Conf) *mongo.Database {
 	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%d", conf.Mongo.Host, conf.Mongo.Port)))
 
 	if err != nil {

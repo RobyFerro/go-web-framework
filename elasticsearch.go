@@ -4,7 +4,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
-func ConnectElastic(conf Conf) *elasticsearch.Client {
+func ConnectElastic(conf *Conf) *elasticsearch.Client {
 	cfg := elasticsearch.Config{
 		Addresses: conf.Elastic.Hosts,
 	}

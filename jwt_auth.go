@@ -20,8 +20,8 @@ type Auth struct {
 }
 
 // Prepare Auth structure for Service Container
-func SetAuth(conf Conf) *Auth {
-	return &Auth{Conf: conf}
+func SetAuth(conf *Conf) *Auth {
+	return &Auth{Conf: *conf}
 }
 
 // Get user struct from authentication token (JWT)
