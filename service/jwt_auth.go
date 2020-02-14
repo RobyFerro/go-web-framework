@@ -10,10 +10,11 @@ import (
 
 type Auth struct {
 	User struct {
-		Name     string `gorm:"type:varchar(255)"`
-		Surname  string `gorm:"type:varchar(255)"`
-		Username string `gorm:"type:varchar(255)"`
-		Password string `gorm:"type:varchar(255)"`
+		ID       uint
+		Name     string
+		Surname  string
+		Username string
+		Password string
 	} `json:"user"`
 	Token string
 	Conf  config.Conf
