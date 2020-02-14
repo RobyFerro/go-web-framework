@@ -23,5 +23,3 @@ type BaseController struct {
 	Elastic  *elasticsearch.Client // Provide access to ElasticSearch instance
 	Session  *sessions.CookieStore // Provide access to the CookieStore
 }
-
-var Controllers []interface{}

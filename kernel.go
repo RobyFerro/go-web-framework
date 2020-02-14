@@ -21,45 +21,14 @@ var (
 	// Get app configuration
 	BaseConfig, _ = Configuration()
 	// Register service container
-	Container *dig.Container
+	Container   *dig.Container
+	Controllers []interface{}
+	Middleware  interface{}
 )
 
 type HttpKernel struct {
 	Models    []interface{}
 	Container *dig.Container
-}
-
-// Parse routing structures and set every route.
-// Return a Gorilla Mux router instance with all routes indicated in router.yml file.
-func WebRouter() (*mux.Router, error) {
-	var wg sync.WaitGroup
-	wg.Add(3)
-
-	routes, err := ConfigurationWeb()
-	if err != nil {
-		return nil, err
-	}
-
-	router := mux.NewRouter()
-
-	go func() {
-		handleSingleRoute(routes.Routes, router)
-		wg.Done()
-	}()
-
-	go func() {
-		handleGroups(routes.Groups, router)
-		wg.Done()
-	}()
-
-	go func() {
-		giveAccessToPublicFolder(router)
-		wg.Done()
-	}()
-
-	wg.Wait()
-
-	return router, nil
 }
 
 // Handle single path parsing.
@@ -80,7 +49,7 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 					method.Call([]reflect.Value{})
 				}).Methods(r.Method)
 
-				subRouter.Use(parseMiddleware(r.Middleware)...)
+				subRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
 				router.Handle(r.Path, subRouter)
 			} else {
 				router.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
@@ -116,7 +85,7 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 						method.Call([]reflect.Value{})
 					}).Methods(r.Method)
 
-					nestedRouter.Use(parseMiddleware(r.Middleware)...)
+					nestedRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
 					subRouter.Handle(r.Path, nestedRouter)
 				} else {
 					subRouter.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
@@ -132,17 +101,17 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 
 		wg.Wait()
 
-		subRouter.Use(parseMiddleware(group.Middleware)...)
+		subRouter.Use(parseMiddleware(group.Middleware, Middleware)...)
 	}
 }
 
 // Parse list of middleware and get an array of []mux.Middleware func
 // Required by Gorilla Mux
-func parseMiddleware(mwList []string) []mux.MiddlewareFunc {
+func parseMiddleware(mwList []string, middleware interface{}) []mux.MiddlewareFunc {
 	var midFunc []mux.MiddlewareFunc
 
 	for _, mw := range mwList {
-		m := reflect.ValueOf(Middleware{})
+		m := reflect.ValueOf(middleware)
 		method := m.MethodByName(mw)
 
 		callable := method.Interface().(func(handler http.Handler) http.Handler)

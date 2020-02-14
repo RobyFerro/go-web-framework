@@ -1,8 +1,10 @@
 package gwf
 
 import (
+	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v2"
 	"os"
+	"sync"
 )
 
 // Structure used to decode all route presents into routing.yml file.
@@ -26,6 +28,42 @@ type Group struct {
 type Router struct {
 	Routes map[string]Route `yaml:"routes"`
 	Groups map[string]Group `yaml:"groups"`
+}
+
+// Parse routing structures and set every route.
+// Return a Gorilla Mux router instance with all routes indicated in router.yml file.
+func WebRouter(controllers []interface{}, middleware interface{}) (*mux.Router, error) {
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	Controllers = controllers
+	Middleware = middleware
+
+	routes, err := ConfigurationWeb()
+	if err != nil {
+		return nil, err
+	}
+
+	router := mux.NewRouter()
+
+	go func() {
+		handleSingleRoute(routes.Routes, router)
+		wg.Done()
+	}()
+
+	go func() {
+		handleGroups(routes.Groups, router)
+		wg.Done()
+	}()
+
+	go func() {
+		giveAccessToPublicFolder(router)
+		wg.Done()
+	}()
+
+	wg.Wait()
+
+	return router, nil
 }
 
 // Parse router.yml file (present in Go-Web root dir) and return a Router structure.
