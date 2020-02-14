@@ -2,7 +2,6 @@ package console
 
 import (
 	"github.com/RobyFerro/go-web-framework/console/command"
-	command2 "github.com/RobyFerro/go-web/app/console/command"
 )
 
 // Register all commands here.
@@ -14,8 +13,6 @@ var (
 		"migration:up":       &command.MigrationUp{},
 		"migration:create":   &command.MigrationCreate{},
 		"migration:rollback": &command.MigrateRollback{},
-		"queue:failed":       &command2.QueueFailed{},
-		"queue:run":          &command2.QueueRun{},
 		"database:seed":      &command.Seeder{},
 		"server:daemon":      &command.ServerDaemon{},
 		"server:run":         &command.ServerRun{},
