@@ -2,6 +2,7 @@ package gwf
 
 import (
 	"github.com/gorilla/mux"
+	"go.uber.org/dig"
 	"gopkg.in/yaml.v2"
 	"os"
 	"sync"
@@ -32,12 +33,13 @@ type Router struct {
 
 // Parse routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
-func WebRouter(controllers []interface{}, middleware interface{}) (*mux.Router, error) {
+func WebRouter(controllers []interface{}, middleware interface{}, sc *dig.Container) (*mux.Router, error) {
 	var wg sync.WaitGroup
 	wg.Add(3)
 
 	Controllers = controllers
 	Middleware = middleware
+	Container = sc
 
 	routes, err := ConfigurationWeb()
 	if err != nil {
