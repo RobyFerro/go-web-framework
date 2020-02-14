@@ -3,7 +3,7 @@ package service
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/RobyFerro/go-web/app/config"
+	"github.com/RobyFerro/go-web-framework/config"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"net/http"
