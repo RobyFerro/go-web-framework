@@ -1,7 +1,6 @@
 package gwf
 
 import (
-	"github.com/RobyFerro/go-web/app/http/controller"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/go-redis/redis/v7"
 	"github.com/gorilla/sessions"
@@ -25,9 +24,4 @@ type BaseController struct {
 	Session  *sessions.CookieStore // Provide access to the CookieStore
 }
 
-var Controllers = []interface{}{
-	&controller.UserController{},
-	&controller.AuthController{},
-	&controller.HomeController{},
-	// Here is where you've to register your custom controller
-}
+var Controllers []interface{}
