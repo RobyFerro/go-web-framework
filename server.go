@@ -19,8 +19,8 @@ func StartServer(sc *dig.Container) error {
 	ServiceContainer = sc
 	var serveError error
 
-	if err := sc.Invoke(func(s *http.Server, conf Conf) {
-		appConf = conf
+	if err := sc.Invoke(func(s *http.Server, conf *Conf) {
+		appConf = *conf
 		webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
 
 		if err := changeRunningUser(); err != nil {
