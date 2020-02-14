@@ -3,7 +3,6 @@ module github.com/RobyFerro/go-web-framework
 go 1.13
 
 require (
-	github.com/RobyFerro/go-web v0.1.0-alpha
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20200210103600-aff00e5adfde
 	github.com/getsentry/sentry-go v0.4.0
@@ -13,6 +12,5 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	go.mongodb.org/mongo-driver v1.3.0
 	go.uber.org/dig v1.8.0
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	gopkg.in/yaml.v2 v2.2.8
 )
