@@ -1,7 +1,6 @@
 package gwf
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -16,14 +15,8 @@ var (
 // The basic path is Go-Web main folder.
 // Example: GetDynamicPath("storage/certs/tls.key")
 func GetDynamicPath(path string) string {
-	//return filepath.Join(filepath.Join(bPath, "../../"), path)
-
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return filepath.Join(dir, path)
+	test := os.Getenv("base_path")
+	return filepath.Join(test, path)
 }
 
 // Return the basic project path.
