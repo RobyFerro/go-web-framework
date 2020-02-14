@@ -12,6 +12,11 @@ func BuildContainer(router *mux.Router) *dig.Container {
 	container := dig.New()
 
 	err := container.Provide(func() *mux.Router {
+		router, err := WebRouter(Controllers, Middleware)
+		if err != nil {
+			ProcessError(err)
+		}
+
 		return router
 	})
 
