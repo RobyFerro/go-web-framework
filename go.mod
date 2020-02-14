@@ -11,8 +11,9 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	github.com/jinzhu/gorm v1.9.12
+	github.com/olekukonko/tablewriter v0.0.4
+	github.com/sevlyar/go-daemon v0.1.5
 	go.mongodb.org/mongo-driver v1.3.0
 	go.uber.org/dig v1.8.0
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	gopkg.in/yaml.v2 v2.2.8
 )
