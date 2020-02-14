@@ -16,7 +16,7 @@ type BaseController struct {
 	DB       *gorm.DB              // Provide access to MySql instance
 	Response http.ResponseWriter   // HTTP response
 	Request  *http.Request         // HTTP request
-	Config   Conf                  // Go-Web configuration
+	Config   *Conf                 // Go-Web configuration
 	Auth     *Auth                 // Authentication/Authorization method
 	Redis    *redis.Client         // Provide access to Redis instance
 	Mongo    *mongo.Database       // Provide access to MongoDB instance

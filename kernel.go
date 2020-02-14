@@ -164,7 +164,7 @@ func registerBaseController(res http.ResponseWriter, req *http.Request, controll
 // Here you can implement the BaseController content.
 // Remember to update even the structure (app/http/controller/controller.go)
 func setBaseController(res http.ResponseWriter, req *http.Request) error {
-	if err := Container.Invoke(func(db *gorm.DB, c Conf, a *Auth, s *sessions.CookieStore) {
+	if err := Container.Invoke(func(db *gorm.DB, c *Conf, a *Auth, s *sessions.CookieStore) {
 		BC = BaseController{
 			DB:       db,
 			Response: res,
