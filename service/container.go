@@ -1,10 +1,9 @@
 package service
 
 import (
-	"github.com/RobyFerro/go-web/app"
-	"github.com/RobyFerro/go-web/app/config"
-	"github.com/RobyFerro/go-web/database"
-	"github.com/RobyFerro/go-web/exception"
+	"github.com/RobyFerro/go-web-framework/config"
+	"github.com/RobyFerro/go-web-framework/database"
+	"github.com/RobyFerro/go-web-framework/exception"
 	"github.com/gorilla/mux"
 	"go.uber.org/dig"
 )
@@ -33,7 +32,7 @@ func BuildContainer(router *mux.Router) *dig.Container {
 
 	err = container.Invoke(func(conf config.Conf) {
 		if len(conf.Redis.Host) > 0 {
-			if err := container.Provide(app.ConnectRedis); err != nil {
+			if err := container.Provide(ConnectRedis); err != nil {
 				exception.ProcessError(err)
 			}
 		}
@@ -45,13 +44,13 @@ func BuildContainer(router *mux.Router) *dig.Container {
 		}
 
 		if len(conf.Mongo.Host) > 0 {
-			if err := container.Provide(app.ConnectMongo); err != nil {
+			if err := container.Provide(ConnectMongo); err != nil {
 				exception.ProcessError(err)
 			}
 		}
 
 		if len(conf.Elastic.Hosts) > 0 {
-			if err := container.Provide(app.ConnectElastic); err != nil {
+			if err := container.Provide(ConnectElastic); err != nil {
 				exception.ProcessError(err)
 			}
 		}

@@ -6,6 +6,7 @@ require (
 	github.com/RobyFerro/go-web v0.1.0-alpha
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20200210103600-aff00e5adfde
+	github.com/getsentry/sentry-go v0.4.0
 	github.com/go-redis/redis/v7 v7.0.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
