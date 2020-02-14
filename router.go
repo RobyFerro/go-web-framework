@@ -1,4 +1,4 @@
-package config
+package go_web_framework
 
 import (
 	"gopkg.in/yaml.v2"

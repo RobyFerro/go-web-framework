@@ -1,8 +1,6 @@
-package controller
+package go_web_framework
 
 import (
-	"github.com/RobyFerro/go-web-framework/config"
-	"github.com/RobyFerro/go-web-framework/service"
 	"github.com/RobyFerro/go-web/app/http/controller"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/go-redis/redis/v7"
@@ -19,8 +17,8 @@ type BaseController struct {
 	DB       *gorm.DB              // Provide access to MySql instance
 	Response http.ResponseWriter   // HTTP response
 	Request  *http.Request         // HTTP request
-	Config   config.Conf           // Go-Web configuration
-	Auth     *service.Auth         // Authentication/Authorization method
+	Config   Conf                  // Go-Web configuration
+	Auth     *Auth                 // Authentication/Authorization method
 	Redis    *redis.Client         // Provide access to Redis instance
 	Mongo    *mongo.Database       // Provide access to MongoDB instance
 	Elastic  *elasticsearch.Client // Provide access to ElasticSearch instance

@@ -1,4 +1,4 @@
-package config
+package go_web_framework
 
 import (
 	"path/filepath"

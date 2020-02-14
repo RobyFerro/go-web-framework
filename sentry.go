@@ -1,4 +1,4 @@
-package exception
+package go_web_framework
 
 import (
 	"github.com/getsentry/sentry-go"

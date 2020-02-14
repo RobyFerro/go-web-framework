@@ -1,7 +1,6 @@
-package http
+package go_web_framework
 
 import (
-	"github.com/RobyFerro/go-web-framework/config"
 	"go.uber.org/dig"
 	"log"
 	"net"
@@ -13,14 +12,14 @@ import (
 )
 
 var ServiceContainer *dig.Container
-var appConf config.Conf
+var appConf Conf
 
 // Start HTTP server
 func StartServer(sc *dig.Container) error {
 	ServiceContainer = sc
 	var serveError error
 
-	if err := sc.Invoke(func(s *http.Server, conf config.Conf) {
+	if err := sc.Invoke(func(s *http.Server, conf Conf) {
 		appConf = conf
 		webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
 

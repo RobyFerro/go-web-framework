@@ -1,8 +1,7 @@
-package service
+package go_web_framework
 
 import (
 	"encoding/json"
-	"github.com/RobyFerro/go-web-framework/config"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
@@ -17,11 +16,11 @@ type Auth struct {
 		Password string
 	} `json:"user"`
 	Token string
-	Conf  config.Conf
+	Conf  Conf
 }
 
 // Prepare Auth structure for Service Container
-func SetAuth(conf config.Conf) *Auth {
+func SetAuth(conf Conf) *Auth {
 	return &Auth{Conf: conf}
 }
 

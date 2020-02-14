@@ -1,9 +1,8 @@
-package service
+package go_web_framework
 
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/config"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"net/http"
@@ -11,7 +10,7 @@ import (
 )
 
 // Prepare HTTP server for Service Container
-func GetHttpServer(router *mux.Router, cfg config.Conf) *http.Server {
+func GetHttpServer(router *mux.Router, cfg Conf) *http.Server {
 	serverString := fmt.Sprintf("%s:%d", cfg.Server.Name, cfg.Server.Port)
 
 	var httpServerConf = http.Server{}
@@ -52,6 +51,6 @@ func GetHttpServer(router *mux.Router, cfg config.Conf) *http.Server {
 }
 
 // Create session CookieStore
-func CreateSessionStore(cfg config.Conf) *sessions.CookieStore {
+func CreateSessionStore(cfg Conf) *sessions.CookieStore {
 	return sessions.NewCookieStore([]byte(os.Getenv(cfg.App.Key)))
 }

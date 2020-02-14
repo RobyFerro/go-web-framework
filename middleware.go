@@ -1,4 +1,4 @@
-package middleware
+package go_web_framework
 
 import "net/http"
 
@@ -6,4 +6,3 @@ import "net/http"
 type Middleware struct {
 	Handler http.Handler
 }
-
