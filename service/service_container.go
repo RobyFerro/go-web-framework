@@ -38,9 +38,5 @@ var Services = []interface{}{
 	gwf.CreateSessionStore,
 	gwf.GetHttpServer,
 	gwf.SetAuth,
-	gwf.ConnectRedis,
-	gwf.ConnectDB,
-	gwf.ConnectMongo,
-	gwf.ConnectElastic,
 	gwf.WebRouter,
 }
