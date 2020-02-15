@@ -32,13 +32,13 @@ type Router struct {
 
 // Parse routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
-func WebRouter() (*mux.Router, error) {
+func WebRouter() *mux.Router {
 	var wg sync.WaitGroup
 	wg.Add(3)
 
 	routes, err := ConfigurationWeb()
 	if err != nil {
-		return nil, err
+		ProcessError(err)
 	}
 
 	router := mux.NewRouter()
@@ -60,7 +60,7 @@ func WebRouter() (*mux.Router, error) {
 
 	wg.Wait()
 
-	return router, nil
+	return router
 }
 
 // Parse router.yml file (present in Go-Web root dir) and return a Router structure.

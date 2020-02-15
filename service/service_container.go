@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/RobyFerro/go-web-framework"
-	"github.com/gorilla/mux"
 	"go.uber.org/dig"
 )
 
@@ -15,70 +14,25 @@ func BuildContainer(controllers []interface{}, middleware interface{}) *dig.Cont
 	gwf.Controllers = controllers
 	gwf.Middleware = middleware
 
-	err := container.Provide(func() *mux.Router {
-		router, err := gwf.WebRouter()
-		if err != nil {
+	for _, s := range Services {
+		if err := container.Provide(s); err != nil {
 			gwf.ProcessError(err)
 		}
-
-		return router
-	})
-
-	if err != nil {
-		gwf.ProcessError(err)
 	}
 
-	if err := container.Provide(gwf.Configuration); err != nil {
-		gwf.ProcessError(err)
-	}
-
-	if err := container.Provide(gwf.CreateSessionStore); err != nil {
-		gwf.ProcessError(err)
-	}
-
-	err = container.Invoke(func(conf *gwf.Conf) {
-		if len(conf.Redis.Host) > 0 {
-			if err := container.Provide(gwf.ConnectRedis); err != nil {
-				gwf.ProcessError(err)
-			}
-		}
-
-		if len(conf.Database.Host) > 0 {
-			if err := container.Provide(gwf.ConnectDB); err != nil {
-				gwf.ProcessError(err)
-			}
-		}
-
-		if len(conf.Mongo.Host) > 0 {
-			if err := container.Provide(gwf.ConnectMongo); err != nil {
-				gwf.ProcessError(err)
-			}
-		}
-
-		if len(conf.Elastic.Hosts) > 0 {
-			if err := container.Provide(gwf.ConnectElastic); err != nil {
-				gwf.ProcessError(err)
-			}
-		}
-	})
-
-	if err != nil {
-		gwf.ProcessError(err)
-	}
-
-	if err := container.Provide(gwf.GetHttpServer); err != nil {
-		gwf.ProcessError(err)
-	}
-
-	if err := container.Provide(gwf.SetAuth); err != nil {
-		gwf.ProcessError(err)
-	}
-
-	setContainer(container)
+	gwf.Container = container
 
 	return container
 }
 
-func setContainer(c *dig.Container) {
-	gwf.Container = c
+var Services = []interface{}{
+	gwf.Configuration,
+	gwf.CreateSessionStore,
+	gwf.GetHttpServer,
+	gwf.SetAuth,
+	gwf.ConnectRedis,
+	gwf.ConnectDB,
+	gwf.ConnectMongo,
+	gwf.ConnectElastic,
+	gwf.WebRouter,
 }
