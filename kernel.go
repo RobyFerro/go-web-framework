@@ -2,12 +2,7 @@ package gwf
 
 import (
 	"fmt"
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
-	"github.com/jinzhu/gorm"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/dig"
 	"net/http"
 	"reflect"
@@ -19,7 +14,7 @@ var (
 	// Declaring base controller
 	BC BaseController
 	// Get app configuration
-	BaseConfig, _ = Configuration()
+	//BaseConfig, _ = Configuration()
 	// Register service container
 	Container   *dig.Container
 	Controllers []interface{}
@@ -150,9 +145,6 @@ func registerBaseController(res http.ResponseWriter, req *http.Request, controll
 	if err := setBaseController(res, req); err != nil {
 		ProcessError(err)
 	}
-	if err := checkControllerIntegrations(&BC); err != nil {
-		ProcessError(err)
-	}
 
 	c := reflect.ValueOf(*controller).Elem().FieldByName("BaseController")
 	c.Set(reflect.ValueOf(BC))
@@ -164,51 +156,10 @@ func registerBaseController(res http.ResponseWriter, req *http.Request, controll
 // Here you can implement the BaseController content.
 // Remember to update even the structure (app/http/controller/controller.go)
 func setBaseController(res http.ResponseWriter, req *http.Request) error {
-	if err := Container.Invoke(func(db *gorm.DB, c *Conf, a *Auth, s *sessions.CookieStore) {
-		BC = BaseController{
-			DB:       db,
-			Response: res,
-			Request:  req,
-			Config:   c,
-			Auth:     a,
-			Session:  s,
-		}
-	}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Check controller integrations
-// Es: Redis, Elastic, Mongo connections
-func checkControllerIntegrations(base *BaseController) error {
-
-	// If is configured MongoDB will be implemented into service container
-	if len(BaseConfig.Mongo.Host) > 0 {
-		if err := Container.Invoke(func(m *mongo.Database) {
-			base.Mongo = m
-		}); err != nil {
-			return err
-		}
-	}
-
-	// If is configured Redis will be implemented into service container
-	if len(BaseConfig.Redis.Host) > 0 {
-		if err := Container.Invoke(func(r *redis.Client) {
-			base.Redis = r
-		}); err != nil {
-			return err
-		}
-	}
-
-	// If is configured ElasticSearch will be implemented into service container
-	if len(BaseConfig.Elastic.Hosts) > 0 {
-		if err := Container.Invoke(func(e *elasticsearch.Client) {
-			base.Elastic = e
-		}); err != nil {
-			return err
-		}
+	BC = BaseController{
+		Response:  res,
+		Request:   req,
+		Container: Container,
 	}
 
 	return nil
