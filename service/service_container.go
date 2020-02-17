@@ -26,13 +26,14 @@ func BuildContainer(controllers []interface{}, middleware interface{}, services 
 	return container
 }
 
-// Bind custom services with defaults
+// Merge custom services with defaults
 func bindServices(services []interface{}) {
 	for _, s := range services {
 		Services = append(Services, s)
 	}
 }
 
+// Declare framework services.
 var Services = []interface{}{
 	gwf.Configuration,
 	gwf.CreateSessionStore,

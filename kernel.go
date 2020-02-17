@@ -41,7 +41,9 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 				subRouter.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
 					cc := GetControllerInterface(directive, writer, request)
 					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					method.Call([]reflect.Value{})
+					if err := Container.Invoke(method.Interface()); err != nil {
+						ProcessError(err)
+					}
 				}).Methods(r.Method)
 
 				subRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
@@ -50,7 +52,9 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 				router.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
 					cc := GetControllerInterface(directive, writer, request)
 					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					method.Call([]reflect.Value{})
+					if err := Container.Invoke(method.Interface()); err != nil {
+						ProcessError(err)
+					}
 				}).Methods(r.Method)
 			}
 
@@ -77,7 +81,9 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 					nestedRouter.HandleFunc(fullPath, func(writer http.ResponseWriter, request *http.Request) {
 						cc := GetControllerInterface(directive, writer, request)
 						method := reflect.ValueOf(cc).MethodByName(directive[1])
-						method.Call([]reflect.Value{})
+						if err := Container.Invoke(method.Interface()); err != nil {
+							ProcessError(err)
+						}
 					}).Methods(r.Method)
 
 					nestedRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
@@ -86,7 +92,9 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 					subRouter.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
 						cc := GetControllerInterface(directive, writer, request)
 						method := reflect.ValueOf(cc).MethodByName(directive[1])
-						method.Call([]reflect.Value{})
+						if err := Container.Invoke(method.Interface()); err != nil {
+							ProcessError(err)
+						}
 					}).Methods(r.Method)
 				}
 
@@ -157,9 +165,8 @@ func registerBaseController(res http.ResponseWriter, req *http.Request, controll
 // Remember to update even the structure (app/http/controller/controller.go)
 func setBaseController(res http.ResponseWriter, req *http.Request) error {
 	BC = BaseController{
-		Response:  res,
-		Request:   req,
-		Container: Container,
+		Response: res,
+		Request:  req,
 	}
 
 	return nil

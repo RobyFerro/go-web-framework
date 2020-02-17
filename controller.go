@@ -1,7 +1,6 @@
 package gwf
 
 import (
-	"go.uber.org/dig"
 	"net/http"
 )
 
@@ -9,7 +8,6 @@ import (
 // Adding something else inside this struct will not directly implement the struct. This because is just a part of the
 // controller construction. See the "setBaseController" method inside app/kernel/kernel.go
 type BaseController struct {
-	Response  http.ResponseWriter // HTTP response
-	Request   *http.Request       // HTTP request
-	Container *dig.Container      //Access to service container
+	Response http.ResponseWriter // HTTP response
+	Request  *http.Request       // HTTP request
 }
