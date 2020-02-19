@@ -5,9 +5,7 @@ import (
 	"go.uber.org/dig"
 )
 
-// Here is where service container is built.
-// As you can see the service container is provided by Uber DIG library.
-// Se its documentation (https://godoc.org/go.uber.org/dig) to implement extra services.
+// BuildContainer provide the golbal service container
 func BuildContainer(controllers []interface{}, middleware interface{}, services []interface{}) *dig.Container {
 	container := dig.New()
 	bindServices(services)
@@ -33,11 +31,10 @@ func bindServices(services []interface{}) {
 	}
 }
 
-// Declare framework services.
+// Services declares all framework services.
 var Services = []interface{}{
 	gwf.Configuration,
 	gwf.CreateSessionStore,
 	gwf.GetHttpServer,
-	gwf.SetAuth,
 	gwf.WebRouter,
 }

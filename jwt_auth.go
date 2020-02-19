@@ -2,11 +2,13 @@ package gwf
 
 import (
 	"encoding/json"
-	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
+// Auth structure will be used to handle the authenticated user data.
 type Auth struct {
 	User struct {
 		ID       uint
@@ -15,23 +17,17 @@ type Auth struct {
 		Username string
 		Password string
 	} `json:"user"`
-	Token string
-	Conf  Conf
+	Key   string
 }
 
-// Prepare Auth structure for Service Container
-func SetAuth(conf *Conf) *Auth {
-	return &Auth{Conf: *conf}
-}
-
-// Get user struct from authentication token (JWT)
+// GetUser will parse incoming request and returns the user data.
 func (c *Auth) GetUser(req *http.Request) error {
 	bearerSchema := "Bearer "
 	tokenString := req.Header.Get("Authorization")
 
 	claims := jwt.MapClaims{}
 	_, _ = jwt.ParseWithClaims(tokenString[len(bearerSchema):], claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(c.Conf.App.Key), nil
+		return []byte(c.Key), nil
 	})
 
 	for key, val := range claims {
@@ -48,8 +44,8 @@ func (c *Auth) GetUser(req *http.Request) error {
 	return nil
 }
 
-// Issue new JWT token
-func (c *Auth) NewToken() bool {
+// NewToken will return a new JWT token
+func (c *Auth) NewToken() (string, bool) {
 	c.User.Password = ""
 	userDataString, _ := json.Marshal(c.User)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -58,18 +54,17 @@ func (c *Auth) NewToken() bool {
 		"iat":  time.Now().Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(c.Conf.App.Key))
-	c.Token = tokenString
+	tokenString, err := token.SignedString([]byte(c.Key))
 
 	if err != nil {
-		return false
+		return "", false
 	}
 
-	return true
+	return tokenString, true
 }
 
-// Refresh JWT token
-func (c *Auth) RefreshToken() bool {
+// RefreshToken will grefresh the a speficic token
+func (c *Auth) RefreshToken(req *http.Request) bool {
 	expirationTime := time.Now().Add(5 * time.Minute)
 	userDataString, _ := json.Marshal(c.User)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -78,8 +73,8 @@ func (c *Auth) RefreshToken() bool {
 		"iat":  time.Now().Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(c.Conf.App.Key))
-	c.Token = tokenString
+	tokenString, err := token.SignedString([]byte(c.Key))
+	req.Header.Set("refresh-token", tokenString)
 
 	if err != nil {
 		return false
