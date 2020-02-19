@@ -2,25 +2,29 @@ package gwf
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
-	"go.uber.org/dig"
 	"net/http"
 	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/gorilla/mux"
+	"go.uber.org/dig"
 )
 
 var (
-	// Declaring base controller
+	// BC is used to declare base controller
 	BC BaseController
-	// Get app configuration
-	//BaseConfig, _ = Configuration()
-	// Register service container
-	Container   *dig.Container
+	// BaseConfig will store all application configuration
+	BaseConfig, _ = Configuration()
+	// Container will provide acces to the global Service Container
+	Container *dig.Container
+	// Controllers will handle every application controller
 	Controllers []interface{}
-	Middleware  interface{}
+	// Middleware will handle every application middleware
+	Middleware interface{}
 )
 
+// HttpKernel structure is used to handle model and SC
 type HttpKernel struct {
 	Models    []interface{}
 	Container *dig.Container
@@ -131,7 +135,7 @@ func giveAccessToPublicFolder(router *mux.Router) {
 	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(publicDirectory)))
 }
 
-// Returns a specific controller instance by comparing "directive" parameter with controller name.
+// GetControllerInterface  will returns a specific controller instance by comparing "directive" parameter with controller name.
 func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.Request) interface{} {
 	var result interface{}
 
