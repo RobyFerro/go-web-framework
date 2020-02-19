@@ -23,6 +23,7 @@ var (
 		"cmd:create":         &command.CmdCreate{},
 		"middleware:create":  &command.MiddlewareCreate{},
 		"job:create":         &command.JobCreate{},
+		"generate:key":       &command.GenerateKey{},
 		"install":            &command.Install{},
 		// Here is where you've to register your custom controller
 	}
