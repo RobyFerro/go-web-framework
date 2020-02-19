@@ -17,7 +17,7 @@ type Auth struct {
 		Username string
 		Password string
 	} `json:"user"`
-	Key   string
+	Key string
 }
 
 // GetUser will parse incoming request and returns the user data.
@@ -64,7 +64,7 @@ func (c *Auth) NewToken() (string, bool) {
 }
 
 // RefreshToken will grefresh the a speficic token
-func (c *Auth) RefreshToken(req *http.Request) bool {
+func (c *Auth) RefreshToken(req http.ResponseWriter) bool {
 	expirationTime := time.Now().Add(5 * time.Minute)
 	userDataString, _ := json.Marshal(c.User)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -74,7 +74,7 @@ func (c *Auth) RefreshToken(req *http.Request) bool {
 	})
 
 	tokenString, err := token.SignedString([]byte(c.Key))
-	req.Header.Set("refresh-token", tokenString)
+	req.Header().Set("refresh-token", tokenString)
 
 	if err != nil {
 		return false
