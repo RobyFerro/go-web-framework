@@ -3,6 +3,8 @@
 All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- Add json tags in Auth (JWT) structure 
 
 ## [v0.2.2-beta] - 2020-02-19
 ### Fixed

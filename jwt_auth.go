@@ -10,11 +10,11 @@ import (
 
 // Auth structure will be used to handle the authenticated user data.
 type Auth struct {
-	ID       uint 
-	Name     string
-	Surname  string
-	Username string
-	Password string
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Surname  string `json:"surname"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // GetUser will parse incoming request and returns the user data.
