@@ -2,24 +2,28 @@ package command
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	gwf "github.com/RobyFerro/go-web-framework"
 )
 
+// ControllerCreate will create a new controller
 type ControllerCreate struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *ControllerCreate) Register() {
 	c.Signature = "controller:create <name>"
 	c.Description = "Create new controller"
 }
 
+// Run this command
 func (c *ControllerCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var _, filename, _, _ = runtime.Caller(0)
 

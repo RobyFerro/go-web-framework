@@ -2,24 +2,28 @@ package command
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	gwf "github.com/RobyFerro/go-web-framework"
 )
 
+// ModelCreate will create a new Gorm model
 type ModelCreate struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *ModelCreate) Register() {
 	c.Signature = "model:create <name>"
 	c.Description = "Create new database model"
 }
 
+// Run this command
 func (c *ModelCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var _, filename, _, _ = runtime.Caller(0)
 

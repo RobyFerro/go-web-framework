@@ -1,23 +1,26 @@
 package command
 
 import (
-	"github.com/RobyFerro/go-web-framework"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"strings"
+
+	gwf "github.com/RobyFerro/go-web-framework"
+	"github.com/olekukonko/tablewriter"
 )
 
+// ShowRoute will shows all routes registerer in your Go-Web application
 type ShowRoute struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *ShowRoute) Register() {
 	c.Signature = "show:route"
 	c.Description = "Show active Go-Web routes"
 }
 
-// Show the current go-web routes
+// Run this command
 func (c *ShowRoute) Run(sc *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var data [][]string
 	routes, err := gwf.ConfigurationWeb()

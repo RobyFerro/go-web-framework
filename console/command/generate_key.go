@@ -10,18 +10,19 @@ import (
 	gwf "github.com/RobyFerro/go-web-framework"
 )
 
+// GenerateKey will generate Go-Web application key in main config.yml file
 type GenerateKey struct {
 	Signature   string
 	Description string
 }
 
-// Command registration
+// Register this command
 func (c *GenerateKey) Register() {
 	c.Signature = "generate:key"             // Change command signature
 	c.Description = "Genate application key" // Change command description
 }
 
-// Command business logic
+// Run this command
 func (c *GenerateKey) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	path := gwf.GetDynamicPath("config.yml")
 	read, err := ioutil.ReadFile(path)

@@ -2,7 +2,6 @@ package command
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io"
 	"io/ioutil"
 	"os"
@@ -10,29 +9,32 @@ import (
 	"path/filepath"
 	"runtime"
 	"syscall"
+
+	gwf "github.com/RobyFerro/go-web-framework"
 )
 
+// Install method will install Go-Web
 type Install struct {
 	Signature   string
 	Description string
 }
 
-// Command registration
+// Register this command
 func (c *Install) Register() {
 	c.Signature = "install"          // Change command signature
 	c.Description = "install Go-Web" // Change command description
 }
 
-// Command business logic
+// Run this command
 func (c *Install) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var _, filename, _, _ = runtime.Caller(0)
-	if err := Dir(filepath.Join(path.Dir(filename), "../../"), args); err != nil {
+	if err := dir(filepath.Join(path.Dir(filename), "../../"), args); err != nil {
 		gwf.ProcessError(err)
 	}
 }
 
 // Dir copies a whole directory recursively
-func Dir(src string, dst string) error {
+func dir(src string, dst string) error {
 	var err error
 	var fds []os.FileInfo
 	var srcInfo os.FileInfo
@@ -53,11 +55,11 @@ func Dir(src string, dst string) error {
 		dstfp := path.Join(dst, fd.Name())
 
 		if fd.IsDir() {
-			if err = Dir(srcfp, dstfp); err != nil {
+			if err = dir(srcfp, dstfp); err != nil {
 				fmt.Println(err)
 			}
 		} else {
-			if err = File(srcfp, dstfp); err != nil {
+			if err = file(srcfp, dstfp); err != nil {
 				fmt.Println(err)
 			}
 		}
@@ -66,7 +68,7 @@ func Dir(src string, dst string) error {
 }
 
 // File copies a single file from src to dst
-func File(src, dst string) error {
+func file(src, dst string) error {
 	var err error
 	var srcfd *os.File
 	var dstfd *os.File

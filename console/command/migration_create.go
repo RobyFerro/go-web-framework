@@ -2,25 +2,28 @@ package command
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
 	"time"
+
+	gwf "github.com/RobyFerro/go-web-framework"
 )
 
+// MigrationCreate will create a new migration
+// This component will create two file UP and DOWN.
+// UP: Work only for migrate operation
+// DOWN: Work only for rollback operation
 type MigrationCreate struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *MigrationCreate) Register() {
 	c.Signature = "migration:create <name>"
 	c.Description = "Create new migration files"
 }
 
-// Create migration files
-// This method will create two file UP and DOWN.
-// UP: Work only for migrate operation
-// DOWN: Work only for rollback operation
+// Run this command
 func (c *MigrationCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	date := time.Now().Unix()
 	path := gwf.GetDynamicPath("database/migration")

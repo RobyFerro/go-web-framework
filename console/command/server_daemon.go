@@ -6,11 +6,13 @@ import (
 	"log"
 )
 
+// ServerDaemon will run Go-Web HTTP server in daemon "mode"
 type ServerDaemon struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *ServerDaemon) Register() {
 	c.Signature = "server:daemon"
 	c.Description = "Run Go-Web server as a daemon"

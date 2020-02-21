@@ -10,16 +10,19 @@ import (
 	"strings"
 )
 
+// CmdCreate will create a new CLI command.
 type CmdCreate struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *CmdCreate) Register() {
 	c.Signature = "cmd:create <name>"
 	c.Description = "Create new command"
 }
 
+// Run this command
 func (c *CmdCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var _, filename, _, _ = runtime.Caller(0)
 

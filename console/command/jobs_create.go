@@ -10,18 +10,19 @@ import (
 	"strings"
 )
 
+// JobCreate will create a new async job
 type JobCreate struct {
 	Signature   string
 	Description string
 }
 
-// Command registration
+// Register this command
 func (c *JobCreate) Register() {
 	c.Signature = "job:create <name>"      // Change command signature
 	c.Description = "Create new async job" // Change command description
 }
 
-// Command business logic
+// Run this commmand
 func (c *JobCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var _, filename, _, _ = runtime.Caller(0)
 

@@ -2,22 +2,26 @@ package command
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
-	"github.com/jinzhu/gorm"
 	"reflect"
 	"strings"
+
+	gwf "github.com/RobyFerro/go-web-framework"
+	"github.com/jinzhu/gorm"
 )
 
+// Seeder will handle database seeding.
 type Seeder struct {
 	Signature   string
 	Description string
 }
 
+// Register this command
 func (c *Seeder) Register() {
 	c.Signature = "database:seed <name>"
 	c.Description = "Execute database seeder"
 }
 
+// Run this command
 // Todo: Improve this method to run a single seeder
 func (c *Seeder) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	err := kernel.Container.Invoke(func(db *gorm.DB) {

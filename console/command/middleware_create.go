@@ -2,26 +2,28 @@ package command
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	gwf "github.com/RobyFerro/go-web-framework"
 )
 
+// MiddlewareCreate will create a new http middleware
 type MiddlewareCreate struct {
 	Signature   string
 	Description string
 }
 
-// Command registration
+// Register this command
 func (c *MiddlewareCreate) Register() {
 	c.Signature = "middleware:create <name>" // Change command signature
 	c.Description = "Create new middleware"  // Change command description
 }
 
-// Command business logic
+// Run this command
 func (c *MiddlewareCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 	var _, filename, _, _ = runtime.Caller(0)
 	splitName := strings.Split(strings.ToLower(args), "_")

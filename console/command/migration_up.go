@@ -3,31 +3,35 @@ package command
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
-	"github.com/jinzhu/gorm"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	gwf "github.com/RobyFerro/go-web-framework"
+	"github.com/jinzhu/gorm"
 )
 
+// MigrationUp will execute database migration
 type MigrationUp struct {
 	Signature   string
 	Description string
 }
 
+// Register command
 func (c *MigrationUp) Register() {
 	c.Signature = "migration:up"
 	c.Description = "Execute migration"
 }
 
-type Migration struct {
+type migration struct {
 	gorm.Model
 	Name  string `gorm:"type:varchar(255)"`
 	Hash  string `gorm:"type:varchar(255)"`
 	Batch int    `gorm:"type:int(11)"`
 }
 
+// Run this command
 func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
 
 	var db *gorm.DB
@@ -37,7 +41,7 @@ func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[strin
 		gwf.ProcessError(err)
 	}
 
-	db.AutoMigrate(&Migration{})
+	db.AutoMigrate(&migration{})
 	batch := getLastBatch(db) + 1
 
 	for _, m := range getAllMigrations() {
@@ -109,7 +113,7 @@ func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 
 // Insert current migration as done into migrations table
 func setMigrationAsDone(db *gorm.DB, hash string, name string, batch int) {
-	m := Migration{
+	m := migration{
 		Name:  name,
 		Hash:  hash,
 		Batch: batch,
