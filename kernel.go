@@ -2,13 +2,12 @@ package gwf
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
+	"go.uber.org/dig"
 	"net/http"
 	"reflect"
 	"strings"
 	"sync"
-
-	"github.com/gorilla/mux"
-	"go.uber.org/dig"
 )
 
 var (
@@ -22,6 +21,8 @@ var (
 	Middleware interface{}
 	// Models will handle every application middleware
 	Models ModelRegister
+	// Services will handle every application service
+	Services ServiceRegister
 )
 
 // Handle single path parsing.

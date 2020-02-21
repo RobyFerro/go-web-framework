@@ -9,16 +9,10 @@ import (
 	"reflect"
 )
 
-func GoWeb(
-	args []string,
-	commands CommandRegister,
-	controllers ControllerRegister,
-	services ServiceRegister,
-	middleware interface{},
-	models ModelRegister,
-) {
+// Start method will start the main Go-Web HTTP Server.
+func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceRegister, mw interface{}, m ModelRegister) {
 	printCLIHeader()
-	mergeCommands(commands)
+	registerBaseEntities(c, m, s, cm, mw)
 
 	cmd := console.Commands[args[1]]
 	if cmd == nil {
@@ -33,9 +27,29 @@ func GoWeb(
 		v.FieldByName("Args").Set(reflect.ValueOf(args[2]))
 	}
 
-	container := service.BuildContainer(controllers, middleware, services, models)
+	// Build service container.
+	// This container will used to invoke the requested command.
+	container := service.BuildContainer()
 	if err := container.Invoke(v.Interface()); err != nil {
 		ProcessError(err)
+	}
+}
+
+// Register base entities in Go-Web kernel
+// This method will register: Controllers, Models, CLI commands, Services and middleware
+func registerBaseEntities(c ControllerRegister, m ModelRegister, s ServiceRegister, cm CommandRegister, mw interface{}) {
+	Controllers = c
+	Middleware = mw
+	Models = m
+
+	mergeCommands(cm)
+	bindServices(s)
+}
+
+// Merge custom services with defaults
+func bindServices(services []interface{}) {
+	for _, s := range services {
+		Services = append(Services, s)
 	}
 }
 
