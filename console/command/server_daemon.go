@@ -1,15 +1,18 @@
 package command
 
 import (
-	"github.com/RobyFerro/go-web-framework"
-	daemon "github.com/sevlyar/go-daemon"
 	"log"
+	"net/http"
+
+	gwf "github.com/RobyFerro/go-web-framework"
+	daemon "github.com/sevlyar/go-daemon"
 )
 
 // ServerDaemon will run Go-Web HTTP server in daemon "mode"
 type ServerDaemon struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -19,39 +22,31 @@ func (c *ServerDaemon) Register() {
 }
 
 // Run Go-Web as a daemon
-func (c *ServerDaemon) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-	err := kernel.Container.Invoke(func(conf gwf.Conf) {
+func (c *ServerDaemon) Run(conf *gwf.Conf, srv *http.Server) {
+	// Simple way to check is a string contains only digits
+	cntxt := &daemon.Context{
+		PidFileName: "storage/log/go-web.pid",
+		PidFilePerm: 0754,
+		LogFileName: "storage/log/go-webd.log",
+		LogFilePerm: 0754,
+		Umask:       027,
+	}
 
-		// Simple way to check is a string contains only digits
-		cntxt := &daemon.Context{
-			PidFileName: "storage/log/go-web.pid",
-			PidFilePerm: 0754,
-			LogFileName: "storage/log/go-webd.log",
-			LogFilePerm: 0754,
-			Umask:       027,
-		}
+	daemonBg, daemonError := cntxt.Reborn()
 
-		daemonBg, daemonError := cntxt.Reborn()
+	if daemonError != nil {
+		log.Fatal("Troubles to start daemon ", daemonError, daemonError.Error())
+	}
 
-		if daemonError != nil {
-			log.Fatal("Troubles to start daemon ", daemonError, daemonError.Error())
-		}
+	if daemonBg != nil {
+		return
+	}
 
-		if daemonBg != nil {
-			return
-		}
+	defer func() {
+		_ = cntxt.Release()
+	}()
 
-		defer func() {
-			_ = cntxt.Release()
-		}()
-
-		if err := gwf.StartServer(kernel.Container); err != nil {
-			gwf.ProcessError(err)
-		}
-
-	})
-
-	if err != nil {
+	if err := gwf.StartServer(srv, conf); err != nil {
 		gwf.ProcessError(err)
 	}
 }

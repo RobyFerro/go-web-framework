@@ -15,6 +15,7 @@ import (
 type MigrationCreate struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -24,12 +25,12 @@ func (c *MigrationCreate) Register() {
 }
 
 // Run this command
-func (c *MigrationCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *MigrationCreate) Run() {
 	date := time.Now().Unix()
 	path := gwf.GetDynamicPath("database/migration")
 
-	filenameUp := fmt.Sprintf("%s/%d_%s.up.sql", path, date, args)
-	filenameDown := fmt.Sprintf("%s/%d_%s.down.sql", path, date, args)
+	filenameUp := fmt.Sprintf("%s/%d_%s.up.sql", path, date, c.Args)
+	filenameDown := fmt.Sprintf("%s/%d_%s.down.sql", path, date, c.Args)
 
 	fmt.Printf("\nCreating new '%s'...\n", filenameUp)
 

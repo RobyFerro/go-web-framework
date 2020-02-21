@@ -15,6 +15,7 @@ import (
 type ControllerCreate struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -24,14 +25,14 @@ func (c *ControllerCreate) Register() {
 }
 
 // Run this command
-func (c *ControllerCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *ControllerCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
-	cName := strings.Title(strings.ToLower(args))
+	cName := strings.Title(strings.ToLower(c.Args))
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/controller.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("app/http/controller"), strings.ToLower(args))
+	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("app/http/controller"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		gwf.ProcessError(err)
 	}

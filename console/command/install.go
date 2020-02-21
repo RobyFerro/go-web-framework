@@ -17,6 +17,7 @@ import (
 type Install struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -26,9 +27,9 @@ func (c *Install) Register() {
 }
 
 // Run this command
-func (c *Install) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *Install) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
-	if err := dir(filepath.Join(path.Dir(filename), "../../"), args); err != nil {
+	if err := dir(filepath.Join(path.Dir(filename), "../../"), c.Args); err != nil {
 		gwf.ProcessError(err)
 	}
 }

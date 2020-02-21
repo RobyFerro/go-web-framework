@@ -14,6 +14,7 @@ import (
 type GenerateKey struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -23,7 +24,7 @@ func (c *GenerateKey) Register() {
 }
 
 // Run this command
-func (c *GenerateKey) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *GenerateKey) Run() {
 	path := gwf.GetDynamicPath("config.yml")
 	read, err := ioutil.ReadFile(path)
 

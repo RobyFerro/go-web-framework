@@ -16,6 +16,7 @@ import (
 type MigrationUp struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register command
@@ -32,15 +33,7 @@ type migration struct {
 }
 
 // Run this command
-func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-
-	var db *gorm.DB
-	if err := kernel.Container.Invoke(func(client *gorm.DB) {
-		db = client
-	}); err != nil {
-		gwf.ProcessError(err)
-	}
-
+func (c *MigrationUp) Run(db *gorm.DB) {
 	db.AutoMigrate(&migration{})
 	batch := getLastBatch(db) + 1
 

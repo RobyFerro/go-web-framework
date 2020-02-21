@@ -14,21 +14,15 @@ import (
 var (
 	// BC is used to declare base controller
 	BC BaseController
-	// BaseConfig will store all application configuration
-	BaseConfig, _ = Configuration()
-	// Container will provide acces to the global Service Container
+	// Container will provide access to the global Service Container
 	Container *dig.Container
 	// Controllers will handle every application controller
-	Controllers []interface{}
+	Controllers ControllerRegister
 	// Middleware will handle every application middleware
 	Middleware interface{}
+	// Models will handle every application middleware
+	Models ModelRegister
 )
-
-// HttpKernel structure is used to handle model and SC
-type HttpKernel struct {
-	Models    []interface{}
-	Container *dig.Container
-}
 
 // Handle single path parsing.
 // This method it's used to parse every single path. If middleware is present a sub-router with will be created

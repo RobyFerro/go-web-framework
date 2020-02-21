@@ -12,6 +12,7 @@ import (
 type ShowRoute struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -21,7 +22,7 @@ func (c *ShowRoute) Register() {
 }
 
 // Run this command
-func (c *ShowRoute) Run(sc *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *ShowRoute) Run() {
 	var data [][]string
 	routes, err := gwf.ConfigurationWeb()
 	if err != nil {
