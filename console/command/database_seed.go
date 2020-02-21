@@ -13,6 +13,7 @@ import (
 type Seeder struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -23,20 +24,13 @@ func (c *Seeder) Register() {
 
 // Run this command
 // Todo: Improve this method to run a single seeder
-func (c *Seeder) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-	err := kernel.Container.Invoke(func(db *gorm.DB) {
-		models := kernel.Models
+func (c *Seeder) Run(db *gorm.DB, models gwf.ModelRegister) {
 
-		if len(args) > 0 {
-			extractSpecificModel(args, &models)
-		}
-
-		seed(models, db)
-	})
-
-	if err != nil {
-		gwf.ProcessError(err)
+	if len(c.Args) > 0 {
+		extractSpecificModel(c.Args, &models)
 	}
+
+	seed(models, db)
 }
 
 // Extract the specified models from model list

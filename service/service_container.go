@@ -1,17 +1,24 @@
 package service
 
 import (
-	"github.com/RobyFerro/go-web-framework"
+	gwf "github.com/RobyFerro/go-web-framework"
+	"github.com/RobyFerro/go-web-framework/console"
 	"go.uber.org/dig"
 )
 
-// BuildContainer provide the golbal service container
-func BuildContainer(controllers []interface{}, middleware interface{}, services []interface{}) *dig.Container {
+// BuildContainer provide the global service container
+func BuildContainer(
+	controllers gwf.ControllerRegister,
+	middleware interface{},
+	services gwf.ServiceRegister,
+	models gwf.ModelRegister,
+) *dig.Container {
 	container := dig.New()
 	bindServices(services)
 
 	gwf.Controllers = controllers
 	gwf.Middleware = middleware
+	gwf.Models = models
 
 	for _, s := range Services {
 		if err := container.Provide(s); err != nil {
@@ -19,9 +26,25 @@ func BuildContainer(controllers []interface{}, middleware interface{}, services 
 		}
 	}
 
+	injectBasicEntities(container)
 	gwf.Container = container
 
 	return container
+}
+
+// Inject base entities: controllers, models, commands in service container
+func injectBasicEntities(sc *dig.Container) {
+	_ = sc.Provide(func() gwf.ControllerRegister {
+		return gwf.Controllers
+	})
+
+	_ = sc.Provide(func() gwf.CommandRegister {
+		return console.Commands
+	})
+
+	_ = sc.Provide(func() gwf.ModelRegister {
+		return gwf.Models
+	})
 }
 
 // Merge custom services with defaults

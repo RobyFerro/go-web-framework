@@ -1,6 +1,8 @@
 package command
 
 import (
+	"net/http"
+
 	gwf "github.com/RobyFerro/go-web-framework"
 )
 
@@ -8,6 +10,7 @@ import (
 type ServerRun struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -17,8 +20,8 @@ func (c *ServerRun) Register() {
 }
 
 // Run this command
-func (c *ServerRun) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-	if err := gwf.StartServer(kernel.Container); err != nil {
+func (c *ServerRun) Run(srv *http.Server, conf *gwf.Conf) {
+	if err := gwf.StartServer(srv, conf); err != nil {
 		gwf.ProcessError(err)
 	}
 }

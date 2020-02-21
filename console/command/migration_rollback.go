@@ -14,6 +14,7 @@ import (
 type MigrateRollback struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -23,15 +24,8 @@ func (c *MigrateRollback) Register() {
 }
 
 // Run this command
-func (c *MigrateRollback) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-	var db *gorm.DB
-	if err := kernel.Container.Invoke(func(client *gorm.DB) {
-		db = client
-	}); err != nil {
-		gwf.ProcessError(err)
-	}
-
-	step, _ := strconv.Atoi(args)
+func (c *MigrateRollback) Run(db *gorm.DB) {
+	step, _ := strconv.Atoi(c.Args)
 	batch := getLastBatch(db)
 
 	for i := 0; i < step; i++ {

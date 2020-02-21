@@ -15,6 +15,7 @@ import (
 type ModelCreate struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -24,14 +25,14 @@ func (c *ModelCreate) Register() {
 }
 
 // Run this command
-func (c *ModelCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *ModelCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
-	cName := strings.Title(strings.ToLower(args))
+	cName := strings.Title(strings.ToLower(c.Args))
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/model.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("database/model"), strings.ToLower(args))
+	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("database/model"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		gwf.ProcessError(err)
 	}
