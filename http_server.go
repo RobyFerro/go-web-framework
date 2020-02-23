@@ -1,4 +1,4 @@
-package gwf
+package main
 
 import (
 	"crypto/tls"

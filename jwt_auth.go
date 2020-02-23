@@ -1,4 +1,4 @@
-package gwf
+package main
 
 import (
 	"encoding/json"

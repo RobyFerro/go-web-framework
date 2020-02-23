@@ -1,11 +1,9 @@
-package command
+package main
 
 import (
 	"fmt"
 	"io/ioutil"
 	"time"
-
-	gwf "github.com/RobyFerro/go-web-framework"
 )
 
 // MigrationCreate will create a new migration
@@ -27,7 +25,7 @@ func (c *MigrationCreate) Register() {
 // Run this command
 func (c *MigrationCreate) Run() {
 	date := time.Now().Unix()
-	path := gwf.GetDynamicPath("database/migration")
+	path := GetDynamicPath("database/migration")
 
 	filenameUp := fmt.Sprintf("%s/%d_%s.up.sql", path, date, c.Args)
 	filenameDown := fmt.Sprintf("%s/%d_%s.down.sql", path, date, c.Args)
@@ -35,14 +33,14 @@ func (c *MigrationCreate) Run() {
 	fmt.Printf("\nCreating new '%s'...\n", filenameUp)
 
 	if err := ioutil.WriteFile(filenameUp, []byte("/* MIGRATION UP */"), 0755); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	fmt.Printf("Created new up migration: %s\n", filenameUp)
 	fmt.Printf("Creating new '%s'...\n", filenameDown)
 
 	if err := ioutil.WriteFile(filenameDown, []byte("/* MIGRATION DOWN */"), 0755); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	fmt.Printf("Created new down migration: %s\n", filenameDown)

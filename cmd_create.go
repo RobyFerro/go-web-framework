@@ -1,4 +1,4 @@
-package command
+package main
 
 import (
 	"fmt"
@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	gwf "github.com/RobyFerro/go-web-framework"
 )
 
 // CmdCreate will create a new CLI command.
@@ -37,9 +35,9 @@ func (c *CmdCreate) Run() {
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/command.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("app/console/command"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/console/command"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	fmt.Printf("\nSUCCESS: Your %s command has been created at %s\n", cName, cFile)

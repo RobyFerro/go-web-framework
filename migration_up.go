@@ -1,4 +1,4 @@
-package command
+package main
 
 import (
 	"crypto/sha256"
@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/jinzhu/gorm"
 )
 
@@ -56,7 +55,7 @@ func (c *MigrationUp) Run(db *gorm.DB) {
 // Retrieve all migration files located in database/migration folder.
 func getAllMigrations() []string {
 	var migrations []string
-	err := filepath.Walk(gwf.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
@@ -66,7 +65,7 @@ func getAllMigrations() []string {
 	})
 
 	if err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	return migrations
@@ -96,7 +95,7 @@ func migrationIsPresent(db *gorm.DB, hash string) bool {
 func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 	fmt.Printf("\nMigrating '%s'\n", migration)
 	if payload, err := ioutil.ReadFile(migration); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	} else {
 		db.Exec(string(payload)).Row()
 	}

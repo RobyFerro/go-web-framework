@@ -1,10 +1,9 @@
-package command
+package main
 
 import (
 	"os"
 	"strings"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -24,9 +23,9 @@ func (c *ShowRoute) Register() {
 // Run this command
 func (c *ShowRoute) Run() {
 	var data [][]string
-	routes, err := gwf.ConfigurationWeb()
+	routes, err := ConfigurationWeb()
 	if err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	// Parse single route
@@ -46,7 +45,7 @@ func (c *ShowRoute) Run() {
 }
 
 // Show single routes
-func showSingleRoute(routes map[string]gwf.Route, data *[][]string) {
+func showSingleRoute(routes map[string]Route, data *[][]string) {
 	for _, r := range routes {
 		*data = append(*data, []string{
 			r.Method,
@@ -60,7 +59,7 @@ func showSingleRoute(routes map[string]gwf.Route, data *[][]string) {
 }
 
 // Show groups
-func showGroupRoutes(routes map[string]gwf.Group, data *[][]string) {
+func showGroupRoutes(routes map[string]Group, data *[][]string) {
 	for _, g := range routes {
 		var middleware []string
 		middleware = append(middleware, g.Middleware...)

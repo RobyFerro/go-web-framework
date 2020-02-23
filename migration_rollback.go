@@ -1,4 +1,4 @@
-package command
+package main
 
 import (
 	"fmt"
@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/jinzhu/gorm"
 )
 
@@ -31,7 +30,7 @@ func (c *MigrateRollback) Run(db *gorm.DB) {
 	for i := 0; i < step; i++ {
 		var migrations []migration
 		if err := db.Order("created_at", true).Where("batch LIKE ?", batch).Find(&migrations).Error; err != nil {
-			gwf.ProcessError(err)
+			ProcessError(err)
 		}
 
 		// Execute given rollback
@@ -48,13 +47,13 @@ func rollbackMigrations(migrations []migration, db *gorm.DB) {
 		fmt.Printf("\nRolling back '%s' migration...\n", rollbackFile)
 
 		if payload, err := ioutil.ReadFile(rollbackFile); err != nil {
-			gwf.ProcessError(err)
+			ProcessError(err)
 		} else {
 			db.Exec(string(payload)).Row()
 		}
 
 		if err := db.Unscoped().Delete(&m).Error; err != nil {
-			gwf.ProcessError(err)
+			ProcessError(err)
 		}
 
 		fmt.Printf("Success! %s has been rolled back!", rollbackFile)

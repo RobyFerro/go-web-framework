@@ -1,11 +1,10 @@
-package command
+package main
 
 import (
 	"fmt"
 	"reflect"
 	"strings"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/jinzhu/gorm"
 )
 
@@ -24,7 +23,7 @@ func (c *Seeder) Register() {
 
 // Run this command
 // Todo: Improve this method to run a single seeder
-func (c *Seeder) Run(db *gorm.DB, models gwf.ModelRegister) {
+func (c *Seeder) Run(db *gorm.DB, models ModelRegister) {
 	if len(c.Args) > 0 {
 		extractSpecificModel(c.Args, &models)
 	}

@@ -1,4 +1,4 @@
-package gwf
+package main
 
 // CommandRegister defines all registered commands
 type CommandRegister = map[string]interface{}

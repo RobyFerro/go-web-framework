@@ -1,10 +1,9 @@
-package command
+package main
 
 import (
 	"log"
 	"net/http"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	daemon "github.com/sevlyar/go-daemon"
 )
 
@@ -22,7 +21,7 @@ func (c *ServerDaemon) Register() {
 }
 
 // Run Go-Web as a daemon
-func (c *ServerDaemon) Run(conf *gwf.Conf, srv *http.Server) {
+func (c *ServerDaemon) Run(conf *Conf, srv *http.Server) {
 	// Simple way to check is a string contains only digits
 	cntxt := &daemon.Context{
 		PidFileName: "storage/log/go-web.pid",
@@ -46,7 +45,7 @@ func (c *ServerDaemon) Run(conf *gwf.Conf, srv *http.Server) {
 		_ = cntxt.Release()
 	}()
 
-	if err := gwf.StartServer(srv, conf); err != nil {
-		gwf.ProcessError(err)
+	if err := StartServer(srv, conf); err != nil {
+		ProcessError(err)
 	}
 }

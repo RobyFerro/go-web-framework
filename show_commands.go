@@ -1,10 +1,9 @@
-package command
+package main
 
 import (
 	"os"
 	"reflect"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -22,7 +21,7 @@ func (c *ShowCommands) Register() {
 }
 
 // Run this command
-func (c *ShowCommands) Run(commands gwf.CommandRegister) {
+func (c *ShowCommands) Run(commands CommandRegister) {
 	var data [][]string
 
 	for _, c := range commands {

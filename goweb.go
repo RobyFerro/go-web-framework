@@ -1,9 +1,7 @@
-package gwf
+package main
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/console"
-	"github.com/RobyFerro/go-web-framework/service"
 	"github.com/common-nighthawk/go-figure"
 	"os"
 	"reflect"
@@ -14,7 +12,7 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 	printCLIHeader()
 	registerBaseEntities(c, m, s, cm, mw)
 
-	cmd := console.Commands[args[1]]
+	cmd := Commands[args[0]]
 	if cmd == nil {
 		fmt.Println("Command not found!")
 		os.Exit(1)
@@ -29,7 +27,7 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 
 	// Build service container.
 	// This container will used to invoke the requested command.
-	container := service.BuildContainer()
+	container := BuildContainer()
 	if err := container.Invoke(v.Interface()); err != nil {
 		ProcessError(err)
 	}
@@ -64,6 +62,6 @@ func printCLIHeader() {
 // MergeCommands will merge system command with customs
 func mergeCommands(commands CommandRegister) {
 	for i, c := range commands {
-		console.Commands[i] = c
+		Commands[i] = c
 	}
 }

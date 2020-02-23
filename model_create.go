@@ -1,4 +1,4 @@
-package command
+package main
 
 import (
 	"fmt"
@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	gwf "github.com/RobyFerro/go-web-framework"
 )
 
 // ModelCreate will create a new Gorm model
@@ -32,9 +30,9 @@ func (c *ModelCreate) Run() {
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/model.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("database/model"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("database/model"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	fmt.Printf("\nSUCCESS: Your model %s has been created at %s", cName, cFile)

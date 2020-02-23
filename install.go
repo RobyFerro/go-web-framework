@@ -1,4 +1,4 @@
-package command
+package main
 
 import (
 	"fmt"
@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"syscall"
-
-	gwf "github.com/RobyFerro/go-web-framework"
 )
 
 // Install method will install Go-Web
@@ -30,7 +28,7 @@ func (c *Install) Register() {
 func (c *Install) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 	if err := dir(filepath.Join(path.Dir(filename), "../../"), c.Args); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 }
 
@@ -93,7 +91,7 @@ func file(src, dst string) error {
 	}
 
 	if err := os.Chown(dst, syscall.Getuid(), syscall.Getgid()); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	return os.Chmod(dst, srcinfo.Mode())

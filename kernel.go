@@ -1,4 +1,4 @@
-package gwf
+package main
 
 import (
 	"fmt"
@@ -22,7 +22,34 @@ var (
 	// Models will handle every application middleware
 	Models ModelRegister
 	// Services will handle every application service
-	Services ServiceRegister
+	Services = ServiceRegister{
+		Configuration,
+		CreateSessionStore,
+		GetHttpServer,
+		WebRouter,
+	}
+	// Register all commands here.
+	// The following map of interfaces expose all available method that can be used by Go-Web CLI tool.
+	// The map index determines the command that you've to run to for use the relative method.
+	// Example: './goweb migration:up' will run '&command.MigrationUp{}' command.
+	Commands = CommandRegister{
+		"migration:up":       &MigrationUp{},
+		"migration:create":   &MigrationCreate{},
+		"migration:rollback": &MigrateRollback{},
+		"database:seed":      &Seeder{},
+		"server:daemon":      &ServerDaemon{},
+		"server:run":         &ServerRun{},
+		"controller:create":  &ControllerCreate{},
+		"model:create":       &ModelCreate{},
+		"show:route":         &ShowRoute{},
+		"show:commands":      &ShowCommands{},
+		"cmd:create":         &CmdCreate{},
+		"middleware:create":  &MiddlewareCreate{},
+		"job:create":         &JobCreate{},
+		"generate:key":       &GenerateKey{},
+		"install":            &Install{},
+		// Here is where you've to register your custom controller
+	}
 )
 
 // Handle single path parsing.

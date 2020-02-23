@@ -1,4 +1,4 @@
-package gwf
+package main
 
 import (
 	"github.com/getsentry/sentry-go"
