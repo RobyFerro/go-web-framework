@@ -18,17 +18,16 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 		os.Exit(1)
 	}
 
-	v := reflect.ValueOf(cmd).MethodByName("Run")
-
+	rc := reflect.ValueOf(cmd)
 	// Set args if exists
 	if len(args) == 2 {
-		v.FieldByName("Args").Set(reflect.ValueOf(args[1]))
+		rc.FieldByName("Args").Set(reflect.ValueOf(args[1]))
 	}
 
 	// Build service container.
 	// This container will used to invoke the requested command.
 	container := BuildContainer()
-	if err := container.Invoke(v.Interface()); err != nil {
+	if err := container.Invoke(rc.MethodByName("Run").Interface()); err != nil {
 		ProcessError(err)
 	}
 }
