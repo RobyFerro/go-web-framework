@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.2-beta] - 2020-02-24
+### Fixed
+- Wrong package name on new commands
+
 ## [v0.3.1-beta] - 2020-02-24
 ### Fixed
 - Wrong CLI command directory
