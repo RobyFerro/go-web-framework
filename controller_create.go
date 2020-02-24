@@ -1,8 +1,7 @@
-package command
+package gwf
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
 	"path"
 	"path/filepath"
@@ -10,26 +9,30 @@ import (
 	"strings"
 )
 
+// ControllerCreate will create a new controller
 type ControllerCreate struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
+// Register this command
 func (c *ControllerCreate) Register() {
 	c.Signature = "controller:create <name>"
 	c.Description = "Create new controller"
 }
 
-func (c *ControllerCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+// Run this command
+func (c *ControllerCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
-	cName := strings.Title(strings.ToLower(args))
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/controller.raw"))
+	cName := strings.Title(strings.ToLower(c.Args))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/controller.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("app/http/controller"), strings.ToLower(args))
+	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/http/controller"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	fmt.Printf("\nSUCCESS: Your %sController has been created at %s", cName, cFile)

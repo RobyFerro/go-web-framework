@@ -1,43 +1,39 @@
-package command
+package gwf
 
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
-	"github.com/jinzhu/gorm"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
+// MigrationUp will execute database migration
 type MigrationUp struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
+// Register command
 func (c *MigrationUp) Register() {
 	c.Signature = "migration:up"
 	c.Description = "Execute migration"
 }
 
-type Migration struct {
+type migration struct {
 	gorm.Model
 	Name  string `gorm:"type:varchar(255)"`
 	Hash  string `gorm:"type:varchar(255)"`
 	Batch int    `gorm:"type:int(11)"`
 }
 
-func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-
-	var db *gorm.DB
-	if err := kernel.Container.Invoke(func(client *gorm.DB) {
-		db = client
-	}); err != nil {
-		gwf.ProcessError(err)
-	}
-
-	db.AutoMigrate(&Migration{})
+// Run this command
+func (c *MigrationUp) Run(db *gorm.DB) {
+	db.AutoMigrate(&migration{})
 	batch := getLastBatch(db) + 1
 
 	for _, m := range getAllMigrations() {
@@ -59,7 +55,8 @@ func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[strin
 // Retrieve all migration files located in database/migration folder.
 func getAllMigrations() []string {
 	var migrations []string
-	err := filepath.Walk(gwf.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
+
+	err := filepath.Walk(GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
@@ -69,7 +66,7 @@ func getAllMigrations() []string {
 	})
 
 	if err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	return migrations
@@ -99,7 +96,7 @@ func migrationIsPresent(db *gorm.DB, hash string) bool {
 func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 	fmt.Printf("\nMigrating '%s'\n", migration)
 	if payload, err := ioutil.ReadFile(migration); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	} else {
 		db.Exec(string(payload)).Row()
 	}
@@ -109,7 +106,7 @@ func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 
 // Insert current migration as done into migrations table
 func setMigrationAsDone(db *gorm.DB, hash string, name string, batch int) {
-	m := Migration{
+	m := migration{
 		Name:  name,
 		Hash:  hash,
 		Batch: batch,

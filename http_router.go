@@ -34,6 +34,7 @@ type Router struct {
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
 func WebRouter() *mux.Router {
 	var wg sync.WaitGroup
+
 	wg.Add(3)
 
 	routes, err := ConfigurationWeb()

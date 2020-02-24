@@ -1,8 +1,7 @@
-package command
+package gwf
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io"
 	"io/ioutil"
 	"os"
@@ -12,30 +11,34 @@ import (
 	"syscall"
 )
 
+// Install method will install Go-Web
 type Install struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
-// Command registration
+// Register this command
 func (c *Install) Register() {
 	c.Signature = "install"          // Change command signature
 	c.Description = "install Go-Web" // Change command description
 }
 
-// Command business logic
-func (c *Install) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+// Run this command
+func (c *Install) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
-	if err := Dir(filepath.Join(path.Dir(filename), "../../"), args); err != nil {
-		gwf.ProcessError(err)
+	if err := dir(filepath.Join(path.Dir(filename), "../../"), c.Args); err != nil {
+		ProcessError(err)
 	}
 }
 
 // Dir copies a whole directory recursively
-func Dir(src string, dst string) error {
-	var err error
-	var fds []os.FileInfo
-	var srcInfo os.FileInfo
+func dir(src string, dst string) error {
+	var (
+		err     error
+		fds     []os.FileInfo
+		srcInfo os.FileInfo
+	)
 
 	if srcInfo, err = os.Stat(src); err != nil {
 		return err
@@ -53,11 +56,11 @@ func Dir(src string, dst string) error {
 		dstfp := path.Join(dst, fd.Name())
 
 		if fd.IsDir() {
-			if err = Dir(srcfp, dstfp); err != nil {
+			if err = dir(srcfp, dstfp); err != nil {
 				fmt.Println(err)
 			}
 		} else {
-			if err = File(srcfp, dstfp); err != nil {
+			if err = file(srcfp, dstfp); err != nil {
 				fmt.Println(err)
 			}
 		}
@@ -66,32 +69,35 @@ func Dir(src string, dst string) error {
 }
 
 // File copies a single file from src to dst
-func File(src, dst string) error {
-	var err error
-	var srcfd *os.File
-	var dstfd *os.File
-	var srcinfo os.FileInfo
+func file(src, dst string) error {
+	var (
+		err      error
+		srcFile  *os.File
+		destFile *os.File
+		srcInfo  os.FileInfo
+	)
 
-	if srcfd, err = os.Open(src); err != nil {
+	if srcFile, err = os.Open(src); err != nil {
 		return err
 	}
-	defer srcfd.Close()
+	defer srcFile.Close()
 
-	if dstfd, err = os.Create(dst); err != nil {
+	if destFile, err = os.Create(dst); err != nil {
 		return err
 	}
-	defer dstfd.Close()
+	defer destFile.Close()
 
-	if _, err = io.Copy(dstfd, srcfd); err != nil {
+	if _, err = io.Copy(destFile, srcFile); err != nil {
 		return err
 	}
-	if srcinfo, err = os.Stat(src); err != nil {
+
+	if srcInfo, err = os.Stat(src); err != nil {
 		return err
 	}
 
 	if err := os.Chown(dst, syscall.Getuid(), syscall.Getgid()); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
-	return os.Chmod(dst, srcinfo.Mode())
+	return os.Chmod(dst, srcInfo.Mode())
 }

@@ -3,9 +3,6 @@ package gwf
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
-	"go.uber.org/dig"
 	"log"
 	"net"
 	"net/http"
@@ -14,36 +11,30 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+
+	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 )
 
 var appConf Conf
 
-// Start HTTP server
-func StartServer(sc *dig.Container) error {
-	var serveError error
+// StartServer will run the Go HTTP web server
+func StartServer(srv *http.Server, conf *Conf) error {
+	appConf = *conf
+	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
 
-	if err := sc.Invoke(func(s *http.Server, conf *Conf) {
-		appConf = *conf
-		webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
-
-		if err := changeRunningUser(); err != nil {
-			serveError = err
-			return
-		}
-
-		if appConf.Server.Ssl {
-			serveError = s.ServeTLS(webListener, appConf.Server.SslCert, appConf.Server.SslKey)
-			return
-		} else {
-			serveError = s.Serve(webListener)
-			return
-		}
-	}); err != nil {
+	if err := changeRunningUser(); err != nil {
 		return err
 	}
 
-	if serveError != nil {
-		return serveError
+	if appConf.Server.Ssl {
+		if err := srv.ServeTLS(webListener, appConf.Server.SslCert, appConf.Server.SslKey); err != nil {
+			return err
+		}
+	} else {
+		if err := srv.Serve(webListener); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -56,7 +47,6 @@ func GetHttpServer(router *mux.Router, cfg *Conf) *http.Server {
 	var httpServerConf = http.Server{}
 
 	if cfg.Server.Ssl {
-
 		sslCfg := &tls.Config{
 			MinVersion:               tls.VersionTLS12,
 			CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},

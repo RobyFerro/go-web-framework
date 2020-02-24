@@ -1,8 +1,7 @@
-package command
+package gwf
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
 	"io/ioutil"
 	"path"
 	"path/filepath"
@@ -10,31 +9,35 @@ import (
 	"strings"
 )
 
+// CmdCreate will create a new CLI command.
 type CmdCreate struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
+// Register this command
 func (c *CmdCreate) Register() {
 	c.Signature = "cmd:create <name>"
 	c.Description = "Create new command"
 }
 
-func (c *CmdCreate) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+// Run this command
+func (c *CmdCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
-	splitName := strings.Split(strings.ToLower(args), "_")
+	splitName := strings.Split(strings.ToLower(c.Args), "_")
 	for i, name := range splitName {
 		splitName[i] = strings.Title(name)
 	}
 
 	cName := strings.Join(splitName, "")
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/command.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/command.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", gwf.GetDynamicPath("app/console/command"), strings.ToLower(args))
+	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/console/command"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	fmt.Printf("\nSUCCESS: Your %s command has been created at %s\n", cName, cFile)

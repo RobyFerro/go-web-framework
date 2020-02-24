@@ -2,33 +2,59 @@ package gwf
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
+	"go.uber.org/dig"
 	"net/http"
 	"reflect"
 	"strings"
 	"sync"
-
-	"github.com/gorilla/mux"
-	"go.uber.org/dig"
 )
 
 var (
 	// BC is used to declare base controller
 	BC BaseController
-	// BaseConfig will store all application configuration
-	BaseConfig, _ = Configuration()
-	// Container will provide acces to the global Service Container
+	// Container will provide access to the global Service Container
 	Container *dig.Container
 	// Controllers will handle every application controller
-	Controllers []interface{}
+	Controllers ControllerRegister
 	// Middleware will handle every application middleware
 	Middleware interface{}
+	// Models will handle every application middleware
+	Models ModelRegister
+	// Services will handle every application service
+	Services = ServiceRegister{
+		List: []interface{}{
+			Configuration,
+			CreateSessionStore,
+			GetHttpServer,
+			WebRouter,
+		},
+	}
+	// Commands will export all registered commands
+	// The following map of interfaces expose all available method that can be used by Go-Web CLI tool.
+	// The map index determines the command that you've to run to for use the relative method.
+	// Example: './goweb migration:up' will run '&command.MigrationUp{}' command.
+	Commands = CommandRegister{
+		List: map[string]interface{}{
+			"migration:up":       &MigrationUp{},
+			"migration:create":   &MigrationCreate{},
+			"migration:rollback": &MigrateRollback{},
+			"database:seed":      &Seeder{},
+			"server:daemon":      &ServerDaemon{},
+			"server:run":         &ServerRun{},
+			"controller:create":  &ControllerCreate{},
+			"model:create":       &ModelCreate{},
+			"show:route":         &ShowRoute{},
+			"show:commands":      &ShowCommands{},
+			"cmd:create":         &CmdCreate{},
+			"middleware:create":  &MiddlewareCreate{},
+			"job:create":         &JobCreate{},
+			"generate:key":       &GenerateKey{},
+			"install":            &Install{},
+			// Here is where you've to register your custom controller
+		},
+	}
 )
-
-// HttpKernel structure is used to handle model and SC
-type HttpKernel struct {
-	Models    []interface{}
-	Container *dig.Container
-}
 
 // Handle single path parsing.
 // This method it's used to parse every single path. If middleware is present a sub-router with will be created
@@ -140,7 +166,7 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 	var result interface{}
 
 	// Find the right controller
-	for _, contr := range Controllers {
+	for _, contr := range Controllers.List {
 		controllerName := reflect.Indirect(reflect.ValueOf(contr)).Type().Name()
 		if controllerName == directive[0] {
 			registerBaseController(w, r, &contr)

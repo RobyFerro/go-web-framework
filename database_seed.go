@@ -1,47 +1,44 @@
-package command
+package gwf
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework"
-	"github.com/jinzhu/gorm"
 	"reflect"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
+// Seeder will handle database seeding.
 type Seeder struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
+// Register this command
 func (c *Seeder) Register() {
 	c.Signature = "database:seed <name>"
 	c.Description = "Execute database seeder"
 }
 
+// Run this command
 // Todo: Improve this method to run a single seeder
-func (c *Seeder) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-	err := kernel.Container.Invoke(func(db *gorm.DB) {
-		models := kernel.Models
-
-		if len(args) > 0 {
-			extractSpecificModel(args, &models)
-		}
-
-		seed(models, db)
-	})
-
-	if err != nil {
-		gwf.ProcessError(err)
+func (c *Seeder) Run(db *gorm.DB, models ModelRegister) {
+	if len(c.Args) > 0 {
+		extractSpecificModel(c.Args, &models.List)
 	}
+
+	seed(models.List, db)
 }
 
 // Extract the specified models from model list
 func extractSpecificModel(name string, models *[]interface{}) {
 	var newModels []interface{}
+
 	for _, m := range *models {
 		modelName := reflect.TypeOf(m).Name()
 
-		if strings.ToLower(name) == strings.ToLower(modelName) {
+		if strings.EqualFold(name, modelName) {
 			newModels = append(newModels, m)
 			break
 		}

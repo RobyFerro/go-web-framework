@@ -1,26 +1,31 @@
-package command
+package gwf
 
 import (
-	"github.com/RobyFerro/go-web-framework"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"reflect"
+
+	"github.com/olekukonko/tablewriter"
 )
 
+// ShowCommands will show all registered commands
 type ShowCommands struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
+// Register this command
 func (c *ShowCommands) Register() {
 	c.Signature = "show:commands"
 	c.Description = "Show Go-Web commands list"
 }
 
-func (c *ShowCommands) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+// Run this command
+func (c *ShowCommands) Run(commands CommandRegister) {
+
 	var data [][]string
 
-	for _, c := range console {
+	for _, c := range commands.List {
 		m := reflect.ValueOf(c).MethodByName("Register")
 		m.Call([]reflect.Value{})
 
