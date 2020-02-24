@@ -10,30 +10,6 @@ import (
 // Remember: this struct will be populated by parsing the config.yml file present into the Go-Web main directory.
 // You've to implement both to works properly.
 type Conf struct {
-	Database struct {
-		Driver   string `yaml:"driver"`
-		Host     string `yaml:"host"`
-		Port     int    `yaml:"port"`
-		Database string `yaml:"database"`
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-	} `yaml:"database"`
-	Redis struct {
-		Host     string `yaml:"host"`
-		Port     int    `yaml:"port"`
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-	} `yaml:"redis"`
-	Mongo struct {
-		Database string `yaml:"database"`
-		Host     string `yaml:"host"`
-		Port     int    `yaml:"port"`
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-	} `yaml:"mongodb"`
-	Elastic struct {
-		Hosts []string `yaml:"hosts"`
-	} `yaml:"elasticsearch"`
 	Server struct {
 		Name     string `yaml:"name"`
 		Port     int    `yaml:"port"`

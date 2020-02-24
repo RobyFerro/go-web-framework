@@ -1,10 +1,9 @@
-package command
+package gwf
 
 import (
 	"os"
 	"reflect"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -12,6 +11,7 @@ import (
 type ShowCommands struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register this command
@@ -21,10 +21,11 @@ func (c *ShowCommands) Register() {
 }
 
 // Run this command
-func (c *ShowCommands) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *ShowCommands) Run(commands CommandRegister) {
+
 	var data [][]string
 
-	for _, c := range console {
+	for _, c := range commands.List {
 		m := reflect.ValueOf(c).MethodByName("Register")
 		m.Call([]reflect.Value{})
 

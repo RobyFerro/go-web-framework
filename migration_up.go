@@ -1,4 +1,4 @@
-package command
+package gwf
 
 import (
 	"crypto/sha256"
@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	gwf "github.com/RobyFerro/go-web-framework"
 	"github.com/jinzhu/gorm"
 )
 
@@ -16,6 +15,7 @@ import (
 type MigrationUp struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Register command
@@ -32,15 +32,7 @@ type migration struct {
 }
 
 // Run this command
-func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
-
-	var db *gorm.DB
-	if err := kernel.Container.Invoke(func(client *gorm.DB) {
-		db = client
-	}); err != nil {
-		gwf.ProcessError(err)
-	}
-
+func (c *MigrationUp) Run(db *gorm.DB) {
 	db.AutoMigrate(&migration{})
 	batch := getLastBatch(db) + 1
 
@@ -63,7 +55,8 @@ func (c *MigrationUp) Run(kernel *gwf.HttpKernel, args string, console map[strin
 // Retrieve all migration files located in database/migration folder.
 func getAllMigrations() []string {
 	var migrations []string
-	err := filepath.Walk(gwf.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
+
+	err := filepath.Walk(GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
@@ -73,7 +66,7 @@ func getAllMigrations() []string {
 	})
 
 	if err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	return migrations
@@ -103,7 +96,7 @@ func migrationIsPresent(db *gorm.DB, hash string) bool {
 func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 	fmt.Printf("\nMigrating '%s'\n", migration)
 	if payload, err := ioutil.ReadFile(migration); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	} else {
 		db.Exec(string(payload)).Row()
 	}
