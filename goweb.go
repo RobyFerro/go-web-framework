@@ -12,7 +12,7 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 	printCLIHeader()
 	registerBaseEntities(c, m, s, cm, mw)
 
-	cmd := Commands[args[0]]
+	cmd := Commands.List[args[0]]
 	if cmd == nil {
 		fmt.Println("Command not found!")
 		os.Exit(1)
@@ -40,14 +40,14 @@ func registerBaseEntities(c ControllerRegister, m ModelRegister, s ServiceRegist
 	Models = m
 
 	mergeCommands(cm)
-	bindServices(s)
+	bindServices(s.List)
 }
 
 // Merge custom services with defaults
 func bindServices(services []interface{}) {
 
 	for _, s := range services {
-		Services = append(Services, s)
+		Services.List = append(Services.List, s)
 	}
 }
 
@@ -61,7 +61,7 @@ func printCLIHeader() {
 
 // MergeCommands will merge system command with customs
 func mergeCommands(commands CommandRegister) {
-	for i, c := range commands {
-		Commands[i] = c
+	for i, c := range commands.List {
+		Commands.List[i] = c
 	}
 }

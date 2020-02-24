@@ -25,10 +25,10 @@ func (c *Seeder) Register() {
 // Todo: Improve this method to run a single seeder
 func (c *Seeder) Run(db *gorm.DB, models ModelRegister) {
 	if len(c.Args) > 0 {
-		extractSpecificModel(c.Args, &models)
+		extractSpecificModel(c.Args, &models.List)
 	}
 
-	seed(models, db)
+	seed(models.List, db)
 }
 
 // Extract the specified models from model list

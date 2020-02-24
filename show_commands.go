@@ -25,7 +25,7 @@ func (c *ShowCommands) Run(commands CommandRegister) {
 
 	var data [][]string
 
-	for _, c := range commands {
+	for _, c := range commands.List {
 		m := reflect.ValueOf(c).MethodByName("Register")
 		m.Call([]reflect.Value{})
 
