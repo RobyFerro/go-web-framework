@@ -8,7 +8,7 @@ import (
 func BuildContainer() *dig.Container {
 	container := dig.New()
 
-	for _, s := range Services {
+	for _, s := range Services.List {
 		if err := container.Provide(s); err != nil {
 			ProcessError(err)
 		}

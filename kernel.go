@@ -166,7 +166,7 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 	var result interface{}
 
 	// Find the right controller
-	for _, contr := range Controllers {
+	for _, contr := range Controllers.List {
 		controllerName := reflect.Indirect(reflect.ValueOf(contr)).Type().Name()
 		if controllerName == directive[0] {
 			registerBaseController(w, r, &contr)
