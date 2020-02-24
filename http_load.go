@@ -3,7 +3,6 @@ package gwf
 import (
 	"encoding/json"
 	"fmt"
-	gwf "github.com/RobyFerro/go-web-framework"
 	vegeta "github.com/tsenart/vegeta/lib"
 	"net/http"
 	"os"
@@ -36,7 +35,7 @@ func (c *HttpLoad) Register() {
 }
 
 // Command business logic
-func (c *HttpLoad) Run(conf *gwf.Conf) {
+func (c *HttpLoad) Run(conf *Conf) {
 	var routes FileStruct
 	readJsonFile(c.Args, &routes)
 
@@ -74,7 +73,7 @@ func readJsonFile(path string, str *FileStruct) *os.File {
 	}
 
 	if err := json.Unmarshal([]byte(path), &str); err != nil {
-		gwf.ProcessError(err)
+		ProcessError(err)
 	}
 
 	return jsonFile
