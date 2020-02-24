@@ -32,7 +32,7 @@ func (c *JobCreate) Run() {
 	}
 
 	cName := strings.Join(splitName, "")
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/job.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/job.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("job"), strings.ToLower(c.Args))

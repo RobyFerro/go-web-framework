@@ -27,7 +27,7 @@ func (c *ModelCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
 	cName := strings.Title(strings.ToLower(c.Args))
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/model.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/model.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("database/model"), strings.ToLower(c.Args))

@@ -32,7 +32,7 @@ func (c *CmdCreate) Run() {
 	}
 
 	cName := strings.Join(splitName, "")
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/command.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/command.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/console/command"), strings.ToLower(c.Args))

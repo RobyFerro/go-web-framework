@@ -1,9 +1,5 @@
 package command
 
-import (
-	"github.com/RobyFerro/go-web-framework"
-)
-
 type @@TMP@@ struct {
 	Signature   string
 	Description string
@@ -16,7 +12,7 @@ func (c *@@TMP@@) Register() {
 }
 
 // Command business logic
-func (c *@@TMP@@) Run(kernel *gwf.HttpKernel, args string, console map[string]interface{}) {
+func (c *@@TMP@@) Run() {
 	// Insert command logic
 }
 

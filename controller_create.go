@@ -27,7 +27,7 @@ func (c *ControllerCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
 	cName := strings.Title(strings.ToLower(c.Args))
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "../../raw/controller.raw"))
+	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/controller.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/http/controller"), strings.ToLower(c.Args))
