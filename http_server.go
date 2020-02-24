@@ -47,7 +47,6 @@ func GetHttpServer(router *mux.Router, cfg *Conf) *http.Server {
 	var httpServerConf = http.Server{}
 
 	if cfg.Server.Ssl {
-
 		sslCfg := &tls.Config{
 			MinVersion:               tls.VersionTLS12,
 			CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},

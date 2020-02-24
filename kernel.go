@@ -28,7 +28,7 @@ var (
 		GetHttpServer,
 		WebRouter,
 	}
-	// Register all commands here.
+	// Commands will export all registered commands
 	// The following map of interfaces expose all available method that can be used by Go-Web CLI tool.
 	// The map index determines the command that you've to run to for use the relative method.
 	// Example: './goweb migration:up' will run '&command.MigrationUp{}' command.

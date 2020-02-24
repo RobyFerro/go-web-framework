@@ -55,6 +55,7 @@ func (c *MigrationUp) Run(db *gorm.DB) {
 // Retrieve all migration files located in database/migration folder.
 func getAllMigrations() []string {
 	var migrations []string
+
 	err := filepath.Walk(GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil

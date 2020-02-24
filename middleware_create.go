@@ -25,6 +25,7 @@ func (c *MiddlewareCreate) Register() {
 // Run this command
 func (c *MiddlewareCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
+
 	splitName := strings.Split(strings.ToLower(c.Args), "_")
 	for i, name := range splitName {
 		splitName[i] = strings.Title(name)
@@ -35,6 +36,7 @@ func (c *MiddlewareCreate) Run() {
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/http/middleware"), strings.ToLower(c.Args))
+
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		ProcessError(err)
 	}

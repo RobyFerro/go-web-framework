@@ -40,8 +40,6 @@ func (c *GenerateKey) Run() {
 	if err = ioutil.WriteFile(path, []byte(newContent), 0); err != nil {
 		ProcessError(err)
 	}
-
-	return
 }
 
 // generateNewToken will return a random sha256 hash

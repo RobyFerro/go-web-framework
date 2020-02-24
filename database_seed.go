@@ -34,10 +34,11 @@ func (c *Seeder) Run(db *gorm.DB, models ModelRegister) {
 // Extract the specified models from model list
 func extractSpecificModel(name string, models *[]interface{}) {
 	var newModels []interface{}
+
 	for _, m := range *models {
 		modelName := reflect.TypeOf(m).Name()
 
-		if strings.ToLower(name) == strings.ToLower(modelName) {
+		if strings.EqualFold(name, modelName) {
 			newModels = append(newModels, m)
 			break
 		}

@@ -31,6 +31,7 @@ func (c *ModelCreate) Run() {
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("database/model"), strings.ToLower(c.Args))
+
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		ProcessError(err)
 	}

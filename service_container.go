@@ -7,6 +7,7 @@ import (
 // BuildContainer provide the global service container
 func BuildContainer() *dig.Container {
 	container := dig.New()
+
 	for _, s := range Services {
 		if err := container.Provide(s); err != nil {
 			ProcessError(err)

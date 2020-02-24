@@ -23,6 +23,7 @@ func (c *ShowRoute) Register() {
 // Run this command
 func (c *ShowRoute) Run() {
 	var data [][]string
+
 	routes, err := ConfigurationWeb()
 	if err != nil {
 		ProcessError(err)

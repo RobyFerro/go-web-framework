@@ -46,6 +46,7 @@ func registerBaseEntities(c ControllerRegister, m ModelRegister, s ServiceRegist
 
 // Merge custom services with defaults
 func bindServices(services []interface{}) {
+
 	for _, s := range services {
 		Services = append(Services, s)
 	}

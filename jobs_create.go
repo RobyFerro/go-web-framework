@@ -22,7 +22,7 @@ func (c *JobCreate) Register() {
 	c.Description = "Create new async job" // Change command description
 }
 
-// Run this commmand
+// Run this command
 func (c *JobCreate) Run() {
 	var _, filename, _, _ = runtime.Caller(0)
 
@@ -36,6 +36,7 @@ func (c *JobCreate) Run() {
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("job"), strings.ToLower(c.Args))
+
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		ProcessError(err)
 	}
