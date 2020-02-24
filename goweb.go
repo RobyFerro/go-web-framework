@@ -21,7 +21,7 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 	rc := reflect.ValueOf(&cmd)
 	// Set args if exists
 	if len(args) == 2 {
-		rc.FieldByName("Args").Set(reflect.ValueOf(args[1]))
+		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
 	}
 
 	// Build service container.
