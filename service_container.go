@@ -1,4 +1,4 @@
-package main
+package gwf
 
 import (
 	"go.uber.org/dig"

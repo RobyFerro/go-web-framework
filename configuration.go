@@ -1,4 +1,4 @@
-package main
+package gwf
 
 import (
 	"gopkg.in/yaml.v2"
