@@ -18,7 +18,7 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 		os.Exit(1)
 	}
 
-	rc := reflect.ValueOf(&cmd)
+	rc := reflect.ValueOf(cmd)
 	// Set args if exists
 	if len(args) == 2 {
 		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
