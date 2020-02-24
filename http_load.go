@@ -44,6 +44,7 @@ func (c *HttpLoad) Run(conf *Conf) {
 	}
 }
 
+// Execute Vegeta attack
 func attack(r LoadRoute, url string) {
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
 	duration := r.Time
