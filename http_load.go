@@ -47,7 +47,6 @@ func (c *HttpLoad) Run(conf *Conf) {
 	}
 
 	for _, r := range routes.Routes {
-		fmt.Printf("Testing: %s\n", serverName)
 		attack(r, fmt.Sprintf("%s:%d", serverName, conf.Server.Port))
 	}
 }
@@ -57,6 +56,7 @@ func attack(r LoadRoute, url string) {
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
 	duration := 5 * time.Second
 	targetUrl := fmt.Sprintf("http://%s/%s", url, r.Url)
+	fmt.Printf("Testing: %s\n", targetUrl)
 
 	target := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: r.Method,
