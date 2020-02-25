@@ -22,7 +22,7 @@ type FileStruct struct {
 type LoadRoute struct {
 	Method string        `json:"method"`
 	Url    string        `json:"url"`
-	Body   []byte        `json:"body"`
+	Body   string        `json:"body"`
 	Header string        `json:"header"`
 	Time   time.Duration `json:"duration"`
 	Rate   int           `json:"rate"`
@@ -61,7 +61,7 @@ func attack(r LoadRoute, url string) {
 	target := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: r.Method,
 		URL:    targetUrl,
-		Body:   r.Body,
+		Body:   []byte(r.Body),
 		Header: http.Header{
 			"Content-Type": {
 				r.Header,
