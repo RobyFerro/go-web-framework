@@ -92,7 +92,7 @@ func attack(r LoadRoute, url string) {
 func printMetrics(m vegeta.Metrics) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"TYPE", "RESULT"})
-	table.Append([]string{"99th percentile", m.Latencies.P99.String()})
+	table.Append([]string{"99th percentile", fmt.Sprintf("%s", m.Latencies.P99)})
 	table.Append([]string{"Total request", fmt.Sprintf("%d", m.Requests)})
 
 	table.Render()
