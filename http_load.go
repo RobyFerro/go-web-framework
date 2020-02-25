@@ -23,9 +23,14 @@ type LoadRoute struct {
 	Method string        `json:"method"`
 	Url    string        `json:"url"`
 	Body   []byte        `json:"body"`
-	Header http.Header   `json:"header"`
+	Header FileHeader    `json:"header"`
 	Time   time.Duration `json:"duration"`
 	Rate   int           `json:"rate"`
+}
+
+type FileHeader struct {
+	Type    string `json:"type"`
+	Content string `json:"content"`
 }
 
 // Command registration
@@ -53,7 +58,7 @@ func attack(r LoadRoute, url string) {
 		Method: r.Method,
 		URL:    fmt.Sprintf("%s/%s", url, r.Url),
 		Body:   r.Body,
-		Header: r.Header,
+		Header: generateHTTPHeader(r.Header),
 	})
 
 	attacker := vegeta.NewAttacker()
@@ -64,6 +69,13 @@ func attack(r LoadRoute, url string) {
 	}
 	metrics.Close()
 	fmt.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
+
+func generateHTTPHeader(data FileHeader) http.Header {
+	var h http.Header
+	h.Set(data.Type, data.Content)
+
+	return h
 }
 
 // Read JSON file content
