@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	vegeta "github.com/tsenart/vegeta/lib"
+	"io/ioutil"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -67,15 +67,14 @@ func attack(r LoadRoute, url string) {
 }
 
 // Read JSON file content
-func readJsonFile(path string, str *FileStruct) *os.File {
-	jsonFile, err := os.Open(GetDynamicPath(path))
+func readJsonFile(path string, str *FileStruct) {
+	filePath := GetDynamicPath(path)
+	jsonFile, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if err := json.Unmarshal([]byte(path), &str); err != nil {
+	if err := json.Unmarshal(jsonFile, &str); err != nil {
 		ProcessError(err)
 	}
-
-	return jsonFile
 }
