@@ -97,7 +97,7 @@ func printMetrics(m *vegeta.Metrics) {
 	table.Append([]string{"Duration", fmt.Sprintf("%s", m.Duration)})
 
 	for s, _ := range m.StatusCodes {
-		table.Append([]string{s, strconv.Itoa(m.StatusCodes[s])})
+		table.Append([]string{fmt.Sprintf("Status code %s", s), strconv.Itoa(m.StatusCodes[s])})
 	}
 
 	table.Render()
