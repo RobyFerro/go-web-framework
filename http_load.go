@@ -97,6 +97,7 @@ func printMetrics(m *vegeta.Metrics, r *LoadRoute) {
 	table.Append([]string{"Duration", fmt.Sprintf("%s", m.Duration)})
 	table.Append([]string{"Rate", fmt.Sprintf("%ds", r.Rate)})
 
+	table.SetColumnAlignment([]int{tablewriter.ALIGN_LEFT, tablewriter.ALIGN_RIGHT})
 	for s, _ := range m.StatusCodes {
 		table.Append([]string{fmt.Sprintf("Status code %s", s), strconv.Itoa(m.StatusCodes[s])})
 	}
