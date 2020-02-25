@@ -68,7 +68,7 @@ func attack(r LoadRoute, url string) {
 
 // Read JSON file content
 func readJsonFile(path string, str *FileStruct) *os.File {
-	jsonFile, err := os.Open(path)
+	jsonFile, err := os.Open(GetDynamicPath(path))
 	if err != nil {
 		fmt.Println(err)
 	}
