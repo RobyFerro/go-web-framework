@@ -61,7 +61,7 @@ func attack(r LoadRoute, url string) {
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
 	duration := 5 * time.Second
 	targetUrl := fmt.Sprintf("http://%s%s", url, r.Url)
-	fmt.Printf("Testing: %s\n", targetUrl)
+	fmt.Printf("Testing: %s - %s\n", r.Method, targetUrl)
 
 	if r.Body != "" {
 		body = getBody(r.Body)
@@ -86,16 +86,16 @@ func attack(r LoadRoute, url string) {
 	}
 
 	metrics.Close()
-	printMetrics(&metrics)
+	printMetrics(&metrics, &r)
 }
 
-func printMetrics(m *vegeta.Metrics) {
+func printMetrics(m *vegeta.Metrics, r *LoadRoute) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"TYPE", "RESULT"})
 	table.Append([]string{"99th percentile", fmt.Sprintf("%s", m.Latencies.P99)})
 	table.Append([]string{"Total request", fmt.Sprintf("%d", m.Requests)})
 	table.Append([]string{"Duration", fmt.Sprintf("%s", m.Duration)})
-	table.Append([]string{"Rate", fmt.Sprintf("%bs", m.Rate)})
+	table.Append([]string{"Rate", fmt.Sprintf("%bs", r.Rate)})
 
 	for s, _ := range m.StatusCodes {
 		table.Append([]string{fmt.Sprintf("Status code %s", s), strconv.Itoa(m.StatusCodes[s])})
