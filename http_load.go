@@ -20,12 +20,12 @@ type FileStruct struct {
 }
 
 type LoadRoute struct {
-	Method string `json:"method"`
-	Url    string `json:"url"`
-	Body   []byte `json:"body"`
-	Header string `json:"header"`
-	Time   int    `json:"duration"`
-	Rate   int    `json:"rate"`
+	Method string        `json:"method"`
+	Url    string        `json:"url"`
+	Body   []byte        `json:"body"`
+	Header string        `json:"header"`
+	Time   time.Duration `json:"duration"`
+	Rate   int           `json:"rate"`
 }
 
 // Command registration
