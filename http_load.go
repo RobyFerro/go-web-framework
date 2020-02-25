@@ -40,14 +40,14 @@ func (c *HttpLoad) Run(conf *Conf) {
 	readJsonFile(c.Args, &routes)
 
 	for _, r := range routes.Routes {
-		attack(r, fmt.Sprintf("%s:%b", conf.Server.Name, conf.Server.Port))
+		attack(r, fmt.Sprintf("%s:%d", conf.Server.Name, conf.Server.Port))
 	}
 }
 
 // Execute Vegeta attack
 func attack(r LoadRoute, url string) {
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
-	duration := r.Time * time.Second
+	duration := 5 * time.Second
 
 	target := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: r.Method,
