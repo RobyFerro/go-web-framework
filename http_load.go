@@ -94,6 +94,8 @@ func printMetrics(m vegeta.Metrics) {
 	table.SetHeader([]string{"TYPE", "RESULT"})
 	table.Append([]string{"99th percentile", m.Latencies.P99.String()})
 	table.Append([]string{"Total request", fmt.Sprintf("%d", m.Requests)})
+
+	table.Render()
 }
 
 // Read JSON file content
