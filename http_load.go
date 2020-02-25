@@ -47,6 +47,7 @@ func (c *HttpLoad) Run(conf *Conf) {
 	}
 
 	for _, r := range routes.Routes {
+		fmt.Printf("Testing: %s\n", serverName)
 		attack(r, fmt.Sprintf("%s:%d", serverName, conf.Server.Port))
 	}
 }
