@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -93,6 +94,11 @@ func printMetrics(m *vegeta.Metrics) {
 	table.SetHeader([]string{"TYPE", "RESULT"})
 	table.Append([]string{"99th percentile", fmt.Sprintf("%s", m.Latencies.P99)})
 	table.Append([]string{"Total request", fmt.Sprintf("%d", m.Requests)})
+	table.Append([]string{"Duration", fmt.Sprintf("%s", m.Duration)})
+
+	for s, _ := range m.StatusCodes {
+		table.Append([]string{s, strconv.Itoa(m.StatusCodes[s])})
+	}
 
 	table.Render()
 }
