@@ -51,6 +51,16 @@ func (c *HttpLoad) Run(conf *Conf) {
 	}
 }
 
+// Read body from .json
+func getBody(path string) []byte {
+	content, err := ioutil.ReadFile(GetDynamicPath(path))
+	if err != nil {
+		ProcessError(err)
+	}
+
+	return content
+}
+
 // Execute Vegeta attack
 func attack(r LoadRoute, url string) {
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
@@ -61,7 +71,7 @@ func attack(r LoadRoute, url string) {
 	target := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: r.Method,
 		URL:    targetUrl,
-		Body:   []byte(r.Body),
+		Body:   getBody(r.Body),
 		Header: http.Header{
 			"Content-Type": {
 				r.Header,
