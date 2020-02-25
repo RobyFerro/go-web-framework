@@ -55,10 +55,11 @@ func (c *HttpLoad) Run(conf *Conf) {
 func attack(r LoadRoute, url string) {
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
 	duration := 5 * time.Second
+	targetUrl := fmt.Sprintf("%s/%s", url, r.Url)
 
 	target := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: r.Method,
-		URL:    fmt.Sprintf("%s/%s", url, r.Url),
+		URL:    targetUrl,
 		Body:   r.Body,
 		Header: http.Header{
 			"Content-Type": {
