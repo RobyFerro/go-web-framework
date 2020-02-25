@@ -84,9 +84,8 @@ func attack(r LoadRoute, url string) {
 		metrics.Add(res)
 	}
 
-	printMetrics(&metrics)
 	metrics.Close()
-
+	printMetrics(&metrics)
 }
 
 func printMetrics(m *vegeta.Metrics) {
