@@ -3,9 +3,11 @@ package gwf
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/olekukonko/tablewriter"
 	vegeta "github.com/tsenart/vegeta/lib"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -51,27 +53,23 @@ func (c *HttpLoad) Run(conf *Conf) {
 	}
 }
 
-// Read body from .json
-func getBody(path string) []byte {
-	content, err := ioutil.ReadFile(GetDynamicPath(path))
-	if err != nil {
-		ProcessError(err)
-	}
-
-	return content
-}
-
 // Execute Vegeta attack
 func attack(r LoadRoute, url string) {
+	var body []byte
+
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
 	duration := 5 * time.Second
 	targetUrl := fmt.Sprintf("http://%s%s", url, r.Url)
 	fmt.Printf("Testing: %s\n", targetUrl)
 
+	if r.Body != "" {
+		body = getBody(r.Body)
+	}
+
 	target := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: r.Method,
 		URL:    targetUrl,
-		Body:   getBody(r.Body),
+		Body:   body,
 		Header: http.Header{
 			"Content-Type": {
 				r.Header,
@@ -85,8 +83,17 @@ func attack(r LoadRoute, url string) {
 	for res := range attacker.Attack(target, rate, duration, "Big Bang!") {
 		metrics.Add(res)
 	}
+
+	printMetrics(metrics)
 	metrics.Close()
-	fmt.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+
+}
+
+func printMetrics(m vegeta.Metrics) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"TYPE", "RESULT"})
+	table.Append([]string{"99th percentile", m.Latencies.P99.String()})
+	table.Append([]string{"Total request", fmt.Sprintf("%d", m.Requests)})
 }
 
 // Read JSON file content
@@ -100,4 +107,14 @@ func readJsonFile(path string, str *FileStruct) {
 	if err := json.Unmarshal(jsonFile, &str); err != nil {
 		ProcessError(err)
 	}
+}
+
+// Read body from .json
+func getBody(path string) []byte {
+	content, err := ioutil.ReadFile(GetDynamicPath(path))
+	if err != nil {
+		ProcessError(err)
+	}
+
+	return content
 }
