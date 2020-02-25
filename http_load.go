@@ -37,10 +37,17 @@ func (c *HttpLoad) Register() {
 // Command business logic
 func (c *HttpLoad) Run(conf *Conf) {
 	var routes FileStruct
+	var serverName string
 	readJsonFile(c.Args, &routes)
 
+	if conf.Server.Name == "" {
+		serverName = "localhost"
+	} else {
+		serverName = conf.Server.Name
+	}
+
 	for _, r := range routes.Routes {
-		attack(r, fmt.Sprintf("%s:%d", conf.Server.Name, conf.Server.Port))
+		attack(r, fmt.Sprintf("%s:%d", serverName, conf.Server.Port))
 	}
 }
 
