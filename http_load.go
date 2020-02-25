@@ -30,8 +30,8 @@ type LoadRoute struct {
 
 // Command registration
 func (c *HttpLoad) Register() {
-	c.Signature = "http:load <target.json>" // Change command signature
-	c.Description = "Execute http load"     // Change command description
+	c.Signature = "http:load target.json" // Change command signature
+	c.Description = "Execute http load"   // Change command description
 }
 
 // Command business logic
