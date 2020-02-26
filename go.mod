@@ -9,10 +9,13 @@ require (
 	github.com/go-redis/redis/v7 v7.0.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
+	github.com/influxdata/tdigest v0.0.1 // indirect
 	github.com/jinzhu/gorm v1.9.12
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
+	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/sevlyar/go-daemon v0.1.5
+	github.com/tsenart/vegeta v12.7.0+incompatible
 	go.uber.org/dig v1.8.0
 	gopkg.in/yaml.v2 v2.2.8
 )

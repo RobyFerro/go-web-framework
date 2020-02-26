@@ -3,6 +3,7 @@ package console
 type @@TMP@@ struct {
 	Signature   string
 	Description string
+	Args        string
 }
 
 // Command registration

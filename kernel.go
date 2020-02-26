@@ -51,6 +51,7 @@ var (
 			"job:create":         &JobCreate{},
 			"generate:key":       &GenerateKey{},
 			"install":            &Install{},
+			"http:load":          &HttpLoad{},
 			// Here is where you've to register your custom controller
 		},
 	}
