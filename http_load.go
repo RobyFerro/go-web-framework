@@ -89,6 +89,7 @@ func attack(r LoadRoute, url string) {
 	printMetrics(&metrics, &r)
 }
 
+// Print metrics on specific request
 func printMetrics(m *vegeta.Metrics, r *LoadRoute) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"TYPE", "RESULT"})
