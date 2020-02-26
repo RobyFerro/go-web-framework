@@ -27,7 +27,7 @@ type LoadRoute struct {
 	Url    string        `json:"url"`
 	Body   string        `json:"body"`
 	Header string        `json:"header"`
-	Time   time.Duration `json:"duration"`
+	Time   time.Duration `json:"time"`
 	Rate   int           `json:"rate"`
 }
 
