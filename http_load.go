@@ -23,12 +23,12 @@ type FileStruct struct {
 }
 
 type LoadRoute struct {
-	Method string `json:"method"`
-	Url    string `json:"url"`
-	Body   string `json:"body"`
-	Header string `json:"header"`
-	Time   int    `json:"duration"`
-	Rate   int    `json:"rate"`
+	Method string        `json:"method"`
+	Url    string        `json:"url"`
+	Body   string        `json:"body"`
+	Header string        `json:"header"`
+	Time   time.Duration `json:"duration"`
+	Rate   int           `json:"rate"`
 }
 
 // Command registration
@@ -59,7 +59,7 @@ func attack(r LoadRoute, url string) {
 	var body []byte
 
 	rate := vegeta.Rate{Freq: r.Rate, Per: time.Second}
-	duration := time.Duration(r.Time) * time.Second
+	duration := r.Time * time.Second
 	targetUrl := fmt.Sprintf("http://%s%s", url, r.Url)
 	fmt.Printf("Testing: %s - %s\n", r.Method, targetUrl)
 
