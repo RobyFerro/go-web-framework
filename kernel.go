@@ -78,7 +78,7 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 				}).Methods(r.Method)
 
 				subRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
-				router.Handle(r.Path, subRouter)
+				router.Handle(r.Path, subRouter).Methods(r.Method)
 			} else {
 				router.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
 					cc := GetControllerInterface(directive, writer, request)
@@ -118,7 +118,7 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 					}).Methods(r.Method)
 
 					nestedRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
-					subRouter.Handle(r.Path, nestedRouter)
+					subRouter.Handle(r.Path, nestedRouter).Methods(r.Method)
 				} else {
 					subRouter.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
 						cc := GetControllerInterface(directive, writer, request)
