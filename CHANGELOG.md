@@ -8,6 +8,8 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 ### Changed 
 - Change JWT lifetime with a custom duration
 
+`func (c *Auth) NewToken(key string, duration time.Duration) (string, bool)`
+
 ## [v0.3.5-beta] - 2020-04-14
 ### Fix 
 - Removed routines from kernel initialization.
