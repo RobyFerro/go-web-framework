@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.5-beta] - 2020-04-14
+### Fix 
+- Removed routines from kernel initialization.
+
 ## [v0.3.4-beta] - 2020-03-26
 ### Fix 
 - Error in route resolution when two routes with same path are declared
