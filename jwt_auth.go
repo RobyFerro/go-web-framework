@@ -38,12 +38,12 @@ func (c *Auth) GetUser(req *http.Request, key string) error {
 }
 
 // NewToken will return a new JWT token
-func (c *Auth) NewToken(key string) (string, bool) {
+func (c *Auth) NewToken(key string, duration time.Duration) (string, bool) {
 	c.Password = ""
 	userDataString, _ := json.Marshal(c)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user": string(userDataString),
-		"exp":  time.Now().Add(time.Hour * time.Duration(2)).Unix(),
+		"exp":  time.Now().Add(duration).Unix(),
 		"iat":  time.Now().Unix(),
 	})
 

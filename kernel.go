@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
-	"sync"
 )
 
 var (
@@ -60,80 +59,63 @@ var (
 // Handle single path parsing.
 // This method it's used to parse every single path. If middleware is present a sub-router with will be created
 func handleSingleRoute(routes map[string]Route, router *mux.Router) {
-	var wg sync.WaitGroup
-	wg.Add(len(routes))
-
 	for _, route := range routes {
-		go func(r Route) {
-			hasMiddleware := len(r.Middleware) > 0
-			directive := strings.Split(r.Action, "@")
-			if hasMiddleware {
-				subRouter := mux.NewRouter()
-				subRouter.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
-					cc := GetControllerInterface(directive, writer, request)
-					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					if err := Container.Invoke(method.Interface()); err != nil {
-						ProcessError(err)
-					}
-				}).Methods(r.Method)
+		hasMiddleware := len(route.Middleware) > 0
+		directive := strings.Split(route.Action, "@")
+		if hasMiddleware {
+			subRouter := mux.NewRouter()
+			subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+				cc := GetControllerInterface(directive, writer, request)
+				method := reflect.ValueOf(cc).MethodByName(directive[1])
+				if err := Container.Invoke(method.Interface()); err != nil {
+					ProcessError(err)
+				}
+			}).Methods(route.Method)
 
-				subRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
-				router.Handle(r.Path, subRouter)
-			} else {
-				router.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
-					cc := GetControllerInterface(directive, writer, request)
-					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					if err := Container.Invoke(method.Interface()); err != nil {
-						ProcessError(err)
-					}
-				}).Methods(r.Method)
-			}
-
-			wg.Done()
-		}(route)
+			subRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
+			router.Handle(route.Path, subRouter).Methods(route.Method)
+		} else {
+			router.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+				cc := GetControllerInterface(directive, writer, request)
+				method := reflect.ValueOf(cc).MethodByName(directive[1])
+				if err := Container.Invoke(method.Interface()); err != nil {
+					ProcessError(err)
+				}
+			}).Methods(route.Method)
+		}
 	}
-
-	wg.Wait()
 }
 
 // Parse route groups.
 func handleGroups(groups map[string]Group, router *mux.Router) {
 	for _, group := range groups {
 		subRouter := router.PathPrefix(group.Prefix).Subrouter()
-		var wg sync.WaitGroup
-		wg.Add(len(group.Routes))
 
 		for _, route := range group.Routes {
-			go func(r Route) {
-				directive := strings.Split(r.Action, "@")
-				if len(r.Middleware) > 0 {
-					nestedRouter := mux.NewRouter()
-					fullPath := fmt.Sprintf("%s%s", group.Prefix, r.Path)
-					nestedRouter.HandleFunc(fullPath, func(writer http.ResponseWriter, request *http.Request) {
-						cc := GetControllerInterface(directive, writer, request)
-						method := reflect.ValueOf(cc).MethodByName(directive[1])
-						if err := Container.Invoke(method.Interface()); err != nil {
-							ProcessError(err)
-						}
-					}).Methods(r.Method)
+			directive := strings.Split(route.Action, "@")
+			if len(route.Middleware) > 0 {
+				nestedRouter := mux.NewRouter()
+				fullPath := fmt.Sprintf("%s%s", group.Prefix, route.Path)
+				nestedRouter.HandleFunc(fullPath, func(writer http.ResponseWriter, request *http.Request) {
+					cc := GetControllerInterface(directive, writer, request)
+					method := reflect.ValueOf(cc).MethodByName(directive[1])
+					if err := Container.Invoke(method.Interface()); err != nil {
+						ProcessError(err)
+					}
+				}).Methods(route.Method)
 
-					nestedRouter.Use(parseMiddleware(r.Middleware, Middleware)...)
-					subRouter.Handle(r.Path, nestedRouter)
-				} else {
-					subRouter.HandleFunc(r.Path, func(writer http.ResponseWriter, request *http.Request) {
-						cc := GetControllerInterface(directive, writer, request)
-						method := reflect.ValueOf(cc).MethodByName(directive[1])
-						if err := Container.Invoke(method.Interface()); err != nil {
-							ProcessError(err)
-						}
-					}).Methods(r.Method)
-				}
-
-				wg.Done()
-			}(route)
+				nestedRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
+				subRouter.Handle(route.Path, nestedRouter).Methods(route.Method)
+			} else {
+				subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+					cc := GetControllerInterface(directive, writer, request)
+					method := reflect.ValueOf(cc).MethodByName(directive[1])
+					if err := Container.Invoke(method.Interface()); err != nil {
+						ProcessError(err)
+					}
+				}).Methods(route.Method)
+			}
 		}
-
-		wg.Wait()
 
 		subRouter.Use(parseMiddleware(group.Middleware, Middleware)...)
 	}

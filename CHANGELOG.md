@@ -4,6 +4,24 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.7-beta] - 2020-08-07
+### Fix 
+- Fixes #1
+
+## [v0.3.6-beta] - 2020-04-14
+### Changed 
+- Change JWT lifetime with a custom duration
+
+`func (c *Auth) NewToken(key string, duration time.Duration) (string, bool)`
+
+## [v0.3.5-beta] - 2020-04-14
+### Fix 
+- Removed routines from kernel initialization.
+
+## [v0.3.4-beta] - 2020-03-26
+### Fix 
+- Error in route resolution when two routes with same path are declared
+
 ## [v0.3.3-beta] - 2020-02-24
 ### Added 
 - New HTTP load CLI tool
