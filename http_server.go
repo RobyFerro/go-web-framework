@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/user"
+	"runtime"
 	"strconv"
 	"strings"
 	"syscall"
@@ -23,8 +24,10 @@ func StartServer(srv *http.Server, conf *Conf) error {
 	appConf = *conf
 	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
 
-	if err := changeRunningUser(); err != nil {
-		return err
+	if runtime.GOOS == "linux" {
+		if err := changeRunningUser(); err != nil {
+			return err
+		}
 	}
 
 	if appConf.Server.Ssl {

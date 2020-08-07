@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.7-beta] - 2020-08-07
+### Fix 
+- Fixes #1
+
 ## [v0.3.6-beta] - 2020-04-14
 ### Changed 
 - Change JWT lifetime with a custom duration
