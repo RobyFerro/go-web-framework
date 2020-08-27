@@ -24,6 +24,7 @@ func (c *MiddlewareCreate) Register() {
 
 // Run this command
 func (c *MiddlewareCreate) Run() {
+	fmt.Println("Creating new middleware...")
 	var _, filename, _, _ = runtime.Caller(0)
 
 	splitName := strings.Split(strings.ToLower(c.Args), "_")

@@ -24,6 +24,7 @@ func (c *ModelCreate) Register() {
 
 // Run this command
 func (c *ModelCreate) Run() {
+	fmt.Println("Creating new model...")
 	var _, filename, _, _ = runtime.Caller(0)
 
 	cName := strings.Title(strings.ToLower(c.Args))
@@ -37,5 +38,5 @@ func (c *ModelCreate) Run() {
 	}
 
 	fmt.Printf("\nSUCCESS: Your model %s has been created at %s", cName, cFile)
-	fmt.Printf("Do not forget to register it!")
+	fmt.Printf("\nDo not forget to register it!")
 }

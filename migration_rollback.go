@@ -24,6 +24,7 @@ func (c *MigrateRollback) Register() {
 
 // Run this command
 func (c *MigrateRollback) Run(db *gorm.DB) {
+	fmt.Println("Executing migration rollback...")
 	step, _ := strconv.Atoi(c.Args)
 	batch := getLastBatch(db)
 
@@ -56,6 +57,6 @@ func rollbackMigrations(migrations []migration, db *gorm.DB) {
 			ProcessError(err)
 		}
 
-		fmt.Printf("Success! %s has been rolled back!", rollbackFile)
+		fmt.Printf("\nSuccess! %s has been rolled back!", rollbackFile)
 	}
 }

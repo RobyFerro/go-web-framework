@@ -24,6 +24,7 @@ func (c *CmdCreate) Register() {
 
 // Run this command
 func (c *CmdCreate) Run() {
+	fmt.Println("Creating new CLI command...")
 	var _, filename, _, _ = runtime.Caller(0)
 
 	splitName := strings.Split(strings.ToLower(c.Args), "_")
@@ -40,6 +41,6 @@ func (c *CmdCreate) Run() {
 		ProcessError(err)
 	}
 
-	fmt.Printf("\nSUCCESS: Your %s command has been created at %s\n", cName, cFile)
-	fmt.Printf("Do not forget to register it!")
+	fmt.Printf("\nSUCCESS: Your %s command has been created at %s", cName, cFile)
+	fmt.Printf("\nDO NOT FORGET TO REGISTER IT!")
 }

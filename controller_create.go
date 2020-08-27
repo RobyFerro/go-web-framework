@@ -24,6 +24,7 @@ func (c *ControllerCreate) Register() {
 
 // Run this command
 func (c *ControllerCreate) Run() {
+	fmt.Println("Creating new controller...")
 	var _, filename, _, _ = runtime.Caller(0)
 
 	cName := strings.Title(strings.ToLower(c.Args))
@@ -36,5 +37,5 @@ func (c *ControllerCreate) Run() {
 	}
 
 	fmt.Printf("\nSUCCESS: Your %sController has been created at %s", cName, cFile)
-	fmt.Printf("Do not forget to register it!")
+	fmt.Printf("\nDO NOT FORGET TO REGISTER IT!")
 }
