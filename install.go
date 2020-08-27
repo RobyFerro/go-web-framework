@@ -5,6 +5,7 @@ import (
 	"go/build"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"syscall"
@@ -25,12 +26,20 @@ func (c *Install) Register() {
 
 // Run this command
 func (c *Install) Run() {
+	fmt.Println("Creating new Go-Web service...")
 	gopath := build.Default.GOPATH
 	sourcePath := fmt.Sprintf("%s/%s", gopath, "src/github.com/RobyFerro/go-web")
 
 	if err := dir(sourcePath, c.Args); err != nil {
 		ProcessError(err)
 	}
+
+	// Remove default .git directory
+	if err := os.RemoveAll(fmt.Sprintf("%s/.git", c.Args)); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Complete!")
 }
 
 // Dir copies a whole directory recursively

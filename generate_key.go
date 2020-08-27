@@ -23,6 +23,7 @@ func (c *GenerateKey) Register() {
 
 // Run this command
 func (c *GenerateKey) Run() {
+	fmt.Println("Generating new application KEY")
 	path := GetDynamicPath("config.yml")
 	read, err := ioutil.ReadFile(path)
 
@@ -40,6 +41,8 @@ func (c *GenerateKey) Run() {
 	if err = ioutil.WriteFile(path, []byte(newContent), 0); err != nil {
 		ProcessError(err)
 	}
+
+	fmt.Println("Complete!")
 }
 
 // generateNewToken will return a random sha256 hash

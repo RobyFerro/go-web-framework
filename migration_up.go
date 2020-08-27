@@ -33,6 +33,7 @@ type migration struct {
 
 // Run this command
 func (c *MigrationUp) Run(db *gorm.DB) {
+	fmt.Println("Executing migrations...")
 	db.AutoMigrate(&migration{})
 	batch := getLastBatch(db) + 1
 
@@ -113,5 +114,5 @@ func setMigrationAsDone(db *gorm.DB, hash string, name string, batch int) {
 	}
 
 	db.Create(&m)
-	fmt.Printf("Success! Migration %s has been executed", name)
+	fmt.Printf("\nSuccess! Migration %s has been executed", name)
 }

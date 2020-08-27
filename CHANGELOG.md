@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.1-beta] - 2020-08-27
+### Fix
+- Generic command improvements
+
 ## [v0.4-beta] - 2020-08-27
 ### Removed
 - Removed some CLI commands in favour of new "Alfred" tool

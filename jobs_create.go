@@ -24,6 +24,7 @@ func (c *JobCreate) Register() {
 
 // Run this command
 func (c *JobCreate) Run() {
+	fmt.Println("Creating new async jobs...")
 	var _, filename, _, _ = runtime.Caller(0)
 
 	splitName := strings.Split(strings.ToLower(c.Args), "_")

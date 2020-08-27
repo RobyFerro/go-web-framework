@@ -24,6 +24,7 @@ func (c *MigrationCreate) Register() {
 
 // Run this command
 func (c *MigrationCreate) Run() {
+	fmt.Println("Creating new migrations...")
 	date := time.Now().Unix()
 	path := GetDynamicPath("database/migration")
 
@@ -43,6 +44,6 @@ func (c *MigrationCreate) Run() {
 		ProcessError(err)
 	}
 
-	fmt.Printf("Created new down migration: %s\n", filenameDown)
-	fmt.Printf("Do not forget to register it!")
+	fmt.Printf("\nCreated new down migration: %s", filenameDown)
+	fmt.Printf("\nDo not forget to register it!")
 }
