@@ -35,22 +35,10 @@ var (
 	// Example: './goweb migration:up' will run '&command.MigrationUp{}' command.
 	Commands = CommandRegister{
 		List: map[string]interface{}{
-			"migration:up":       &MigrationUp{},
-			"migration:create":   &MigrationCreate{},
-			"migration:rollback": &MigrateRollback{},
-			"database:seed":      &Seeder{},
-			"server:daemon":      &ServerDaemon{},
-			"server:run":         &ServerRun{},
-			"controller:create":  &ControllerCreate{},
-			"model:create":       &ModelCreate{},
-			"show:route":         &ShowRoute{},
-			"show:commands":      &ShowCommands{},
-			"cmd:create":         &CmdCreate{},
-			"middleware:create":  &MiddlewareCreate{},
-			"job:create":         &JobCreate{},
-			"generate:key":       &GenerateKey{},
-			"install":            &Install{},
-			"http:load":          &HttpLoad{},
+			"database:seed": &Seeder{},
+			"server:daemon": &ServerDaemon{},
+			"server:run":    &ServerRun{},
+			"show:commands": &ShowCommands{},
 			// Here is where you've to register your custom controller
 		},
 	}

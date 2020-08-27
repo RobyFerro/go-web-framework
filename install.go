@@ -2,12 +2,11 @@ package gwf
 
 import (
 	"fmt"
+	"go/build"
 	"io"
 	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
-	"runtime"
 	"syscall"
 )
 
@@ -26,8 +25,10 @@ func (c *Install) Register() {
 
 // Run this command
 func (c *Install) Run() {
-	var _, filename, _, _ = runtime.Caller(0)
-	if err := dir(filepath.Join(path.Dir(filename), "../../"), c.Args); err != nil {
+	gopath := build.Default.GOPATH
+	sourcePath := fmt.Sprintf("%s/%s", gopath, "src/github.com/RobyFerro/go-web")
+
+	if err := dir(sourcePath, c.Args); err != nil {
 		ProcessError(err)
 	}
 }
