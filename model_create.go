@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 )
@@ -37,6 +38,9 @@ func (c *ModelCreate) Run() {
 		ProcessError(err)
 	}
 
+	re := regexp.MustCompile("(model\\.[A-Za-z]\\w+( *){},(\\n*)(\\t*| *))")
+	newModel := fmt.Sprintf("model.%s{},\n\t\t", cName)
+	autoRegister(re, newModel)
+
 	fmt.Printf("\nSUCCESS: Your model %s has been created at %s", cName, cFile)
-	fmt.Printf("\nDo not forget to register it!")
 }
