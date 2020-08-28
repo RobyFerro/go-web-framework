@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.2-beta] - 2020-08-28
+### Added
+- Controllers and Models auto-register function (If created with Alfred).
+
 ## [v0.4.1-beta] - 2020-08-27
 ### Fix
 - Generic command improvements
