@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 )
@@ -36,6 +37,9 @@ func (c *ControllerCreate) Run() {
 		ProcessError(err)
 	}
 
+	re := regexp.MustCompile("(&controller\\.[A-Za-z]\\w+( *){},(\\n*)(\\t*| *))")
+	newController := fmt.Sprintf("\t&controller.%sController{},\n\t\t", cName)
+	autoRegister(re, newController)
+
 	fmt.Printf("\nSUCCESS: Your %sController has been created at %s", cName, cFile)
-	fmt.Printf("\nDO NOT FORGET TO REGISTER IT!")
 }
