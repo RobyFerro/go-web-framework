@@ -3,18 +3,12 @@ package gwf
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"net"
 	"net/http"
 	"os"
-	"os/user"
-	"runtime"
 	"strconv"
-	"strings"
-	"syscall"
-
-	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 )
 
 var appConf Conf
@@ -24,11 +18,12 @@ func StartServer(srv *http.Server, conf *Conf) error {
 	appConf = *conf
 	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
 
-	if runtime.GOOS == "linux" {
+	// Deprecated due to Windows OS incompatibility
+	/*if runtime.GOOS == "linux" {
 		if err := changeRunningUser(); err != nil {
 			return err
 		}
-	}
+	}*/
 
 	if appConf.Server.Ssl {
 		if err := srv.ServeTLS(webListener, appConf.Server.SslCert, appConf.Server.SslKey); err != nil {
@@ -88,6 +83,9 @@ func CreateSessionStore(cfg *Conf) *sessions.CookieStore {
 	return sessions.NewCookieStore([]byte(os.Getenv(cfg.App.Key)))
 }
 
+/*
+Deprecated methods: The following methods have been deprecated due to Windows conflicts
+//
 // Change running user. This method works only on Linux systems
 // If you'd like to run go-web on Windows or OSX system you should avoid the following code
 func changeRunningUser() error {
@@ -169,3 +167,4 @@ func changeGID(gid int) error {
 
 	return nil
 }
+*/
