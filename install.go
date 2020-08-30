@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"runtime"
 	"syscall"
 )
 
@@ -105,8 +106,10 @@ func file(src, dst string) error {
 		return err
 	}
 
-	if err := os.Chown(dst, syscall.Getuid(), syscall.Getgid()); err != nil {
-		ProcessError(err)
+	if runtime.GOOS == "linux" {
+		if err := os.Chown(dst, syscall.Getuid(), syscall.Getgid()); err != nil {
+			ProcessError(err)
+		}
 	}
 
 	return os.Chmod(dst, srcInfo.Mode())
