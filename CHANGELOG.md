@@ -4,6 +4,14 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.4-beta] - 2020-08-30
+### Fix
+- Warning messages creating new service in Windows
+
+## [v0.4.3-beta] - 2020-08-29
+### Removed
+- Syscall used to change user/group
+
 ## [v0.4.2-beta] - 2020-08-28
 ### Added
 - Controllers and Models auto-register function (If created with Alfred).
