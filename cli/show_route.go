@@ -1,6 +1,8 @@
-package gwf
+package cli
 
 import (
+	"github.com/RobyFerro/go-web-framework/foundation"
+	"github.com/RobyFerro/go-web-framework/helper"
 	"os"
 	"strings"
 
@@ -24,9 +26,9 @@ func (c *ShowRoute) Register() {
 func (c *ShowRoute) Run() {
 	var data [][]string
 
-	routes, err := ConfigurationWeb()
+	routes, err := foundation.ConfigurationWeb()
 	if err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 
 	// Parse single route
@@ -46,7 +48,7 @@ func (c *ShowRoute) Run() {
 }
 
 // Show single routes
-func showSingleRoute(routes map[string]Route, data *[][]string) {
+func showSingleRoute(routes map[string]foundation.Route, data *[][]string) {
 	for _, r := range routes {
 		*data = append(*data, []string{
 			r.Method,
@@ -60,7 +62,7 @@ func showSingleRoute(routes map[string]Route, data *[][]string) {
 }
 
 // Show groups
-func showGroupRoutes(routes map[string]Group, data *[][]string) {
+func showGroupRoutes(routes map[string]foundation.Group, data *[][]string) {
 	for _, g := range routes {
 		var middleware []string
 		middleware = append(middleware, g.Middleware...)

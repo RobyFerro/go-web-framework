@@ -1,6 +1,7 @@
-package gwf
+package cli
 
 import (
+	"github.com/RobyFerro/go-web-framework/types"
 	"os"
 	"reflect"
 
@@ -21,7 +22,7 @@ func (c *ShowCommands) Register() {
 }
 
 // Run this command
-func (c *ShowCommands) Run(commands CommandRegister) {
+func (c *ShowCommands) Run(commands types.CommandRegister) {
 
 	var data [][]string
 

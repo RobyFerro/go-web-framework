@@ -1,7 +1,8 @@
-package gwf
+package cli
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/helper"
 	"io/ioutil"
 	"path"
 	"path/filepath"
@@ -32,9 +33,9 @@ func (c *ControllerCreate) Run() {
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/controller.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/http/controller"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", helper.GetDynamicPath("app/http/controller"), strings.ToLower(c.Args))
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 
 	re := regexp.MustCompile("(&controller\\.[A-Za-z]\\w+( *){},(\\n*)(\\t*| *))")

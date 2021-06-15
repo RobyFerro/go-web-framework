@@ -1,6 +1,9 @@
-package gwf
+package cli
 
 import (
+	"github.com/RobyFerro/go-web-framework/foundation"
+	"github.com/RobyFerro/go-web-framework/helper"
+	"github.com/RobyFerro/go-web-framework/service"
 	"log"
 	"net/http"
 
@@ -21,7 +24,7 @@ func (c *ServerDaemon) Register() {
 }
 
 // Run Go-Web as a daemon
-func (c *ServerDaemon) Run(conf *Conf, srv *http.Server) {
+func (c *ServerDaemon) Run(conf *service.Conf, srv *http.Server) {
 	// Simple way to check is a string contains only digits
 	cntxt := &daemon.Context{
 		PidFileName: "storage/log/go-web.pid",
@@ -45,7 +48,7 @@ func (c *ServerDaemon) Run(conf *Conf, srv *http.Server) {
 		_ = cntxt.Release()
 	}()
 
-	if err := StartServer(srv, conf); err != nil {
-		ProcessError(err)
+	if err := foundation.StartServer(srv, conf); err != nil {
+		helper.ProcessError(err)
 	}
 }

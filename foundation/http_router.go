@@ -1,6 +1,7 @@
-package gwf
+package foundation
 
 import (
+	"github.com/RobyFerro/go-web-framework/helper"
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v2"
 	"os"
@@ -39,23 +40,23 @@ func WebRouter() *mux.Router {
 
 	routes, err := ConfigurationWeb()
 	if err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 
 	router := mux.NewRouter()
 
 	go func() {
-		handleSingleRoute(routes.Routes, router)
+		HandleSingleRoute(routes.Routes, router)
 		wg.Done()
 	}()
 
 	go func() {
-		handleGroups(routes.Groups, router)
+		HandleGroups(routes.Groups, router)
 		wg.Done()
 	}()
 
 	go func() {
-		giveAccessToPublicFolder(router)
+		GiveAccessToPublicFolder(router)
 		wg.Done()
 	}()
 
@@ -68,7 +69,7 @@ func WebRouter() *mux.Router {
 // This structure will be used by the HTTP kernel to setup every routes.
 func ConfigurationWeb() (*Router, error) {
 	var conf Router
-	routePath := GetDynamicPath("routing.yml")
+	routePath := helper.GetDynamicPath("routing.yml")
 	c, err := os.Open(routePath)
 
 	if err != nil {

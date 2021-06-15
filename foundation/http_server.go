@@ -1,8 +1,9 @@
-package gwf
+package foundation
 
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/service"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"net"
@@ -11,10 +12,10 @@ import (
 	"strconv"
 )
 
-var appConf Conf
+var appConf service.Conf
 
 // StartServer will run the Go HTTP web server
-func StartServer(srv *http.Server, conf *Conf) error {
+func StartServer(srv *http.Server, conf *service.Conf) error {
 	appConf = *conf
 	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
 
@@ -39,7 +40,7 @@ func StartServer(srv *http.Server, conf *Conf) error {
 }
 
 // Prepare HTTP server for Service Container
-func GetHttpServer(router *mux.Router, cfg *Conf) *http.Server {
+func GetHttpServer(router *mux.Router, cfg *service.Conf) *http.Server {
 	serverString := fmt.Sprintf("%s:%d", cfg.Server.Name, cfg.Server.Port)
 
 	var httpServerConf = http.Server{}
@@ -79,7 +80,7 @@ func GetHttpServer(router *mux.Router, cfg *Conf) *http.Server {
 }
 
 // Create session CookieStore
-func CreateSessionStore(cfg *Conf) *sessions.CookieStore {
+func CreateSessionStore(cfg *service.Conf) *sessions.CookieStore {
 	return sessions.NewCookieStore([]byte(os.Getenv(cfg.App.Key)))
 }
 

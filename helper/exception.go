@@ -1,7 +1,8 @@
-package gwf
+package helper
 
 import (
 	"fmt"
+	//"github.com/RobyFerro/go-web-framework"
 	"gopkg.in/yaml.v2"
 	"os"
 )
@@ -16,12 +17,6 @@ type ErrorConfiguration struct {
 // You can customize this method to implement your error handling.
 // Es.: You can implement "Sentry" or other error tracking system
 func ProcessError(err error) {
-	configuration := getExceptionConfig()
-
-	if configuration.Exception.Sentry != "" {
-		SentryReport(err, configuration)
-	}
-
 	fmt.Println(err.Error())
 	Log(err.Error())
 }

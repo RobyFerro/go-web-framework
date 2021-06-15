@@ -1,4 +1,4 @@
-package gwf
+package types
 
 // CommandRegister defines all registered commands
 type CommandRegister struct {

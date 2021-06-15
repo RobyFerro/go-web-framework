@@ -1,4 +1,4 @@
-package gwf
+package cli
 
 import (
 	"io/ioutil"

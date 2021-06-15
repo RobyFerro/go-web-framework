@@ -2,17 +2,20 @@ package gwf
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/foundation"
+	"github.com/RobyFerro/go-web-framework/helper"
+	"github.com/RobyFerro/go-web-framework/types"
 	"github.com/common-nighthawk/go-figure"
 	"os"
 	"reflect"
 )
 
 // Start method will start the main Go-Web HTTP Server.
-func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceRegister, mw interface{}, m ModelRegister) {
+func Start(args []string, cm types.CommandRegister, c types.ControllerRegister, s types.ServiceRegister, mw interface{}, m types.ModelRegister) {
 	printCLIHeader()
 	registerBaseEntities(c, m, s, cm, mw)
 
-	cmd := Commands.List[args[0]]
+	cmd := foundation.Commands.List[args[0]]
 	if cmd == nil {
 		fmt.Println("Command not found!")
 		os.Exit(1)
@@ -28,16 +31,16 @@ func Start(args []string, cm CommandRegister, c ControllerRegister, s ServiceReg
 	// This container will used to invoke the requested command.
 	container := BuildContainer()
 	if err := container.Invoke(rc.MethodByName("Run").Interface()); err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 }
 
 // Register base entities in Go-Web kernel
 // This method will register: Controllers, Models, CLI commands, Services and middleware
-func registerBaseEntities(c ControllerRegister, m ModelRegister, s ServiceRegister, cm CommandRegister, mw interface{}) {
-	Controllers = c
-	Middleware = mw
-	Models = m
+func registerBaseEntities(c types.ControllerRegister, m types.ModelRegister, s types.ServiceRegister, cm types.CommandRegister, mw interface{}) {
+	foundation.Controllers = c
+	foundation.Middleware = mw
+	foundation.Models = m
 
 	mergeCommands(cm)
 	bindServices(s.List)
@@ -47,7 +50,7 @@ func registerBaseEntities(c ControllerRegister, m ModelRegister, s ServiceRegist
 func bindServices(services []interface{}) {
 
 	for _, s := range services {
-		Services.List = append(Services.List, s)
+		foundation.Services.List = append(foundation.Services.List, s)
 	}
 }
 
@@ -60,8 +63,8 @@ func printCLIHeader() {
 }
 
 // MergeCommands will merge system command with customs
-func mergeCommands(commands CommandRegister) {
+func mergeCommands(commands types.CommandRegister) {
 	for i, c := range commands.List {
-		Commands.List[i] = c
+		foundation.Commands.List[i] = c
 	}
 }

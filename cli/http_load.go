@@ -1,8 +1,10 @@
-package gwf
+package cli
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/helper"
+	"github.com/RobyFerro/go-web-framework/service"
 	"github.com/olekukonko/tablewriter"
 	vegeta "github.com/tsenart/vegeta/lib"
 	"io/ioutil"
@@ -38,7 +40,7 @@ func (c *HttpLoad) Register() {
 }
 
 // Command business logic
-func (c *HttpLoad) Run(conf *Conf) {
+func (c *HttpLoad) Run(conf *service.Conf) {
 	var routes FileStruct
 	var serverName string
 	readJsonFile(c.Args, &routes)
@@ -108,22 +110,22 @@ func printMetrics(m *vegeta.Metrics, r *LoadRoute) {
 
 // Read JSON file content
 func readJsonFile(path string, str *FileStruct) {
-	filePath := GetDynamicPath(path)
+	filePath := helper.GetDynamicPath(path)
 	jsonFile, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	if err := json.Unmarshal(jsonFile, &str); err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 }
 
 // Read body from .json
 func getBody(path string) []byte {
-	content, err := ioutil.ReadFile(GetDynamicPath(path))
+	content, err := ioutil.ReadFile(helper.GetDynamicPath(path))
 	if err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 
 	return content

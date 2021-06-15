@@ -1,4 +1,4 @@
-package gwf
+package helper
 
 import (
 	"os"

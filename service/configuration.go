@@ -1,11 +1,12 @@
-package gwf
+package service
 
 import (
+	"github.com/RobyFerro/go-web-framework/helper"
 	"gopkg.in/yaml.v2"
 	"os"
 )
 
-// This is the main configuration of Go-Web
+// Conf represents the main configuration of Go-Web
 // You can implement this method if wanna implement more configuration.
 // Remember: this struct will be populated by parsing the config.yml file present into the Go-Web main directory.
 // You've to implement both to works properly.
@@ -31,10 +32,10 @@ type Conf struct {
 	} `yaml:"mail"`
 }
 
-// Get configuration struct by parsing the config.yml file.
+// Configuration returns a `Conf` struct by parsing the main config.yml file.
 func Configuration() (*Conf, error) {
 	var conf Conf
-	confFile := GetDynamicPath("config.yml")
+	confFile := helper.GetDynamicPath("config.yml")
 	c, err := os.Open(confFile)
 
 	if err != nil {

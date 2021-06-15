@@ -1,7 +1,12 @@
-package gwf
+package foundation
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/cli"
+	"github.com/RobyFerro/go-web-framework/helper"
+	http2 "github.com/RobyFerro/go-web-framework/http"
+	"github.com/RobyFerro/go-web-framework/service"
+	"github.com/RobyFerro/go-web-framework/types"
 	"github.com/gorilla/mux"
 	"go.uber.org/dig"
 	"net/http"
@@ -11,19 +16,19 @@ import (
 
 var (
 	// BC is used to declare base controller
-	BC BaseController
+	BC http2.BaseController
 	// Container will provide access to the global Service Container
 	Container *dig.Container
 	// Controllers will handle every application controller
-	Controllers ControllerRegister
+	Controllers types.ControllerRegister
 	// Middleware will handle every application middleware
 	Middleware interface{}
 	// Models will handle every application middleware
-	Models ModelRegister
+	Models types.ModelRegister
 	// Services will handle every application service
-	Services = ServiceRegister{
+	Services = types.ServiceRegister{
 		List: []interface{}{
-			Configuration,
+			service.Configuration,
 			CreateSessionStore,
 			GetHttpServer,
 			WebRouter,
@@ -33,12 +38,12 @@ var (
 	// The following map of interfaces expose all available method that can be used by Go-Web CLI tool.
 	// The map index determines the command that you've to run to for use the relative method.
 	// Example: './goweb migration:up' will run '&command.MigrationUp{}' command.
-	Commands = CommandRegister{
+	Commands = types.CommandRegister{
 		List: map[string]interface{}{
-			"database:seed": &Seeder{},
-			"server:daemon": &ServerDaemon{},
-			"server:run":    &ServerRun{},
-			"show:commands": &ShowCommands{},
+			"database:seed": &cli.Seeder{},
+			"server:daemon": &cli.ServerDaemon{},
+			"server:run":    &cli.ServerRun{},
+			"show:commands": &cli.ShowCommands{},
 			// Here is where you've to register your custom controller
 		},
 	}
@@ -46,7 +51,7 @@ var (
 
 // Handle single path parsing.
 // This method it's used to parse every single path. If middleware is present a sub-router with will be created
-func handleSingleRoute(routes map[string]Route, router *mux.Router) {
+func HandleSingleRoute(routes map[string]Route, router *mux.Router) {
 	for _, route := range routes {
 		hasMiddleware := len(route.Middleware) > 0
 		directive := strings.Split(route.Action, "@")
@@ -56,7 +61,7 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 				cc := GetControllerInterface(directive, writer, request)
 				method := reflect.ValueOf(cc).MethodByName(directive[1])
 				if err := Container.Invoke(method.Interface()); err != nil {
-					ProcessError(err)
+					helper.ProcessError(err)
 				}
 			}).Methods(route.Method)
 
@@ -67,7 +72,7 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 				cc := GetControllerInterface(directive, writer, request)
 				method := reflect.ValueOf(cc).MethodByName(directive[1])
 				if err := Container.Invoke(method.Interface()); err != nil {
-					ProcessError(err)
+					helper.ProcessError(err)
 				}
 			}).Methods(route.Method)
 		}
@@ -75,7 +80,7 @@ func handleSingleRoute(routes map[string]Route, router *mux.Router) {
 }
 
 // Parse route groups.
-func handleGroups(groups map[string]Group, router *mux.Router) {
+func HandleGroups(groups map[string]Group, router *mux.Router) {
 	for _, group := range groups {
 		subRouter := router.PathPrefix(group.Prefix).Subrouter()
 
@@ -88,7 +93,7 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 					cc := GetControllerInterface(directive, writer, request)
 					method := reflect.ValueOf(cc).MethodByName(directive[1])
 					if err := Container.Invoke(method.Interface()); err != nil {
-						ProcessError(err)
+						helper.ProcessError(err)
 					}
 				}).Methods(route.Method)
 
@@ -99,7 +104,7 @@ func handleGroups(groups map[string]Group, router *mux.Router) {
 					cc := GetControllerInterface(directive, writer, request)
 					method := reflect.ValueOf(cc).MethodByName(directive[1])
 					if err := Container.Invoke(method.Interface()); err != nil {
-						ProcessError(err)
+						helper.ProcessError(err)
 					}
 				}).Methods(route.Method)
 			}
@@ -127,8 +132,8 @@ func parseMiddleware(mwList []string, middleware interface{}) []mux.MiddlewareFu
 
 // Give access to public folder. With the /public prefix you can access to all of your assets.
 // This is mandatory to access to public files (.js, .css, images, etc...).
-func giveAccessToPublicFolder(router *mux.Router) {
-	publicDirectory := http.Dir(GetDynamicPath("public"))
+func GiveAccessToPublicFolder(router *mux.Router) {
+	publicDirectory := http.Dir(helper.GetDynamicPath("public"))
 	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(publicDirectory)))
 }
 
@@ -152,7 +157,7 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 // This operation will give you access to all basic controller properties.
 func registerBaseController(res http.ResponseWriter, req *http.Request, controller *interface{}) *interface{} {
 	if err := setBaseController(res, req); err != nil {
-		ProcessError(err)
+		helper.ProcessError(err)
 	}
 
 	c := reflect.ValueOf(*controller).Elem().FieldByName("BaseController")
@@ -165,7 +170,7 @@ func registerBaseController(res http.ResponseWriter, req *http.Request, controll
 // Here you can implement the BaseController content.
 // Remember to update even the structure (app/http/controller/controller.go)
 func setBaseController(res http.ResponseWriter, req *http.Request) error {
-	BC = BaseController{
+	BC = http2.BaseController{
 		Response: res,
 		Request:  req,
 	}
