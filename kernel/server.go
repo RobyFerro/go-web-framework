@@ -16,6 +16,12 @@ type Run struct {
 	Args        string
 }
 
+// Register this command
+func (c *Run) Register() {
+	c.Signature = "server:run"
+	c.Description = "Starts Go-Web server"
+}
+
 // Run this command
 func (c *Run) Run(srv *http.Server, conf *Conf) {
 	if err := startServer(srv, conf); err != nil {

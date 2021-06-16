@@ -11,8 +11,8 @@ import (
 )
 
 // Start method will start the main Go-Web HTTP Server.
-func Start(args []string, cm register.CommandRegister, c register.ControllerRegister, s register.ServiceRegister, mw interface{},
-	m register.ModelRegister) {
+func Start(args []string, cm register.CommandRegister, c register.ControllerRegister, s register.ServiceRegister,
+	mw interface{}, m register.ModelRegister) {
 	printCLIHeader()
 	registerBaseEntities(c, m, s, cm, mw)
 
