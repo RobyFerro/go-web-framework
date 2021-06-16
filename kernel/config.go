@@ -1,8 +1,8 @@
-package service
+package kernel
 
 import (
-	"github.com/RobyFerro/go-web-framework/helper"
-	"gopkg.in/yaml.v2"
+	"github.com/RobyFerro/go-web-framework/tool"
+	"gopkg.in/yaml.v3"
 	"os"
 )
 
@@ -32,10 +32,30 @@ type Conf struct {
 	} `yaml:"mail"`
 }
 
-// Configuration returns a `Conf` struct by parsing the main config.yml file.
-func Configuration() (*Conf, error) {
+// RetrieveRoutingConf will parse router.yml file (present in Go-Web root dir) and return a Router structure.
+// This structure will be used by the HTTP kernel to setup every routes.
+func RetrieveRoutingConf() (*Router, error) {
+	var conf Router
+	routePath := tool.GetDynamicPath("routing.yml")
+	c, err := os.Open(routePath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	decoder := yaml.NewDecoder(c)
+
+	if err := decoder.Decode(&conf); err != nil {
+		return nil, err
+	}
+
+	return &conf, nil
+}
+
+// RetrieveAppConf returns a `Conf` struct by parsing the main config.yml file.
+func RetrieveAppConf() (*Conf, error) {
 	var conf Conf
-	confFile := helper.GetDynamicPath("config.yml")
+	confFile := tool.GetDynamicPath("config.yml")
 	c, err := os.Open(confFile)
 
 	if err != nil {

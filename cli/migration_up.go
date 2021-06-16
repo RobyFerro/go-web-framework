@@ -3,8 +3,9 @@ package cli
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/helper"
+	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -58,7 +59,7 @@ func (c *MigrationUp) Run(db *gorm.DB) {
 func getAllMigrations() []string {
 	var migrations []string
 
-	err := filepath.Walk(helper.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(tool.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
@@ -68,7 +69,7 @@ func getAllMigrations() []string {
 	})
 
 	if err != nil {
-		helper.ProcessError(err)
+		log.Fatal(err)
 	}
 
 	return migrations
@@ -98,7 +99,7 @@ func migrationIsPresent(db *gorm.DB, hash string) bool {
 func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 	fmt.Printf("\nMigrating '%s'\n", migration)
 	if payload, err := ioutil.ReadFile(migration); err != nil {
-		helper.ProcessError(err)
+		log.Fatal(err)
 	} else {
 		db.Exec(string(payload)).Row()
 	}

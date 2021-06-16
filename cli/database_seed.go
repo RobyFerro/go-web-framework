@@ -2,7 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/types"
+	"github.com/RobyFerro/go-web-framework/register"
 	"reflect"
 	"strings"
 
@@ -24,7 +24,7 @@ func (c *Seeder) Register() {
 
 // Run this command
 // Todo: Improve this method to run a single seeder
-func (c *Seeder) Run(db *gorm.DB, models types.ModelRegister) {
+func (c *Seeder) Run(db *gorm.DB, models register.ModelRegister) {
 	fmt.Println("Execute database seeding...")
 	if len(c.Args) > 0 {
 		extractSpecificModel(c.Args, &models.List)

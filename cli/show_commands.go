@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/RobyFerro/go-web-framework/types"
+	"github.com/RobyFerro/go-web-framework/register"
 	"os"
 	"reflect"
 
@@ -22,7 +22,7 @@ func (c *ShowCommands) Register() {
 }
 
 // Run this command
-func (c *ShowCommands) Run(commands types.CommandRegister) {
+func (c *ShowCommands) Run(commands register.CommandRegister) {
 
 	var data [][]string
 

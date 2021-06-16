@@ -1,11 +1,11 @@
-package helper
+package tool
 
 import (
 	"os"
 	"path/filepath"
 )
 
-// Returns the absolute path of the selected file/folder.
+// GetDynamicPath returns the absolute path of the selected file/folder.
 // The basic path is Go-Web main folder.
 // Example: GetDynamicPath("storage/certs/tls.key")
 func GetDynamicPath(path string) string {

@@ -2,8 +2,9 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/helper"
+	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
+	"log"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -33,10 +34,10 @@ func (c *ModelCreate) Run() {
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/model.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", helper.GetDynamicPath("database/model"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", tool.GetDynamicPath("database/model"), strings.ToLower(c.Args))
 
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		helper.ProcessError(err)
+		log.Fatal(err)
 	}
 
 	re := regexp.MustCompile("(model\\.[A-Za-z]\\w+( *){},(\\n*)(\\t*| *))")
