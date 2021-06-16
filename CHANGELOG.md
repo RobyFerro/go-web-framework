@@ -4,6 +4,11 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-1-beta] - 2021-06-16
+### Fix
+- Fix CLI issue
+
+
 ## [v0.5-beta] - 2021-06-16
 ### Changed
 - Changed repository
