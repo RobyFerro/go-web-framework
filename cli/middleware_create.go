@@ -1,8 +1,10 @@
-package gwf
+package cli
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
+	"log"
 	"path"
 	"path/filepath"
 	"runtime"
@@ -36,10 +38,10 @@ func (c *MiddlewareCreate) Run() {
 	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/middleware.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", GetDynamicPath("app/http/middleware"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", tool.GetDynamicPath("app/http/middleware"), strings.ToLower(c.Args))
 
 	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
-		ProcessError(err)
+		log.Fatal(err)
 	}
 
 	fmt.Printf("\nSUCCESS: Your %s middleware has been created at %s\n", cName, cFile)

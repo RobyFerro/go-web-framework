@@ -4,6 +4,17 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-beta] - 2021-06-16
+### Changed
+- Changed repository
+- Improved structure with an approach og Clean Architecture
+
+### Removed
+- Server daemon cli command
+- HTTP Load cli command
+- Show route cli command
+
+
 ## [v0.4.4-beta] - 2020-08-30
 ### Fix
 - Warning messages creating new service in Windows

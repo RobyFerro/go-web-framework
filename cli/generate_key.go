@@ -1,10 +1,12 @@
-package gwf
+package cli
 
 import (
 	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
+	"log"
 	"strings"
 )
 
@@ -24,22 +26,22 @@ func (c *GenerateKey) Register() {
 // Run this command
 func (c *GenerateKey) Run() {
 	fmt.Println("Generating new application KEY")
-	path := GetDynamicPath("config.yml")
+	path := tool.GetDynamicPath("config.yml")
 	read, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		ProcessError(err)
+		log.Fatal(err)
 	}
 
 	appKey, err := generateNewToken()
 	if err != nil {
-		ProcessError(err)
+		log.Fatal(err)
 	}
 
 	newContent := strings.Replace(string(read), "$$APP_KEY$$", appKey, -1)
 
 	if err = ioutil.WriteFile(path, []byte(newContent), 0); err != nil {
-		ProcessError(err)
+		log.Fatal(err)
 	}
 
 	fmt.Println("Complete!")
