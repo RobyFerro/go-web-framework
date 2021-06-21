@@ -9,5 +9,6 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/olekukonko/tablewriter v0.0.5
 	go.uber.org/dig v1.11.0
+	gopkg.in/asaskevich/govalidator.v4 v4.0.0-20160518190739-766470278477
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
