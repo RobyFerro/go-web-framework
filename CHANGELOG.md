@@ -4,6 +4,13 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-2-beta] - 2021-06-21
+### Added
+- Implemented "View" tool
+- Implemented "ValidateRequest" tool
+- Implemented "DecodeJsonRequest" tool
+- Implemented "RunJob" tool
+
 ## [v0.5-1-beta] - 2021-06-16
 ### Fix
 - Fix CLI issue
