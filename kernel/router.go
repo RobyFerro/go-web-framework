@@ -2,8 +2,8 @@ package kernel
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
 	"github.com/RobyFerro/go-web-framework/tool"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"reflect"
@@ -77,20 +77,23 @@ func HandleSingleRoute(routes map[string]Route, router *mux.Router) {
 		if hasMiddleware {
 			subRouter := mux.NewRouter()
 			subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+				container := BuildCustomContainer()
 				cc := GetControllerInterface(directive, writer, request)
 				method := reflect.ValueOf(cc).MethodByName(directive[1])
-				if err := Container.Invoke(method.Interface()); err != nil {
+				if err := container.Invoke(method.Interface()); err != nil {
 					log.Fatal(err)
 				}
+
 			}).Methods(route.Method)
 
 			subRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
 			router.Handle(route.Path, subRouter).Methods(route.Method)
 		} else {
 			router.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+				container := BuildCustomContainer()
 				cc := GetControllerInterface(directive, writer, request)
 				method := reflect.ValueOf(cc).MethodByName(directive[1])
-				if err := Container.Invoke(method.Interface()); err != nil {
+				if err := container.Invoke(method.Interface()); err != nil {
 					log.Fatal(err)
 				}
 			}).Methods(route.Method)
@@ -109,9 +112,10 @@ func HandleGroups(groups map[string]Group, router *mux.Router) {
 				nestedRouter := mux.NewRouter()
 				fullPath := fmt.Sprintf("%s%s", group.Prefix, route.Path)
 				nestedRouter.HandleFunc(fullPath, func(writer http.ResponseWriter, request *http.Request) {
+					container := BuildCustomContainer()
 					cc := GetControllerInterface(directive, writer, request)
 					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					if err := Container.Invoke(method.Interface()); err != nil {
+					if err := container.Invoke(method.Interface()); err != nil {
 						log.Fatal(err)
 					}
 				}).Methods(route.Method)
@@ -120,9 +124,10 @@ func HandleGroups(groups map[string]Group, router *mux.Router) {
 				subRouter.Handle(route.Path, nestedRouter).Methods(route.Method)
 			} else {
 				subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+					container := BuildCustomContainer()
 					cc := GetControllerInterface(directive, writer, request)
 					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					if err := Container.Invoke(method.Interface()); err != nil {
+					if err := container.Invoke(method.Interface()); err != nil {
 						log.Fatal(err)
 					}
 				}).Methods(route.Method)

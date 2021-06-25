@@ -30,7 +30,7 @@ func Start(args []string, cm register.CommandRegister, c register.ControllerRegi
 
 	// Build service container.
 	// This container will used to invoke the requested command.
-	container := kernel.BuildContainer()
+	container := kernel.BuildSystemContainer()
 	if err := container.Invoke(rc.MethodByName("Run").Interface()); err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +51,7 @@ func registerBaseEntities(c register.ControllerRegister, m register.ModelRegiste
 // Merge custom services with defaults
 func bindServices(services []interface{}) {
 	for _, s := range services {
-		kernel.Services.List = append(kernel.Services.List, s)
+		kernel.CustomServices.List = append(kernel.CustomServices.List, s)
 	}
 }
 

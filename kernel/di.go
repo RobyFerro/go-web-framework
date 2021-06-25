@@ -3,20 +3,32 @@ package kernel
 import (
 	"github.com/RobyFerro/go-web-framework/register"
 	"go.uber.org/dig"
+	"log"
 )
 
 // Container will provide access to the global Service Container
-var (
-	Container *dig.Container
-)
+var Container *dig.Container
 
-// BuildContainer provide the global service container
-func BuildContainer() *dig.Container {
+// BuildCustomContainer provides a service container with custom services
+func BuildCustomContainer() *dig.Container {
+	container := dig.New()
+
+	for _, s := range CustomServices.List {
+		if err := container.Provide(s); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return container
+}
+
+// BuildSystemContainer provide the global service container
+func BuildSystemContainer() *dig.Container {
 	container := dig.New()
 
 	for _, s := range Services.List {
 		if err := container.Provide(s); err != nil {
-
+			log.Fatal(err)
 		}
 	}
 
