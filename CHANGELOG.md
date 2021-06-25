@@ -4,6 +4,11 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-3-beta] - 2021-06-21
+### Fix
+- Fix DI by encapsulating custom services into a separate service container.
+
+
 ## [v0.5-2-beta] - 2021-06-21
 ### Added
 - Implemented "View" tool

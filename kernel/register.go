@@ -26,6 +26,9 @@ var (
 			WebRouter,
 		},
 	}
+	CustomServices = register.ServiceRegister{
+		List: []interface{}{},
+	}
 	Models = register.ModelRegister{
 		List: []interface{}{},
 	}
