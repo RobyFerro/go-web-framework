@@ -24,7 +24,7 @@ var (
 			CreateSessionStore,
 		},
 	}
-	CustomServices = register.ServiceRegister{
+	Services = register.ServiceRegister{
 		List: []interface{}{},
 	}
 	Models = register.ModelRegister{

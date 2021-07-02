@@ -58,7 +58,7 @@ func registerBaseEntities(entities BaseEntities) {
 // Merge services with defaults
 func mergeServices(services []interface{}) {
 	for _, s := range services {
-		kernel.CustomServices.List = append(kernel.CustomServices.List, s)
+		kernel.Services.List = append(kernel.Services.List, s)
 	}
 }
 

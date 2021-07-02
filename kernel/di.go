@@ -11,7 +11,7 @@ import (
 func BuildCustomContainer() *dig.Container {
 	container := dig.New()
 
-	for _, s := range CustomServices.List {
+	for _, s := range Services.List {
 		if err := container.Provide(s); err != nil {
 			log.Fatal(err)
 		}
