@@ -23,8 +23,12 @@ func (c *Run) Register() {
 }
 
 // Run this command
-func (c *Run) Run(srv *http.Server, conf *Conf) {
-	if err := startServer(srv, conf); err != nil {
+func (c *Run) Run() {
+	router := WebRouter()
+	conf, _ := RetrieveAppConf()
+	server := GetHttpServer(router, conf)
+
+	if err := startServer(server, conf); err != nil {
 		log.Fatal(err)
 	}
 }

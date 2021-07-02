@@ -18,12 +18,10 @@ var (
 			// Here is where you've to register your custom controller
 		},
 	}
-	Services = register.ServiceRegister{
+	SingletonServices = register.ServiceRegister{
 		List: []interface{}{
 			RetrieveAppConf,
 			CreateSessionStore,
-			GetHttpServer,
-			WebRouter,
 		},
 	}
 	CustomServices = register.ServiceRegister{
