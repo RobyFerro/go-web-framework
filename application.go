@@ -23,7 +23,7 @@ func Start(args []string, entities BaseEntities) {
 	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
 	myFigure.Print()
 
-	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.eu")
+	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.it")
 
 	registerBaseEntities(entities)
 
