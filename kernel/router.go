@@ -117,15 +117,6 @@ func HandleGroups(groups map[string]Group, router *mux.Router) {
 	}
 }
 
-func executeControllerDirective(directive []string, w http.ResponseWriter, r *http.Request) {
-	container := BuildCustomContainer()
-	cc := GetControllerInterface(directive, w, r)
-	method := reflect.ValueOf(cc).MethodByName(directive[1])
-	if err := container.Invoke(method.Interface()); err != nil {
-		log.Fatal(err)
-	}
-}
-
 // GiveAccessToPublicFolder gives access to public folder. With the /public prefix you can access to all of your assets.
 // This is mandatory to access to public files (.js, .css, images, etc...).
 func GiveAccessToPublicFolder(router *mux.Router) {
@@ -147,4 +138,16 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 	}
 
 	return result
+}
+
+// Executes controller string directives.
+// Example: MainController@main
+// 	executes the main method from MainController
+func executeControllerDirective(directive []string, w http.ResponseWriter, r *http.Request) {
+	container := BuildCustomContainer()
+	cc := GetControllerInterface(directive, w, r)
+	method := reflect.ValueOf(cc).MethodByName(directive[1])
+	if err := container.Invoke(method.Interface()); err != nil {
+		log.Fatal(err)
+	}
 }
