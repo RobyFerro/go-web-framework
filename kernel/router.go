@@ -143,6 +143,7 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 // Executes controller string directives.
 // Example: MainController@main
 // 	executes the main method from MainController
+// It build the custom service container and invoke the selected directive inside them.
 func executeControllerDirective(directive []string, w http.ResponseWriter, r *http.Request) {
 	container := BuildCustomContainer()
 	cc := GetControllerInterface(directive, w, r)
