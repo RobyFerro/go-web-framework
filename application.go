@@ -5,16 +5,27 @@ import (
 	"github.com/RobyFerro/go-web-framework/kernel"
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/common-nighthawk/go-figure"
-	"log"
 	"os"
 	"reflect"
 )
 
+type BaseEntities struct {
+	Controllers       register.ControllerRegister
+	Commands          register.CommandRegister
+	Services          register.ServiceRegister
+	SingletonServices register.ServiceRegister
+	Middlewares       interface{}
+	Models            register.ModelRegister
+}
+
 // Start method will start the main Go-Web HTTP Server.
-func Start(args []string, cm register.CommandRegister, c register.ControllerRegister, s register.ServiceRegister,
-	mw interface{}, m register.ModelRegister) {
-	printCLIHeader()
-	registerBaseEntities(c, m, s, cm, mw)
+func Start(args []string, entities BaseEntities) {
+	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
+	myFigure.Print()
+
+	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.it")
+
+	registerBaseEntities(entities)
 
 	cmd := kernel.Commands.List[args[0]]
 	if cmd == nil {
@@ -28,39 +39,34 @@ func Start(args []string, cm register.CommandRegister, c register.ControllerRegi
 		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
 	}
 
-	// Build service container.
-	// This container will used to invoke the requested command.
-	container := kernel.BuildSystemContainer()
-	if err := container.Invoke(rc.MethodByName("Run").Interface()); err != nil {
-		log.Fatal(err)
-	}
+	singletonIOC = kernel.BuildSingletonContainer()
+	rc.MethodByName("Run").Call([]reflect.Value{})
 }
 
 // Register base entities in Go-Web kernel
 // This method will register: Controllers, Models, CLI commands, Services and middleware
-func registerBaseEntities(c register.ControllerRegister, m register.ModelRegister, s register.ServiceRegister,
-	cm register.CommandRegister, mw interface{}) {
-	kernel.Controllers = c
-	kernel.Middleware = mw
-	kernel.Models = m
+func registerBaseEntities(entities BaseEntities) {
+	kernel.Controllers = entities.Controllers
+	kernel.Middleware = entities.Middlewares
+	kernel.Models = entities.Models
 
-	mergeCommands(cm)
-	bindServices(s.List)
+	mergeCommands(entities.Commands)
+	mergeServices(entities.Services.List)
+	mergeSingletonServices(entities.SingletonServices.List)
 }
 
-// Merge custom services with defaults
-func bindServices(services []interface{}) {
+// Merge services with defaults
+func mergeServices(services []interface{}) {
 	for _, s := range services {
-		kernel.CustomServices.List = append(kernel.CustomServices.List, s)
+		kernel.Services.List = append(kernel.Services.List, s)
 	}
 }
 
-// Print Go-Web CLI header
-func printCLIHeader() {
-	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
-	myFigure.Print()
-
-	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.eu")
+// Merge singleton services with defaults
+func mergeSingletonServices(services []interface{}) {
+	for _, s := range services {
+		kernel.SingletonServices.List = append(kernel.SingletonServices.List, s)
+	}
 }
 
 // MergeCommands will merge system command with customs

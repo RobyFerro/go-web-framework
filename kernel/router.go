@@ -77,25 +77,14 @@ func HandleSingleRoute(routes map[string]Route, router *mux.Router) {
 		if hasMiddleware {
 			subRouter := mux.NewRouter()
 			subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
-				container := BuildCustomContainer()
-				cc := GetControllerInterface(directive, writer, request)
-				method := reflect.ValueOf(cc).MethodByName(directive[1])
-				if err := container.Invoke(method.Interface()); err != nil {
-					log.Fatal(err)
-				}
-
+				executeControllerDirective(directive, writer, request)
 			}).Methods(route.Method)
 
 			subRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
 			router.Handle(route.Path, subRouter).Methods(route.Method)
 		} else {
 			router.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
-				container := BuildCustomContainer()
-				cc := GetControllerInterface(directive, writer, request)
-				method := reflect.ValueOf(cc).MethodByName(directive[1])
-				if err := container.Invoke(method.Interface()); err != nil {
-					log.Fatal(err)
-				}
+				executeControllerDirective(directive, writer, request)
 			}).Methods(route.Method)
 		}
 	}
@@ -112,24 +101,14 @@ func HandleGroups(groups map[string]Group, router *mux.Router) {
 				nestedRouter := mux.NewRouter()
 				fullPath := fmt.Sprintf("%s%s", group.Prefix, route.Path)
 				nestedRouter.HandleFunc(fullPath, func(writer http.ResponseWriter, request *http.Request) {
-					container := BuildCustomContainer()
-					cc := GetControllerInterface(directive, writer, request)
-					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					if err := container.Invoke(method.Interface()); err != nil {
-						log.Fatal(err)
-					}
+					executeControllerDirective(directive, writer, request)
 				}).Methods(route.Method)
 
 				nestedRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
 				subRouter.Handle(route.Path, nestedRouter).Methods(route.Method)
 			} else {
 				subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
-					container := BuildCustomContainer()
-					cc := GetControllerInterface(directive, writer, request)
-					method := reflect.ValueOf(cc).MethodByName(directive[1])
-					if err := container.Invoke(method.Interface()); err != nil {
-						log.Fatal(err)
-					}
+					executeControllerDirective(directive, writer, request)
 				}).Methods(route.Method)
 			}
 		}
@@ -159,4 +138,17 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 	}
 
 	return result
+}
+
+// Executes controller string directives.
+// Example: MainController@main
+// 	executes the main method from MainController
+// It build the CUSTOM SERVICE CONTAINER and invoke the selected directive inside them.
+func executeControllerDirective(directive []string, w http.ResponseWriter, r *http.Request) {
+	container := BuildCustomContainer()
+	cc := GetControllerInterface(directive, w, r)
+	method := reflect.ValueOf(cc).MethodByName(directive[1])
+	if err := container.Invoke(method.Interface()); err != nil {
+		log.Fatal(err)
+	}
 }
