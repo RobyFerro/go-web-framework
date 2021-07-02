@@ -14,6 +14,10 @@ func RetrieveSingletonContainer() *dig.Container {
 	return singletonIOC
 }
 
+func RetrieveServiceContainer() *dig.Container {
+	return kernel.BuildCustomContainer()
+}
+
 // RetrieveConfig provides a shortcut to retrieve the global configuration.
 func RetrieveConfig() *kernel.Conf {
 	var config *kernel.Conf
