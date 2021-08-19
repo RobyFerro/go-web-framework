@@ -1,9 +1,9 @@
 package foundation
 
 import (
+	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/kernel"
 	"github.com/gorilla/sessions"
-	"go.uber.org/dig"
 	"log"
 )
 

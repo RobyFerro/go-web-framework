@@ -1,8 +1,8 @@
 package kernel
 
 import (
+	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/register"
-	"go.uber.org/dig"
 	"log"
 )
 

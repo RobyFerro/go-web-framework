@@ -39,7 +39,6 @@ func Start(args []string, entities BaseEntities) {
 		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
 	}
 
-	singletonIOC = kernel.BuildSingletonContainer()
 	rc.MethodByName("Run").Call([]reflect.Value{})
 }
 
