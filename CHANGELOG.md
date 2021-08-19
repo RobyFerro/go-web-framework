@@ -4,6 +4,11 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-5-beta] - 2021-08-19
+
+### Fixed
+- Controller raw template with right 'kernel' package
+
 ## [v0.5-4-beta] - 2021-07-02
 
 ### Added
