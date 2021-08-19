@@ -2,9 +2,11 @@ package foundation
 
 import (
 	"fmt"
+	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/kernel"
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/common-nighthawk/go-figure"
+	"log"
 	"os"
 	"reflect"
 )
@@ -14,12 +16,14 @@ type BaseEntities struct {
 	Commands          register.CommandRegister
 	Services          register.ServiceRegister
 	SingletonServices register.ServiceRegister
+	CommandServices   register.ServiceRegister
 	Middlewares       interface{}
 	Models            register.ModelRegister
 }
 
 // Start method will start the main Go-Web HTTP Server.
 func Start(args []string, entities BaseEntities) {
+	c := kernel.BuildCommandContainer()
 	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
 	myFigure.Print()
 
@@ -39,7 +43,10 @@ func Start(args []string, entities BaseEntities) {
 		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
 	}
 
-	rc.MethodByName("Run").Call([]reflect.Value{})
+	err := dig.GroupInvoke(rc.MethodByName("Run").Interface(), c)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // Register base entities in Go-Web kernel

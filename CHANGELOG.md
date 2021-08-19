@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-7-beta] - 2021-08-19
+
+### Fixed
+- Implemented command ioc container
 
 ## [v0.5-6-beta] - 2021-08-19
 

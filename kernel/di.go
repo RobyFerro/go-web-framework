@@ -20,6 +20,20 @@ func BuildCustomContainer() *dig.Container {
 	return container
 }
 
+// BuildCommandContainer builds a service container that will be used only to run console commands.
+func BuildCommandContainer() *dig.Container {
+	container := dig.New()
+
+	for _, s := range CommandServices.List {
+		if err := container.Provide(s); err != nil {
+			log.Fatal(err)
+		}
+	}
+	injectBasicEntities(container)
+
+	return container
+}
+
 // BuildSingletonContainer provide the global service container
 func BuildSingletonContainer() *dig.Container {
 	container := dig.New()

@@ -27,6 +27,9 @@ var (
 	Services = register.ServiceRegister{
 		List: []interface{}{},
 	}
+	CommandServices = register.ServiceRegister{
+		List: []interface{}{},
+	}
 	Models = register.ModelRegister{
 		List: []interface{}{},
 	}
