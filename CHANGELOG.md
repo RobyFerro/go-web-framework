@@ -4,6 +4,12 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+
+## [v0.5-6-beta] - 2021-08-19
+
+### Added
+- Merged factory and singleton container abstraction
+
 ## [v0.5-5-beta] - 2021-08-19
 
 ### Fixed
