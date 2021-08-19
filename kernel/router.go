@@ -2,6 +2,7 @@ package kernel
 
 import (
 	"fmt"
+	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"github.com/gorilla/mux"
 	"log"
@@ -34,10 +35,13 @@ type Router struct {
 	Groups map[string]Group `yaml:"groups"`
 }
 
+var singletonIOC *dig.Container
+
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
 func WebRouter() *mux.Router {
 	var wg sync.WaitGroup
+	singletonIOC = BuildSingletonContainer()
 
 	wg.Add(3)
 
@@ -148,7 +152,8 @@ func executeControllerDirective(directive []string, w http.ResponseWriter, r *ht
 	container := BuildCustomContainer()
 	cc := GetControllerInterface(directive, w, r)
 	method := reflect.ValueOf(cc).MethodByName(directive[1])
-	if err := container.Invoke(method.Interface()); err != nil {
+
+	if err := dig.GroupInvoke(method.Interface(), container, singletonIOC); err != nil {
 		log.Fatal(err)
 	}
 }
