@@ -4,6 +4,11 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5-8-beta] - 2021-08-20
+
+### Fixed
+- Fixed IOC arguments order issue
+
 ## [v0.5-7-beta] - 2021-08-19
 
 ### Fixed
