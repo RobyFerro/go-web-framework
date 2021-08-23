@@ -51,6 +51,7 @@ func WebRouter() *mux.Router {
 	}
 
 	router := mux.NewRouter()
+	router.Use(gzipMiddleware)
 
 	go func() {
 		HandleSingleRoute(routes.Routes, router)
