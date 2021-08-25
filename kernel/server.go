@@ -9,21 +9,8 @@ import (
 
 var appConf Conf
 
-// Run will run Go-Web HTTP server
-type Run struct {
-	Signature   string
-	Description string
-	Args        string
-}
-
-// Register this command
-func (c *Run) Register() {
-	c.Signature = "server:run"
-	c.Description = "Starts Go-Web server"
-}
-
-// Run this command
-func (c *Run) Run() {
+// RunServer this command
+func RunServer() {
 	router := WebRouter()
 	conf, _ := RetrieveAppConf()
 	server := GetHttpServer(router, conf)

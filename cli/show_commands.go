@@ -2,10 +2,9 @@ package cli
 
 import (
 	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/olekukonko/tablewriter"
 	"os"
 	"reflect"
-
-	"github.com/olekukonko/tablewriter"
 )
 
 // ShowCommands will show all registered commands

@@ -21,16 +21,17 @@ type BaseEntities struct {
 	Models            register.ModelRegister
 }
 
-// Start method will start the main Go-Web HTTP Server.
-func Start(args []string, entities BaseEntities) {
+// Start will run the HTTP web server
+func Start(e BaseEntities) {
+	startup(e)
+	kernel.RunServer()
+}
+
+// StartCommand method runs specific CLI command
+func StartCommand(args []string, e BaseEntities) {
+	startup(e)
+
 	c := kernel.BuildCommandContainer()
-	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
-	myFigure.Print()
-
-	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.it")
-
-	registerBaseEntities(entities)
-
 	cmd := kernel.Commands.List[args[0]]
 	if cmd == nil {
 		fmt.Println("Command not found!")
@@ -38,7 +39,6 @@ func Start(args []string, entities BaseEntities) {
 	}
 
 	rc := reflect.ValueOf(cmd)
-	// Set args if exists
 	if len(args) == 2 {
 		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
 	}
@@ -49,9 +49,16 @@ func Start(args []string, entities BaseEntities) {
 	}
 }
 
-// Register base entities in Go-Web kernel
+func startup(e BaseEntities) {
+	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
+	myFigure.Print()
+	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.it")
+	RegisterBaseEntities(e)
+}
+
+// RegisterBaseEntities base entities in Go-Web kernel
 // This method will register: Controllers, Models, CLI commands, Services and middleware
-func registerBaseEntities(entities BaseEntities) {
+func RegisterBaseEntities(entities BaseEntities) {
 	kernel.Controllers = entities.Controllers
 	kernel.Middleware = entities.Middlewares
 	kernel.Models = entities.Models

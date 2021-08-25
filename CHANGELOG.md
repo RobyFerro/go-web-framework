@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.6-0-beta] - 2021-08-25
+### Changed
+- Split command line interfaces and http server.
+
 ## [v0.5-9-beta] - 2021-08-23
 ### Added
 - Gzip compression over HTTP responses
