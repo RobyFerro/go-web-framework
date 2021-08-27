@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.6-1-beta] - 2021-08-27
+### Fix
+- Resolved command service container issue
+
 ## [v0.6-0-beta] - 2021-08-25
 ### Changed
 - Split command line interfaces and http server.

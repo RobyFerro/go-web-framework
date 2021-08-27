@@ -66,6 +66,7 @@ func RegisterBaseEntities(entities BaseEntities) {
 	mergeCommands(entities.Commands)
 	mergeServices(entities.Services.List)
 	mergeSingletonServices(entities.SingletonServices.List)
+	mergeCommandServices(entities.CommandServices.List)
 }
 
 // Merge services with defaults
@@ -86,5 +87,12 @@ func mergeSingletonServices(services []interface{}) {
 func mergeCommands(commands register.CommandRegister) {
 	for i, c := range commands.List {
 		kernel.Commands.List[i] = c
+	}
+}
+
+// MergeCommands will merge system command with customs
+func mergeCommandServices(services []interface{}) {
+	for _, s := range services {
+		kernel.CommandServices.List = append(kernel.CommandServices.List, s)
 	}
 }
