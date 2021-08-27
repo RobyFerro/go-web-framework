@@ -28,7 +28,7 @@ func RetrieveConfig() *kernel.Conf {
 func RetrieveCookieStore() *sessions.CookieStore {
 	var store *sessions.CookieStore
 	if err := RetrieveSingletonContainer().Invoke(func(c *sessions.CookieStore) {
-		c = store
+		store = c
 	}); err != nil {
 		log.Fatal(err)
 	}
