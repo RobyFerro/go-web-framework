@@ -45,4 +45,5 @@ func (c *MiddlewareCreate) Run() {
 	}
 
 	fmt.Printf("\nSUCCESS: Your %s middleware has been created at %s\n", cName, cFile)
+	fmt.Println("Do not forget to register your new middleware!")
 }
