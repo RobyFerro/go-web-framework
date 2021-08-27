@@ -44,4 +44,7 @@ var (
 	Controllers = register.ControllerRegister{
 		List: []interface{}{},
 	}
+	Middlewares = register.MiddlewareRegister{
+		List: []interface{}{},
+	}
 )

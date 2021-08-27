@@ -4,8 +4,13 @@ import (
 	"net/http"
 )
 
-// Your custom middleware
-func (Middleware) @@TMP@@(next http.Handler) http.Handler {
+type @@TMP@@Middleware struct {
+    Name        string
+    Description string
+}
+
+// Handle description
+func (@@TMP@@Middleware) Handle(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Do stuff here
 	})

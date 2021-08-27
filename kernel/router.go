@@ -35,13 +35,13 @@ type Router struct {
 	Groups map[string]Group `yaml:"groups"`
 }
 
-var singletonIOC *dig.Container
+var SingletonIOC *dig.Container
 
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
 func WebRouter() *mux.Router {
 	var wg sync.WaitGroup
-	singletonIOC = BuildSingletonContainer()
+	SingletonIOC = BuildSingletonContainer()
 
 	wg.Add(3)
 
@@ -85,7 +85,7 @@ func HandleSingleRoute(routes map[string]Route, router *mux.Router) {
 				executeControllerDirective(directive, writer, request)
 			}).Methods(route.Method)
 
-			subRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
+			subRouter.Use(parseMiddleware(route.Middleware)...)
 			router.Handle(route.Path, subRouter).Methods(route.Method)
 		} else {
 			router.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
@@ -109,7 +109,7 @@ func HandleGroups(groups map[string]Group, router *mux.Router) {
 					executeControllerDirective(directive, writer, request)
 				}).Methods(route.Method)
 
-				nestedRouter.Use(parseMiddleware(route.Middleware, Middleware)...)
+				nestedRouter.Use(parseMiddleware(route.Middleware)...)
 				subRouter.Handle(route.Path, nestedRouter).Methods(route.Method)
 			} else {
 				subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
@@ -118,7 +118,7 @@ func HandleGroups(groups map[string]Group, router *mux.Router) {
 			}
 		}
 
-		subRouter.Use(parseMiddleware(group.Middleware, Middleware)...)
+		subRouter.Use(parseMiddleware(group.Middleware)...)
 	}
 }
 
@@ -154,7 +154,7 @@ func executeControllerDirective(directive []string, w http.ResponseWriter, r *ht
 	cc := GetControllerInterface(directive, w, r)
 	method := reflect.ValueOf(cc).MethodByName(directive[1])
 
-	if err := dig.GroupInvoke(method.Interface(), container, singletonIOC); err != nil {
+	if err := dig.GroupInvoke(method.Interface(), container, SingletonIOC); err != nil {
 		log.Fatal(err)
 	}
 }

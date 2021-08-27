@@ -17,7 +17,7 @@ type BaseEntities struct {
 	Services          register.ServiceRegister
 	SingletonServices register.ServiceRegister
 	CommandServices   register.ServiceRegister
-	Middlewares       interface{}
+	Middlewares       register.MiddlewareRegister
 	Models            register.ModelRegister
 }
 
@@ -60,11 +60,13 @@ func startup(e BaseEntities) {
 // This method will register: Controllers, Models, CLI commands, Services and middleware
 func RegisterBaseEntities(entities BaseEntities) {
 	kernel.Controllers = entities.Controllers
-	kernel.Middleware = entities.Middlewares
+	kernel.Middlewares = entities.Middlewares
 	kernel.Models = entities.Models
 
 	mergeCommands(entities.Commands)
 	mergeServices(entities.Services.List)
+	mergeMiddleware(entities.Middlewares)
+
 	mergeSingletonServices(entities.SingletonServices.List)
 	mergeCommandServices(entities.CommandServices.List)
 }
@@ -87,6 +89,13 @@ func mergeSingletonServices(services []interface{}) {
 func mergeCommands(commands register.CommandRegister) {
 	for i, c := range commands.List {
 		kernel.Commands.List[i] = c
+	}
+}
+
+// MergeCommands will merge system command with customs
+func mergeMiddleware(mw register.MiddlewareRegister) {
+	for i, c := range mw.List {
+		kernel.Middlewares.List[i] = c
 	}
 }
 

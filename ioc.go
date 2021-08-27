@@ -7,11 +7,9 @@ import (
 	"log"
 )
 
-var singletonIOC *dig.Container
-
 // RetrieveSingletonContainer returns a IOC container that contains every IOC singleton services.
 func RetrieveSingletonContainer() *dig.Container {
-	return singletonIOC
+	return kernel.SingletonIOC
 }
 
 // RetrieveConfig provides a shortcut to retrieve the global configuration.
