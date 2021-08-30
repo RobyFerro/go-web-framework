@@ -3,6 +3,8 @@
 All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
+### Removed
+- Removed Mail struct from configuration
 
 ## [v0.6-3-beta] - 2021-08-27
 ### Fixed

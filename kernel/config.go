@@ -23,13 +23,6 @@ type Conf struct {
 	App struct {
 		Key string `yaml:"key"`
 	} `yaml:"app"`
-	Mail struct {
-		From     string `yaml:"from"`
-		Host     string `yaml:"host"`
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
-		Port     int    `yaml:"port"`
-	} `yaml:"mail"`
 }
 
 // RetrieveRoutingConf will parse router.yml file (present in Go-Web root dir) and return a Router structure.
