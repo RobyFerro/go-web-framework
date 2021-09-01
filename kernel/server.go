@@ -16,8 +16,11 @@ type ServerConf struct {
 	Key     string
 }
 
+var config *ServerConf
+
 // RunServer this command
 func RunServer(conf ServerConf) {
+	config = &conf
 	router := WebRouter()
 	server := GetHttpServer(router, conf)
 

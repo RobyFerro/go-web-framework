@@ -10,8 +10,8 @@ import (
 )
 
 // CreateSessionStore creates a new session CookieStore
-func CreateSessionStore(cfg *Conf) *sessions.CookieStore {
-	return sessions.NewCookieStore([]byte(os.Getenv(cfg.App.Key)))
+func CreateSessionStore() *sessions.CookieStore {
+	return sessions.NewCookieStore([]byte(os.Getenv(config.Key)))
 }
 
 // GetHttpServer prepare HTTP server for Service Container

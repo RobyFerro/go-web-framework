@@ -28,6 +28,7 @@ var (
 	}
 	SingletonServices = register.ServiceRegister{
 		List: []interface{}{
+			RetrieveAppConf,
 			CreateSessionStore,
 		},
 	}
