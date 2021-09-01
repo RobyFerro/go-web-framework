@@ -5,6 +5,7 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 ## [Unreleased]
 ### Fixed
 - Issue #17
+- Issue #16
 
 ## [v0.7.0-beta] - 2021-08-27
 ### Changed
