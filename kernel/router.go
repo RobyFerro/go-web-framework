@@ -9,73 +9,56 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
-	"sync"
 )
 
-// Route structure is used to decode all route presents into routing.yml file.
 type Route struct {
-	Path        string   `yaml:"path"`
-	Action      string   `yaml:"action"`
-	Method      string   `yaml:"method"`
-	Description string   `yaml:"description"`
-	Middleware  []string `yaml:"middleware"`
-	Prefix      string   `yaml:"prefix"`
+	Name        string
+	Path        string
+	Action      string
+	Method      string
+	Description string
+	Middleware  []Middleware
 }
 
-// Group structure used to decode all groups presents into the routing.yml file.
 type Group struct {
-	Prefix     string `yaml:"prefix"`
-	Routes     map[string]Route
-	Middleware []string
+	Name       string
+	Prefix     string
+	Routes     []Route
+	Middleware []Middleware
 }
 
-// Router structure of web router.
-type Router struct {
-	Routes map[string]Route `yaml:"routes"`
-	Groups map[string]Group `yaml:"groups"`
+type HTTRouter struct {
+	Route  []Route
+	Groups []Group
 }
 
 var SingletonIOC *dig.Container
 
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
-func WebRouter() *mux.Router {
-	var wg sync.WaitGroup
+func WebRouter(routes []HTTRouter) *mux.Router {
 	SingletonIOC = BuildSingletonContainer()
-
-	wg.Add(3)
-
-	routes, err := RetrieveRoutingConf()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	router := mux.NewRouter()
 	router.Use(gzipMiddleware)
 
-	go func() {
-		HandleSingleRoute(routes.Routes, router)
-		wg.Done()
-	}()
+	for _, r := range routes {
+		if len(r.Route) > 0 {
+			HandleSingleRoute(r.Route, router)
+		}
 
-	go func() {
-		HandleGroups(routes.Groups, router)
-		wg.Done()
-	}()
+		if len(r.Groups) > 0 {
+			HandleGroups(r.Groups, router)
+		}
 
-	go func() {
 		GiveAccessToPublicFolder(router)
-		wg.Done()
-	}()
-
-	wg.Wait()
+	}
 
 	return router
 }
 
 // HandleSingleRoute handles single path parsing.
 // This method it's used to parse every single path. If middleware is present a sub-router with will be created
-func HandleSingleRoute(routes map[string]Route, router *mux.Router) {
+func HandleSingleRoute(routes []Route, router *mux.Router) {
 	for _, route := range routes {
 		hasMiddleware := len(route.Middleware) > 0
 		directive := strings.Split(route.Action, "@")
@@ -96,7 +79,7 @@ func HandleSingleRoute(routes map[string]Route, router *mux.Router) {
 }
 
 // HandleGroups parses route groups.
-func HandleGroups(groups map[string]Group, router *mux.Router) {
+func HandleGroups(groups []Group, router *mux.Router) {
 	for _, group := range groups {
 		subRouter := router.PathPrefix(group.Prefix).Subrouter()
 

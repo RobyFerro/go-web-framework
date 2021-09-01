@@ -13,9 +13,9 @@ func RetrieveSingletonContainer() *dig.Container {
 }
 
 // RetrieveConfig provides a shortcut to retrieve the global configuration.
-func RetrieveConfig() *kernel.Conf {
-	var config *kernel.Conf
-	if err := RetrieveSingletonContainer().Invoke(func(c *kernel.Conf) {
+func RetrieveConfig() *kernel.ServerConf {
+	var config *kernel.ServerConf
+	if err := RetrieveSingletonContainer().Invoke(func(c *kernel.ServerConf) {
 		config = c
 	}); err != nil {
 		log.Fatal(err)
