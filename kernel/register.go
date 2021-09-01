@@ -17,7 +17,6 @@ var (
 			"cmd:create":         &cli.CmdCreate{},
 			"controller:create":  &cli.ControllerCreate{},
 			"generate:key":       &cli.GenerateKey{},
-			"job:create":         &cli.JobCreate{},
 			"middleware:create":  &cli.MiddlewareCreate{},
 			"migration:create":   &cli.MigrationCreate{},
 			"migration:rollback": &cli.MigrateRollback{},

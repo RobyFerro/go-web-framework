@@ -19,9 +19,9 @@ type ServerConf struct {
 var config *ServerConf
 
 // RunServer this command
-func RunServer(conf ServerConf) {
+func RunServer(conf ServerConf, r []HTTRouter) {
 	config = &conf
-	router := WebRouter()
+	router := WebRouter(r)
 	server := GetHttpServer(router, conf)
 
 	if err := startServer(server, conf); err != nil {

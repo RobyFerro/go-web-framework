@@ -19,12 +19,13 @@ type BaseEntities struct {
 	CommandServices   register.ServiceRegister
 	Middlewares       register.MiddlewareRegister
 	Models            register.ModelRegister
+	Router            []kernel.HTTRouter
 }
 
 // Start will run the HTTP web server
 func Start(e BaseEntities, c kernel.ServerConf) {
 	startup(e)
-	kernel.RunServer(c)
+	kernel.RunServer(c, e.Router)
 }
 
 // StartCommand method runs specific CLI command

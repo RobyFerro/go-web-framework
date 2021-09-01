@@ -1,17 +1,11 @@
 package kernel
 
-import (
-	"github.com/RobyFerro/go-web-framework/tool"
-	"gopkg.in/yaml.v3"
-	"os"
-)
-
 // RetrieveAppConf returns a `Conf` struct by parsing the main config.yml file.
 func RetrieveAppConf() *ServerConf {
 	return config
 }
 
-// RetrieveRoutingConf will parse router.yml file (present in Go-Web root dir) and return a Router structure.
+/*// RetrieveRoutingConf will parse router.yml file (present in Go-Web root dir) and return a Router structure.
 // This structure will be used by the HTTP kernel to setup every routes.
 func RetrieveRoutingConf() (*Router, error) {
 	var conf Router
@@ -29,4 +23,4 @@ func RetrieveRoutingConf() (*Router, error) {
 	}
 
 	return &conf, nil
-}
+}*/
