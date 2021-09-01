@@ -3,6 +3,10 @@
 All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Changed .yml routing system in favour of the router module. Now every route/group have to be registered directly in go structure.
+- Changed .yml configuration. Now system and custom configuration are located into the new config module.
+
 ### Removed
 - Removed Mail struct from configuration
 
