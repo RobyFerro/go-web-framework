@@ -3,6 +3,9 @@
 All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
+
+
+## [v0.7.0-beta] - 2021-08-27
 ### Changed
 - Changed .yml routing system in favour of the router module. Now every route/group have to be registered directly in go structure.
 - Changed .yml configuration. Now system and custom configuration are located into the new config module.
@@ -10,50 +13,51 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 ### Removed
 - Removed Mail struct from configuration
 
-## [v0.6-3-beta] - 2021-08-27
+
+## [v0.6.3-beta] - 2021-08-27
 ### Fixed
 - Fixed cookie store issue
 
-## [v0.6-2-beta] - 2021-08-27
+## [v0.6.2-beta] - 2021-08-27
 ### Changed
 - Changed middleware architecture. Now every middleware consists in an isolated structure.
 
-## [v0.6-1-beta] - 2021-08-27
+## [v0.6.1-beta] - 2021-08-27
 ### Fix
 - Resolved command service container issue
 
-## [v0.6-0-beta] - 2021-08-25
+## [v0.6.0-beta] - 2021-08-25
 ### Changed
 - Split command line interfaces and http server.
 
-## [v0.5-9-beta] - 2021-08-23
+## [v0.5.9-beta] - 2021-08-23
 ### Added
 - Gzip compression over HTTP responses
 
 ### Fixed
 - Fixed IOC arguments order issue
 
-## [v0.5-8-beta] - 2021-08-20
+## [v0.5.8-beta] - 2021-08-20
 
 ### Fixed
 - Fixed IOC arguments order issue
 
-## [v0.5-7-beta] - 2021-08-19
+## [v0.5.7-beta] - 2021-08-19
 
 ### Fixed
 - Implemented command ioc container
 
-## [v0.5-6-beta] - 2021-08-19
+## [v0.5.6-beta] - 2021-08-19
 
 ### Added
 - Merged factory and singleton container abstraction
 
-## [v0.5-5-beta] - 2021-08-19
+## [v0.5.5-beta] - 2021-08-19
 
 ### Fixed
 - Controller raw template with right 'kernel' package
 
-## [v0.5-4-beta] - 2021-07-02
+## [v0.5.4-beta] - 2021-07-02
 
 ### Added
 - Insert readme.md
@@ -64,13 +68,13 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 - Go-Web `server:run` command runs outside the IOC container.
 - Expose`SingletonServices`
 
-## [v0.5-3-beta] - 2021-06-21
+## [v0.5.3-beta] - 2021-06-21
 
 ### Fix
 
 - Fix DI by encapsulating custom services into a separate service container.
 
-## [v0.5-2-beta] - 2021-06-21
+## [v0.5.2-beta] - 2021-06-21
 
 ### Added
 
@@ -79,7 +83,7 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 - Implemented "DecodeJsonRequest" tool
 - Implemented "RunJob" tool
 
-## [v0.5-1-beta] - 2021-06-16
+## [v0.5.1-beta] - 2021-06-16
 
 ### Fix
 
