@@ -14,8 +14,8 @@ type Middleware interface {
 func parseMiddleware(mwList []Middleware) []mux.MiddlewareFunc {
 	var midFunc []mux.MiddlewareFunc
 
-	for _, mw := range mwList {
-		midFunc = append(midFunc, mw.Handle)
+	for i := len(mwList) - 1; i > -1; i-- {
+		midFunc = append(midFunc, mwList[i].Handle)
 	}
 
 	return midFunc
