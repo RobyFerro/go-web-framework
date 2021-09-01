@@ -25,8 +25,8 @@ func (c *GenerateKey) Register() {
 
 // Run this command
 func (c *GenerateKey) Run() {
-	fmt.Println("Generating new application KEY")
-	path := tool.GetDynamicPath("config.yml")
+	fmt.Println("Generating new application KEY...")
+	path := tool.GetDynamicPath("config/server.go")
 	read, err := ioutil.ReadFile(path)
 
 	if err != nil {
@@ -38,7 +38,7 @@ func (c *GenerateKey) Run() {
 		log.Fatal(err)
 	}
 
-	newContent := strings.Replace(string(read), "$$APP_KEY$$", appKey, -1)
+	newContent := strings.Replace(string(read), "REPLACE_WITH_CUSTOM_APP_KEY", appKey, -1)
 
 	if err = ioutil.WriteFile(path, []byte(newContent), 0); err != nil {
 		log.Fatal(err)
