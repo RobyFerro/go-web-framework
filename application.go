@@ -22,9 +22,9 @@ type BaseEntities struct {
 }
 
 // Start will run the HTTP web server
-func Start(e BaseEntities) {
+func Start(e BaseEntities, c kernel.ServerConf) {
 	startup(e)
-	kernel.RunServer()
+	kernel.RunServer(c)
 }
 
 // StartCommand method runs specific CLI command

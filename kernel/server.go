@@ -7,12 +7,18 @@ import (
 	"strconv"
 )
 
-var appConf Conf
+type ServerConf struct {
+	Name    string
+	Port    int
+	SSL     bool
+	SSLCert string
+	SSLKey  string
+	Key     string
+}
 
 // RunServer this command
-func RunServer() {
+func RunServer(conf ServerConf) {
 	router := WebRouter()
-	conf, _ := RetrieveAppConf()
 	server := GetHttpServer(router, conf)
 
 	if err := startServer(server, conf); err != nil {
@@ -21,12 +27,11 @@ func RunServer() {
 }
 
 // startServer will run the Go HTTP web server
-func startServer(srv *http.Server, conf *Conf) error {
-	appConf = *conf
-	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Server.Port))
+func startServer(srv *http.Server, conf ServerConf) error {
+	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Port))
 
-	if appConf.Server.Ssl {
-		if err := srv.ServeTLS(webListener, appConf.Server.SslCert, appConf.Server.SslKey); err != nil {
+	if conf.SSL {
+		if err := srv.ServeTLS(webListener, conf.SSLCert, conf.SSLKey); err != nil {
 			return err
 		}
 	} else {

@@ -44,22 +44,3 @@ func RetrieveRoutingConf() (*Router, error) {
 
 	return &conf, nil
 }
-
-// RetrieveAppConf returns a `Conf` struct by parsing the main config.yml file.
-func RetrieveAppConf() (*Conf, error) {
-	var conf Conf
-	confFile := tool.GetDynamicPath("config.yml")
-	c, err := os.Open(confFile)
-
-	if err != nil {
-		return nil, err
-	}
-
-	decoder := yaml.NewDecoder(c)
-
-	if err := decoder.Decode(&conf); err != nil {
-		return nil, err
-	}
-
-	return &conf, nil
-}

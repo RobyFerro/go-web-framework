@@ -15,12 +15,12 @@ func CreateSessionStore(cfg *Conf) *sessions.CookieStore {
 }
 
 // GetHttpServer prepare HTTP server for Service Container
-func GetHttpServer(router *mux.Router, cfg *Conf) *http.Server {
-	serverString := fmt.Sprintf("%s:%d", cfg.Server.Name, cfg.Server.Port)
+func GetHttpServer(router *mux.Router, cfg ServerConf) *http.Server {
+	serverString := fmt.Sprintf("%s:%d", cfg.Name, cfg.Port)
 
 	var httpServerConf = http.Server{}
 
-	if cfg.Server.Ssl {
+	if cfg.SSL {
 		sslCfg := &tls.Config{
 			MinVersion:               tls.VersionTLS12,
 			CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
