@@ -25,15 +25,15 @@ func (c *Seeder) Register() {
 func (c *Seeder) Run(db *gorm.DB, models register.ModelRegister) {
 	fmt.Println("Execute database seeding...")
 	if len(c.Args) > 0 {
-		extractSpecificModel(c.Args, &models.List)
+		extractSpecificModel(c.Args, &models)
 	}
 
-	seed(models.List, db)
+	seed(models, db)
 }
 
 // Extract the specified models from model list
-func extractSpecificModel(name string, models *[]interface{}) {
-	var newModels []interface{}
+func extractSpecificModel(name string, models *register.ModelRegister) {
+	var newModels register.ModelRegister
 
 	for _, m := range *models {
 		modelName := reflect.TypeOf(m).Name()

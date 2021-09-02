@@ -5,6 +5,8 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 ## [Unreleased]
 ### Changed
 - Abstract CLI command structure
+- Improved kernel registry removing useless declaration.
+- Implemented HTTP router in base entities
 
 ## [v0.7.1-beta] - 2021-09-02
 ### Fixed
