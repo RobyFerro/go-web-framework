@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
 	"log"
@@ -13,9 +14,7 @@ import (
 // UP: Work only for migrate operation
 // DOWN: Work only for rollback operation
 type MigrationCreate struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command

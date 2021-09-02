@@ -11,9 +11,7 @@ import (
 
 // Seeder will handle database seeding.
 type Seeder struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
 	"log"
@@ -14,9 +15,7 @@ import (
 
 // ModelCreate will create a new Gorm model
 type ModelCreate struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command

@@ -29,6 +29,12 @@ type Middleware interface {
 	Handle(next http.Handler) http.Handler
 }
 
+type Command struct {
+	Signature   string
+	Description string
+	Args        string
+}
+
 type MiddlewareRegister struct {
 	List []interface{}
 }

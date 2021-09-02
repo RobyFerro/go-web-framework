@@ -9,9 +9,7 @@ import (
 
 // ShowCommands will show all registered commands
 type ShowCommands struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command

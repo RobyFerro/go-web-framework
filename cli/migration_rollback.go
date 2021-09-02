@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/register"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -12,9 +13,7 @@ import (
 
 // MigrateRollback will rollback some migration in your database
 type MigrateRollback struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command
