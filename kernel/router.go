@@ -174,12 +174,14 @@ func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Reque
 }
 
 func validateRequest(data interface{}, r *http.Request) error {
-	if err := tool.DecodeJsonRequest(r, &data); err != nil {
-		return err
-	}
+	if data != nil {
+		if err := tool.DecodeJsonRequest(r, &data); err != nil {
+			return err
+		}
 
-	if err := tool.ValidateRequest(data); err != nil {
-		return err
+		if err := tool.ValidateRequest(data); err != nil {
+			return err
+		}
 	}
 
 	return nil
