@@ -17,6 +17,7 @@ type Route struct {
 	Action      string
 	Method      string
 	Description string
+	Validation  interface{}
 	Middleware  []Middleware
 }
 
@@ -62,9 +63,17 @@ func HandleSingleRoute(routes []Route, router *mux.Router) {
 	for _, route := range routes {
 		hasMiddleware := len(route.Middleware) > 0
 		directive := strings.Split(route.Action, "@")
+		validation := route.Validation
 		if hasMiddleware {
 			subRouter := mux.NewRouter()
 			subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+				if err := validateRequest(validation, request); err != nil {
+					writer.WriteHeader(http.StatusUnprocessableEntity)
+					_, _ = writer.Write([]byte(err.Error()))
+
+					return
+				}
+
 				executeControllerDirective(directive, writer, request)
 			}).Methods(route.Method)
 
@@ -72,6 +81,13 @@ func HandleSingleRoute(routes []Route, router *mux.Router) {
 			router.Handle(route.Path, subRouter).Methods(route.Method)
 		} else {
 			router.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+				if err := validateRequest(validation, request); err != nil {
+					writer.WriteHeader(http.StatusUnprocessableEntity)
+					_, _ = writer.Write([]byte(err.Error()))
+
+					return
+				}
+
 				executeControllerDirective(directive, writer, request)
 			}).Methods(route.Method)
 		}
@@ -85,10 +101,18 @@ func HandleGroups(groups []Group, router *mux.Router) {
 
 		for _, route := range group.Routes {
 			directive := strings.Split(route.Action, "@")
+			validation := route.Validation
 			if len(route.Middleware) > 0 {
 				nestedRouter := mux.NewRouter()
 				fullPath := fmt.Sprintf("%s%s", group.Prefix, route.Path)
 				nestedRouter.HandleFunc(fullPath, func(writer http.ResponseWriter, request *http.Request) {
+					if err := validateRequest(validation, request); err != nil {
+						writer.WriteHeader(http.StatusUnprocessableEntity)
+						_, _ = writer.Write([]byte(err.Error()))
+
+						return
+					}
+
 					executeControllerDirective(directive, writer, request)
 				}).Methods(route.Method)
 
@@ -96,6 +120,13 @@ func HandleGroups(groups []Group, router *mux.Router) {
 				subRouter.Handle(route.Path, nestedRouter).Methods(route.Method)
 			} else {
 				subRouter.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
+					if err := validateRequest(validation, request); err != nil {
+						writer.WriteHeader(http.StatusUnprocessableEntity)
+						_, _ = writer.Write([]byte(err.Error()))
+
+						return
+					}
+
 					executeControllerDirective(directive, writer, request)
 				}).Methods(route.Method)
 			}
@@ -132,12 +163,24 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 // Example: MainController@main
 // 	executes the main method from MainController
 // It build the CUSTOM SERVICE CONTAINER and invoke the selected directive inside them.
-func executeControllerDirective(directive []string, w http.ResponseWriter, r *http.Request) {
+func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Request) {
 	container := BuildCustomContainer()
-	cc := GetControllerInterface(directive, w, r)
-	method := reflect.ValueOf(cc).MethodByName(directive[1])
+	cc := GetControllerInterface(d, w, r)
+	method := reflect.ValueOf(cc).MethodByName(d[1])
 
 	if err := dig.GroupInvoke(method.Interface(), container, SingletonIOC); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func validateRequest(data interface{}, r *http.Request) error {
+	if err := tool.DecodeJsonRequest(r, &data); err != nil {
+		return err
+	}
+
+	if err := tool.ValidateRequest(data); err != nil {
+		return err
+	}
+
+	return nil
 }
