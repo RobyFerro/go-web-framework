@@ -7,6 +7,9 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 - Issue #17
 - Issue #16
 
+### Added
+- Support for request validation in routers
+
 ## [v0.7.0-beta] - 2021-08-27
 ### Changed
 - Changed .yml routing system in favour of the router module. Now every route/group have to be registered directly in go structure.
