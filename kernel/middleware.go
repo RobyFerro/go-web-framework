@@ -1,17 +1,13 @@
 package kernel
 
 import (
+	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/gorilla/mux"
-	"net/http"
 )
-
-type Middleware interface {
-	Handle(next http.Handler) http.Handler
-}
 
 // Parse list of middleware and get an array of []mux.Middleware func
 // Required by Gorilla Mux
-func parseMiddleware(mwList []Middleware) []mux.MiddlewareFunc {
+func parseMiddleware(mwList []register.Middleware) []mux.MiddlewareFunc {
 	var midFunc []mux.MiddlewareFunc
 
 	for i := len(mwList) - 1; i > -1; i-- {

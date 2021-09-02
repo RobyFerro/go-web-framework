@@ -11,7 +11,7 @@ import (
 func BuildCustomContainer() *dig.Container {
 	container := dig.New()
 
-	for _, s := range Services.List {
+	for _, s := range Services {
 		if err := container.Provide(s); err != nil {
 			log.Fatal(err)
 		}
@@ -24,7 +24,7 @@ func BuildCustomContainer() *dig.Container {
 func BuildCommandContainer() *dig.Container {
 	container := dig.New()
 
-	for _, s := range CommandServices.List {
+	for _, s := range CommandServices {
 		if err := container.Provide(s); err != nil {
 			log.Fatal(err)
 		}
@@ -38,7 +38,7 @@ func BuildCommandContainer() *dig.Container {
 func BuildSingletonContainer() *dig.Container {
 	container := dig.New()
 
-	for _, s := range SingletonServices.List {
+	for _, s := range SingletonServices {
 		if err := container.Provide(s); err != nil {
 			log.Fatal(err)
 		}
@@ -61,5 +61,9 @@ func injectBasicEntities(sc *dig.Container) {
 
 	_ = sc.Provide(func() register.ModelRegister {
 		return Models
+	})
+
+	_ = sc.Provide(func() []register.HTTPRouter {
+		return Router
 	})
 }

@@ -3,6 +3,7 @@ package kernel
 import (
 	"fmt"
 	"github.com/RobyFerro/dig"
+	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"github.com/gorilla/mux"
 	"log"
@@ -11,33 +12,11 @@ import (
 	"strings"
 )
 
-type Route struct {
-	Name        string
-	Path        string
-	Action      string
-	Method      string
-	Description string
-	Validation  interface{}
-	Middleware  []Middleware
-}
-
-type Group struct {
-	Name       string
-	Prefix     string
-	Routes     []Route
-	Middleware []Middleware
-}
-
-type HTTRouter struct {
-	Route  []Route
-	Groups []Group
-}
-
 var SingletonIOC *dig.Container
 
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
-func WebRouter(routes []HTTRouter) *mux.Router {
+func WebRouter(routes []register.HTTPRouter) *mux.Router {
 	SingletonIOC = BuildSingletonContainer()
 	router := mux.NewRouter()
 	router.Use(gzipMiddleware)
@@ -59,7 +38,7 @@ func WebRouter(routes []HTTRouter) *mux.Router {
 
 // HandleSingleRoute handles single path parsing.
 // This method it's used to parse every single path. If middleware is present a sub-router with will be created
-func HandleSingleRoute(routes []Route, router *mux.Router) {
+func HandleSingleRoute(routes []register.Route, router *mux.Router) {
 	for _, route := range routes {
 		hasMiddleware := len(route.Middleware) > 0
 		directive := strings.Split(route.Action, "@")
@@ -95,7 +74,7 @@ func HandleSingleRoute(routes []Route, router *mux.Router) {
 }
 
 // HandleGroups parses route groups.
-func HandleGroups(groups []Group, router *mux.Router) {
+func HandleGroups(groups []register.Group, router *mux.Router) {
 	for _, group := range groups {
 		subRouter := router.PathPrefix(group.Prefix).Subrouter()
 
@@ -148,7 +127,7 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 	var result interface{}
 
 	// Find the right controller
-	for _, contr := range Controllers.List {
+	for _, contr := range Controllers {
 		controllerName := reflect.Indirect(reflect.ValueOf(contr)).Type().Name()
 		if controllerName == directive[0] {
 			registerBaseController(w, r, &contr)

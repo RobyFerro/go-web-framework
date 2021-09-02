@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// This structure is used to implement GZIP compression over HTTP response.
+// Defined as a Gorilla Mux middleware is implemented directly in the gwf router.
 type gzipResponseWriter struct {
 	io.Writer
 	http.ResponseWriter

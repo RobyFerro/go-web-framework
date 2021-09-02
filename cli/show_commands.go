@@ -9,9 +9,7 @@ import (
 
 // ShowCommands will show all registered commands
 type ShowCommands struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command
@@ -25,7 +23,7 @@ func (c *ShowCommands) Run(commands register.CommandRegister) {
 
 	var data [][]string
 
-	for _, c := range commands.List {
+	for _, c := range commands {
 		m := reflect.ValueOf(c).MethodByName("Register")
 		m.Call([]reflect.Value{})
 

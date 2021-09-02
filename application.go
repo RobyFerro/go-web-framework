@@ -19,7 +19,7 @@ type BaseEntities struct {
 	CommandServices   register.ServiceRegister
 	Middlewares       register.MiddlewareRegister
 	Models            register.ModelRegister
-	Router            []kernel.HTTRouter
+	Router            []register.HTTPRouter
 }
 
 // Start will run the HTTP web server
@@ -33,7 +33,7 @@ func StartCommand(args []string, e BaseEntities) {
 	startup(e)
 
 	c := kernel.BuildCommandContainer()
-	cmd := kernel.Commands.List[args[0]]
+	cmd := kernel.Commands[args[0]]
 	if cmd == nil {
 		fmt.Println("Command not found!")
 		os.Exit(1)
@@ -63,46 +63,47 @@ func RegisterBaseEntities(entities BaseEntities) {
 	kernel.Controllers = entities.Controllers
 	kernel.Middlewares = entities.Middlewares
 	kernel.Models = entities.Models
+	kernel.Router = entities.Router
 
 	mergeCommands(entities.Commands)
-	mergeServices(entities.Services.List)
+	mergeServices(entities.Services)
 	mergeMiddleware(entities.Middlewares)
 
-	mergeSingletonServices(entities.SingletonServices.List)
-	mergeCommandServices(entities.CommandServices.List)
+	mergeSingletonServices(entities.SingletonServices)
+	mergeCommandServices(entities.CommandServices)
 }
 
 // Merge services with defaults
 func mergeServices(services []interface{}) {
 	for _, s := range services {
-		kernel.Services.List = append(kernel.Services.List, s)
+		kernel.Services = append(kernel.Services, s)
 	}
 }
 
 // Merge singleton services with defaults
 func mergeSingletonServices(services []interface{}) {
 	for _, s := range services {
-		kernel.SingletonServices.List = append(kernel.SingletonServices.List, s)
+		kernel.SingletonServices = append(kernel.SingletonServices, s)
 	}
 }
 
 // MergeCommands will merge system command with customs
 func mergeCommands(commands register.CommandRegister) {
-	for i, c := range commands.List {
-		kernel.Commands.List[i] = c
+	for i, c := range commands {
+		kernel.Commands[i] = c
 	}
 }
 
 // MergeCommands will merge system command with customs
 func mergeMiddleware(mw register.MiddlewareRegister) {
-	for i, c := range mw.List {
-		kernel.Middlewares.List[i] = c
+	for i, c := range mw {
+		kernel.Middlewares[i] = c
 	}
 }
 
 // MergeCommands will merge system command with customs
 func mergeCommandServices(services []interface{}) {
 	for _, s := range services {
-		kernel.CommandServices.List = append(kernel.CommandServices.List, s)
+		kernel.CommandServices = append(kernel.CommandServices, s)
 	}
 }

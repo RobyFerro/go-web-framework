@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
 	"log"
@@ -12,9 +13,7 @@ import (
 
 // GenerateKey will generate Go-Web application key in main config.yml file
 type GenerateKey struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register this command

@@ -3,6 +3,7 @@ package cli
 import (
 	"crypto/sha256"
 	"fmt"
+	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"io/ioutil"
 	"log"
@@ -15,9 +16,7 @@ import (
 
 // MigrationUp will execute database migration
 type MigrationUp struct {
-	Signature   string
-	Description string
-	Args        string
+	register.Command
 }
 
 // Register command

@@ -1,6 +1,7 @@
 package kernel
 
 import (
+	"github.com/RobyFerro/go-web-framework/register"
 	"log"
 	"net"
 	"net/http"
@@ -19,7 +20,7 @@ type ServerConf struct {
 var config *ServerConf
 
 // RunServer this command
-func RunServer(conf ServerConf, r []HTTRouter) {
+func RunServer(conf ServerConf, r []register.HTTPRouter) {
 	config = &conf
 	router := WebRouter(r)
 	server := GetHttpServer(router, conf)
