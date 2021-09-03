@@ -21,6 +21,7 @@ var (
 		"migration:rollback": &cli.MigrateRollback{},
 		"migration:up":       &cli.MigrationUp{},
 		"model:create":       &cli.ModelCreate{},
+		"router:show":        &cli.RouterShow{},
 		// Here is where you've to register your custom controller
 	}
 	SingletonServices = register.ServiceRegister{
