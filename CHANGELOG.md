@@ -4,6 +4,13 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.8.1-beta] - 2021-09-03
+### Added
+- New show routes command
+
+### Changed
+- Middleware architecture
+
 ## [v0.8.0-beta] - 2021-09-02
 ### Changed
 - Abstract CLI command structure
