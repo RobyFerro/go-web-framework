@@ -3,6 +3,7 @@ package kernel
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"net/http"
@@ -19,6 +20,7 @@ func GetHttpServer(router *mux.Router, cfg ServerConf) *http.Server {
 	serverString := fmt.Sprintf("%s:%d", cfg.Name, cfg.Port)
 
 	var httpServerConf = http.Server{}
+	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
 
 	if cfg.SSL {
 		sslCfg := &tls.Config{
@@ -37,7 +39,7 @@ func GetHttpServer(router *mux.Router, cfg ServerConf) *http.Server {
 
 		httpServerConf = http.Server{
 			Addr:    serverString,
-			Handler: router,
+			Handler: loggedRouter,
 			//			ReadTimeout:  time.Duration(agentconfig.Ag.Agent.HttpRTimeout) * time.Second,
 			//			WriteTimeout: time.Duration(agentconfig.Ag.Agent.HttpWTimeout) * time.Second,
 			TLSConfig:    sslCfg,
@@ -47,7 +49,7 @@ func GetHttpServer(router *mux.Router, cfg ServerConf) *http.Server {
 	} else {
 		httpServerConf = http.Server{
 			Addr:    serverString,
-			Handler: router,
+			Handler: loggedRouter,
 		}
 	}
 

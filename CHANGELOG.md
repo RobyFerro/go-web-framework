@@ -4,6 +4,10 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.8.2-beta] - 2021-09-03
+### Added
+- New global logger handler
+
 ## [v0.8.1-beta] - 2021-09-03
 ### Added
 - New show routes command
