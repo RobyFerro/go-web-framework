@@ -4,6 +4,11 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.9.0-beta] - 2021-09-19
+### Changed
+- Included validation payload in kernel.Request structure.
+  - Now you can access to a decoded payload by calling the kernel.Request object (in controller)
+
 ## [v0.8.2-beta] - 2021-09-03
 ### Added
 - New global logger handler

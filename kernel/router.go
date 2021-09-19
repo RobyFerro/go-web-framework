@@ -1,6 +1,7 @@
 package kernel
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/register"
@@ -13,6 +14,8 @@ import (
 )
 
 var SingletonIOC *dig.Container
+
+type Request map[string]interface{}
 
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
@@ -53,7 +56,7 @@ func HandleSingleRoute(routes []register.Route, router *mux.Router) {
 					return
 				}
 
-				executeControllerDirective(directive, writer, request)
+				executeControllerDirective(directive, writer, request, validation)
 			}).Methods(route.Method)
 
 			subRouter.Use(parseMiddleware(route.Middleware)...)
@@ -67,7 +70,7 @@ func HandleSingleRoute(routes []register.Route, router *mux.Router) {
 					return
 				}
 
-				executeControllerDirective(directive, writer, request)
+				executeControllerDirective(directive, writer, request, validation)
 			}).Methods(route.Method)
 		}
 	}
@@ -92,7 +95,7 @@ func HandleGroups(groups []register.Group, router *mux.Router) {
 						return
 					}
 
-					executeControllerDirective(directive, writer, request)
+					executeControllerDirective(directive, writer, request, validation)
 				}).Methods(route.Method)
 
 				nestedRouter.Use(parseMiddleware(route.Middleware)...)
@@ -106,7 +109,7 @@ func HandleGroups(groups []register.Group, router *mux.Router) {
 						return
 					}
 
-					executeControllerDirective(directive, writer, request)
+					executeControllerDirective(directive, writer, request, validation)
 				}).Methods(route.Method)
 			}
 		}
@@ -142,14 +145,32 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 // Example: MainController@main
 // 	executes the main method from MainController
 // It build the CUSTOM SERVICE CONTAINER and invoke the selected directive inside them.
-func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Request) {
+func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Request, validation interface{}) {
 	container := BuildCustomContainer()
+	payload := structToMap(validation)
+
+	err := container.Provide(func() Request {
+		return payload
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	cc := GetControllerInterface(d, w, r)
 	method := reflect.ValueOf(cc).MethodByName(d[1])
 
 	if err := dig.GroupInvoke(method.Interface(), container, SingletonIOC); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func structToMap(s interface{}) map[string]interface{} {
+	m := make(map[string]interface{})
+	j, _ := json.Marshal(s)
+	_ = json.Unmarshal(j, &m)
+
+	return m
 }
 
 func validateRequest(data interface{}, r *http.Request) error {
