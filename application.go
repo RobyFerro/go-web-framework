@@ -2,13 +2,14 @@ package foundation
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"reflect"
+
 	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/kernel"
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/common-nighthawk/go-figure"
-	"log"
-	"os"
-	"reflect"
 )
 
 type BaseEntities struct {
@@ -66,18 +67,10 @@ func RegisterBaseEntities(entities BaseEntities) {
 	kernel.Router = entities.Router
 
 	mergeCommands(entities.Commands)
-	mergeServices(entities.Services)
 	mergeMiddleware(entities.Middlewares)
 
 	mergeSingletonServices(entities.SingletonServices)
 	mergeCommandServices(entities.CommandServices)
-}
-
-// Merge services with defaults
-func mergeServices(services []interface{}) {
-	for _, s := range services {
-		kernel.Services = append(kernel.Services, s)
-	}
 }
 
 // Merge singleton services with defaults

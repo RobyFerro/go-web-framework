@@ -28,7 +28,6 @@ var (
 		RetrieveAppConf,
 		CreateSessionStore,
 	}
-	Services        = register.ServiceRegister{}
 	CommandServices = register.ServiceRegister{}
 	Models          = register.ModelRegister{}
 	Controllers     = register.ControllerRegister{}

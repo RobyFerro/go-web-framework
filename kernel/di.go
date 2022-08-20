@@ -1,19 +1,22 @@
 package kernel
 
 import (
+	"log"
+
 	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/register"
-	"log"
 )
 
 // BuildCustomContainer provides a service container with custom services.
 // It returns a container that will only be user on the HTTP controllers.
-func BuildCustomContainer() *dig.Container {
+func BuildCustomContainer(modules []register.DIModule) *dig.Container {
 	container := dig.New()
 
-	for _, s := range Services {
-		if err := container.Provide(s); err != nil {
-			log.Fatal(err)
+	for _, m := range modules {
+		for _, p := range m.Provides {
+			if err := container.Provide(p); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 
