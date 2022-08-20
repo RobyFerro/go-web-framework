@@ -2,8 +2,7 @@ package kernel
 
 import (
 	"log"
-
-	"github.com/RobyFerro/dig"
+	"go.uber.org/dig"
 	"github.com/RobyFerro/go-web-framework/register"
 )
 
@@ -32,21 +31,6 @@ func BuildCommandContainer() *dig.Container {
 			log.Fatal(err)
 		}
 	}
-	injectBasicEntities(container)
-
-	return container
-}
-
-// BuildSingletonContainer provide the global service container
-func BuildSingletonContainer() *dig.Container {
-	container := dig.New()
-
-	for _, s := range SingletonServices {
-		if err := container.Provide(s); err != nil {
-			log.Fatal(err)
-		}
-	}
-
 	injectBasicEntities(container)
 
 	return container

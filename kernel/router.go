@@ -8,20 +8,16 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/RobyFerro/dig"
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
 	"github.com/gorilla/mux"
 )
-
-var SingletonIOC *dig.Container
 
 type Request map[string]interface{}
 
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
 func WebRouter(routes []register.HTTPRouter) *mux.Router {
-	SingletonIOC = BuildSingletonContainer()
 	router := mux.NewRouter()
 	router.Use(gzipMiddleware)
 
@@ -172,10 +168,6 @@ func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Reque
 	if err := container.Invoke(method.Interface()); err != nil {
 		log.Fatal(err)
 	}
-
-	//if err := dig.GroupInvoke(method.Interface(), container, SingletonIOC); err != nil {
-	//	log.Fatal(err)
-	//}
 }
 
 func structToMap(s interface{}) map[string]interface{} {
