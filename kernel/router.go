@@ -3,24 +3,21 @@ package kernel
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/RobyFerro/dig"
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"reflect"
 	"strings"
-)
 
-var SingletonIOC *dig.Container
+	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/RobyFerro/go-web-framework/tool"
+	"github.com/gorilla/mux"
+)
 
 type Request map[string]interface{}
 
 // WebRouter parses routing structures and set every route.
 // Return a Gorilla Mux router instance with all routes indicated in router.yml file.
 func WebRouter(routes []register.HTTPRouter) *mux.Router {
-	SingletonIOC = BuildSingletonContainer()
 	router := mux.NewRouter()
 	router.Use(gzipMiddleware)
 
@@ -125,15 +122,12 @@ func GiveAccessToPublicFolder(router *mux.Router) {
 	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(publicDirectory)))
 }
 
-// GetControllerInterface  will returns a specific controller instance by comparing "directive" parameter with controller name.
-func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.Request) interface{} {
-	var result interface{}
-
-	// Find the right controller
+// GetControllerName returns a ControllerRegisterItem structure
+func getControllerItem(itemName string) register.ControllerRegisterItem {
+	var result register.ControllerRegisterItem
 	for _, contr := range Controllers {
-		controllerName := reflect.Indirect(reflect.ValueOf(contr)).Type().Name()
-		if controllerName == directive[0] {
-			registerBaseController(w, r, &contr)
+		controllerName := reflect.Indirect(reflect.ValueOf(contr.Controller)).Type().Name()
+		if controllerName == itemName {
 			result = contr
 		}
 	}
@@ -141,12 +135,23 @@ func GetControllerInterface(directive []string, w http.ResponseWriter, r *http.R
 	return result
 }
 
+// GetControllerInterface  will returns a specific controller instance by comparing "directive" parameter with controller name.
+func RegisterConrollerInterface(item register.ControllerRegisterItem, w http.ResponseWriter, r *http.Request) interface{} {
+	registerBaseController(w, r, &item.Controller)
+
+	return item.Controller
+}
+
 // Executes controller string directives.
 // Example: MainController@main
-// 	executes the main method from MainController
+//
+//	executes the main method from MainController
+//
 // It build the CUSTOM SERVICE CONTAINER and invoke the selected directive inside them.
 func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Request, validation interface{}) {
-	container := BuildCustomContainer()
+	item := getControllerItem(d[0])
+	container := BuildCustomContainer(item.Modules)
+
 	payload := structToMap(validation)
 
 	err := container.Provide(func() Request {
@@ -157,10 +162,10 @@ func executeControllerDirective(d []string, w http.ResponseWriter, r *http.Reque
 		log.Fatal(err)
 	}
 
-	cc := GetControllerInterface(d, w, r)
+	cc := RegisterConrollerInterface(item, w, r)
 	method := reflect.ValueOf(cc).MethodByName(d[1])
 
-	if err := dig.GroupInvoke(method.Interface(), container, SingletonIOC); err != nil {
+	if err := container.Invoke(method.Interface()); err != nil {
 		log.Fatal(err)
 	}
 }

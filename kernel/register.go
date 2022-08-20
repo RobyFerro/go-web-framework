@@ -24,11 +24,6 @@ var (
 		"router:show":        &cli.RouterShow{},
 		// Here is where you've to register your custom controller
 	}
-	SingletonServices = register.ServiceRegister{
-		RetrieveAppConf,
-		CreateSessionStore,
-	}
-	Services        = register.ServiceRegister{}
 	CommandServices = register.ServiceRegister{}
 	Models          = register.ModelRegister{}
 	Controllers     = register.ControllerRegister{}

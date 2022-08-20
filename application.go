@@ -2,24 +2,22 @@ package foundation
 
 import (
 	"fmt"
-	"github.com/RobyFerro/dig"
-	"github.com/RobyFerro/go-web-framework/kernel"
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/common-nighthawk/go-figure"
 	"log"
 	"os"
 	"reflect"
+
+	"github.com/RobyFerro/go-web-framework/kernel"
+	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/common-nighthawk/go-figure"
 )
 
 type BaseEntities struct {
-	Controllers       register.ControllerRegister
-	Commands          register.CommandRegister
-	Services          register.ServiceRegister
-	SingletonServices register.ServiceRegister
-	CommandServices   register.ServiceRegister
-	Middlewares       register.MiddlewareRegister
-	Models            register.ModelRegister
-	Router            []register.HTTPRouter
+	Controllers     register.ControllerRegister
+	Commands        register.CommandRegister
+	CommandServices register.ServiceRegister
+	Middlewares     register.MiddlewareRegister
+	Models          register.ModelRegister
+	Router          []register.HTTPRouter
 }
 
 // Start will run the HTTP web server
@@ -44,7 +42,7 @@ func StartCommand(args []string, e BaseEntities) {
 		reflect.Indirect(rc).FieldByName("Args").SetString(args[1])
 	}
 
-	err := dig.GroupInvoke(rc.MethodByName("Run").Interface(), c)
+	err := c.Invoke(rc.MethodByName("Run").Interface())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,25 +64,9 @@ func RegisterBaseEntities(entities BaseEntities) {
 	kernel.Router = entities.Router
 
 	mergeCommands(entities.Commands)
-	mergeServices(entities.Services)
 	mergeMiddleware(entities.Middlewares)
 
-	mergeSingletonServices(entities.SingletonServices)
 	mergeCommandServices(entities.CommandServices)
-}
-
-// Merge services with defaults
-func mergeServices(services []interface{}) {
-	for _, s := range services {
-		kernel.Services = append(kernel.Services, s)
-	}
-}
-
-// Merge singleton services with defaults
-func mergeSingletonServices(services []interface{}) {
-	for _, s := range services {
-		kernel.SingletonServices = append(kernel.SingletonServices, s)
-	}
 }
 
 // MergeCommands will merge system command with customs

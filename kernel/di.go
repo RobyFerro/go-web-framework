@@ -1,19 +1,21 @@
 package kernel
 
 import (
-	"github.com/RobyFerro/dig"
-	"github.com/RobyFerro/go-web-framework/register"
 	"log"
+	"go.uber.org/dig"
+	"github.com/RobyFerro/go-web-framework/register"
 )
 
 // BuildCustomContainer provides a service container with custom services.
 // It returns a container that will only be user on the HTTP controllers.
-func BuildCustomContainer() *dig.Container {
+func BuildCustomContainer(modules []register.DIModule) *dig.Container {
 	container := dig.New()
 
-	for _, s := range Services {
-		if err := container.Provide(s); err != nil {
-			log.Fatal(err)
+	for _, m := range modules {
+		for _, p := range m.Provides {
+			if err := container.Provide(p); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 
@@ -29,21 +31,6 @@ func BuildCommandContainer() *dig.Container {
 			log.Fatal(err)
 		}
 	}
-	injectBasicEntities(container)
-
-	return container
-}
-
-// BuildSingletonContainer provide the global service container
-func BuildSingletonContainer() *dig.Container {
-	container := dig.New()
-
-	for _, s := range SingletonServices {
-		if err := container.Provide(s); err != nil {
-			log.Fatal(err)
-		}
-	}
-
 	injectBasicEntities(container)
 
 	return container
