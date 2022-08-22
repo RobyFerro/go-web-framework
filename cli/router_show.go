@@ -48,7 +48,7 @@ func parseRoutes(routes []register.Route, table *tablewriter.Table, prefix *stri
 func getMiddlewareString(middlewares *[]register.Middleware) string {
 	var list []string
 	for _, m := range *middlewares {
-		list = append(list, fmt.Sprintf("%s", m.GetName()))
+		list = append(list, m.GetName())
 	}
 
 	return strings.Join(list, ",")

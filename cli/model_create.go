@@ -2,15 +2,18 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
-	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
+
+	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/RobyFerro/go-web-framework/tool"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // ModelCreate will create a new Gorm model
@@ -29,17 +32,17 @@ func (c *ModelCreate) Run() {
 	fmt.Println("Creating new model...")
 	var _, filename, _, _ = runtime.Caller(0)
 
-	cName := strings.Title(strings.ToLower(c.Args))
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/model.raw"))
+	cName := cases.Title(language.Und, cases.NoLower).String(strings.ToLower(c.Args))
+	input, _ := os.ReadFile(filepath.Join(path.Dir(filename), "raw/model.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", tool.GetDynamicPath("database/model"), strings.ToLower(c.Args))
 
-	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
+	if err := os.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		log.Fatal(err)
 	}
 
-	re := regexp.MustCompile("(model\\.[A-Za-z]\\w+( *){},(\\n*)(\\t*| *))")
+	re := regexp.MustCompile(`(model\\.[A-Za-z]\\w+( *){},(\\n*)(\\t*| *))`)
 	newModel := fmt.Sprintf("model.%s{},\n\t\t", cName)
 	autoRegister(re, newModel)
 

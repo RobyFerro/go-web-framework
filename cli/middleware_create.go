@@ -2,14 +2,17 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
-	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/RobyFerro/go-web-framework/tool"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // MiddlewareCreate will create a new http middleware
@@ -30,16 +33,16 @@ func (c *MiddlewareCreate) Run() {
 
 	splitName := strings.Split(strings.ToLower(c.Args), "_")
 	for i, name := range splitName {
-		splitName[i] = strings.Title(name)
+		splitName[i] = cases.Title(language.Und, cases.NoLower).String(name)
 	}
 
 	cName := strings.Join(splitName, "")
-	input, _ := ioutil.ReadFile(filepath.Join(path.Dir(filename), "raw/middleware.raw"))
+	input, _ := os.ReadFile(filepath.Join(path.Dir(filename), "raw/middleware.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
 	cFile := fmt.Sprintf("%s/%s.go", tool.GetDynamicPath("app/http/middleware"), strings.ToLower(c.Args))
 
-	if err := ioutil.WriteFile(cFile, []byte(cContent), 0755); err != nil {
+	if err := os.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		log.Fatal(err)
 	}
 

@@ -2,11 +2,12 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/register"
-	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 	"strings"
+
+	"github.com/RobyFerro/go-web-framework/register"
 
 	"github.com/jinzhu/gorm"
 )
@@ -47,7 +48,7 @@ func rollbackMigrations(migrations []migration, db *gorm.DB) {
 		rollbackFile := strings.ReplaceAll(m.Name, ".up.sql", ".down.sql")
 		fmt.Printf("\nRolling back '%s' migration...\n", rollbackFile)
 
-		if payload, err := ioutil.ReadFile(rollbackFile); err != nil {
+		if payload, err := os.ReadFile(rollbackFile); err != nil {
 			log.Fatal(err)
 		} else {
 			db.Exec(string(payload)).Row()
