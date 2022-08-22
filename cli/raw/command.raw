@@ -10,6 +10,12 @@ func (c *@@TMP@@) Register() {
 	c.Description = "Execute database seeder"       // Change command description
 }
 
+// Command registration
+func (c *@@TMP@@) Help() {
+	// Implement with command help message
+	log.Println("Usage: ---------")
+}
+
 // Command business logic
 func (c *@@TMP@@) Run() {
 	// Insert command logic

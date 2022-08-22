@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -10,7 +10,7 @@ import (
 // Handles Go-Web component auto Register
 func autoRegister(re *regexp.Regexp, newElement string) {
 	var elements []string
-	content, err := ioutil.ReadFile("register/register.go")
+	content, err := os.ReadFile("register/register.go")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,7 +26,7 @@ func autoRegister(re *regexp.Regexp, newElement string) {
 	newString := strings.Join(elements, "")
 
 	newContent := strings.Replace(string(content), oldString, newString, 1)
-	if err := ioutil.WriteFile("register/register.go", []byte(newContent), 0644); err != nil {
+	if err := os.WriteFile("register/register.go", []byte(newContent), 0644); err != nil {
 		log.Fatal(err)
 	}
 }

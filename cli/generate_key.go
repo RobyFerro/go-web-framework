@@ -4,11 +4,12 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
+	"log"
+	"os"
+	"strings"
+
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
-	"io/ioutil"
-	"log"
-	"strings"
 )
 
 // GenerateKey will generate Go-Web application key in main config.yml file
@@ -26,7 +27,7 @@ func (c *GenerateKey) Register() {
 func (c *GenerateKey) Run() {
 	fmt.Println("Generating new application KEY...")
 	path := tool.GetDynamicPath("config/server.go")
-	read, err := ioutil.ReadFile(path)
+	read, err := os.ReadFile(path)
 
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +40,7 @@ func (c *GenerateKey) Run() {
 
 	newContent := strings.Replace(string(read), "REPLACE_WITH_CUSTOM_APP_KEY", appKey, -1)
 
-	if err = ioutil.WriteFile(path, []byte(newContent), 0); err != nil {
+	if err = os.WriteFile(path, []byte(newContent), 0); err != nil {
 		log.Fatal(err)
 	}
 

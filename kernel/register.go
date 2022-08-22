@@ -22,6 +22,8 @@ var (
 		"migration:up":       &cli.MigrationUp{},
 		"model:create":       &cli.ModelCreate{},
 		"router:show":        &cli.RouterShow{},
+		"service:create":     &cli.ServiceCreate{},
+		"update":             &cli.UpdateAlfred{},
 		// Here is where you've to register your custom controller
 	}
 	CommandServices = register.ServiceRegister{}

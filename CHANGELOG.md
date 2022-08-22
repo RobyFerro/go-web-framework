@@ -4,91 +4,144 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.9.1-rc.2] - 2022-08-22
+
+### Added
+
+- Implemented install and update Alfred commands.
+
+### Fixed
+
+- Removed `strings.Title()` function.
+
+## [v0.9.1-rc.1] - 2022-08-20
+
+### Removed
+
+- Global IoC container support
+- Singleton IoC container
+
+### Added
+
+- Custom controller IoC container with modules support
+
 ## [v0.9.0-beta] - 2021-09-19
+
 ### Changed
+
 - Included validation payload in kernel.Request structure.
-  - Now you can access to a decoded payload by calling the kernel.Request object (in controller)
+- Now you can access to a decoded payload by calling the kernel.Request object (in controller)
 
 ## [v0.8.2-beta] - 2021-09-03
+
 ### Added
+
 - New global logger handler
 
 ## [v0.8.1-beta] - 2021-09-03
+
 ### Added
+
 - New show routes command
 
 ### Changed
+
 - Middleware architecture
 
 ## [v0.8.0-beta] - 2021-09-02
+
 ### Changed
+
 - Abstract CLI command structure
 - Improved kernel registry removing useless declaration.
 - Implemented HTTP router in base entities
 
 ## [v0.7.1-beta] - 2021-09-02
+
 ### Fixed
+
 - Issue #17
 - Issue #16
 
 ### Added
+
 - Support for request validation in routers
-- 
+
+-
+
 ## [v0.7.0-beta] - 2021-08-27
+
 ### Changed
+
 - Changed .yml routing system in favour of the router module. Now every route/group have to be registered directly in go structure.
 - Changed .yml configuration. Now system and custom configuration are located into the new config module.
 
 ### Removed
+
 - Removed Mail struct from configuration
 
-
 ## [v0.6.3-beta] - 2021-08-27
+
 ### Fixed
+
 - Fixed cookie store issue
 
 ## [v0.6.2-beta] - 2021-08-27
+
 ### Changed
+
 - Changed middleware architecture. Now every middleware consists in an isolated structure.
 
 ## [v0.6.1-beta] - 2021-08-27
+
 ### Fix
+
 - Resolved command service container issue
 
 ## [v0.6.0-beta] - 2021-08-25
+
 ### Changed
+
 - Split command line interfaces and http server.
 
 ## [v0.5.9-beta] - 2021-08-23
+
 ### Added
+
 - Gzip compression over HTTP responses
 
 ### Fixed
+
 - Fixed IOC arguments order issue
 
 ## [v0.5.8-beta] - 2021-08-20
 
 ### Fixed
+
 - Fixed IOC arguments order issue
 
 ## [v0.5.7-beta] - 2021-08-19
 
 ### Fixed
+
 - Implemented command ioc container
 
 ## [v0.5.6-beta] - 2021-08-19
 
 ### Added
+
 - Merged factory and singleton container abstraction
 
 ## [v0.5.5-beta] - 2021-08-19
 
 ### Fixed
+
 - Controller raw template with right 'kernel' package
 
 ## [v0.5.4-beta] - 2021-07-02
 
 ### Added
+
 - Insert readme.md
 - Shortcut methods to access on global configuration and cookie store objects.
 

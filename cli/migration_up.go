@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -97,7 +96,7 @@ func migrationIsPresent(db *gorm.DB, hash string) bool {
 // Execute migration
 func executeMigration(db *gorm.DB, migration string, hash string, batch int) {
 	fmt.Printf("\nMigrating '%s'\n", migration)
-	if payload, err := ioutil.ReadFile(migration); err != nil {
+	if payload, err := os.ReadFile(migration); err != nil {
 		log.Fatal(err)
 	} else {
 		db.Exec(string(payload)).Row()
