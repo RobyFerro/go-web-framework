@@ -2,11 +2,12 @@ package cli
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"github.com/RobyFerro/go-web-framework/register"
 	"github.com/RobyFerro/go-web-framework/tool"
-	"io/ioutil"
-	"log"
-	"time"
 )
 
 // MigrationCreate will create a new migration
@@ -34,14 +35,14 @@ func (c *MigrationCreate) Run() {
 
 	fmt.Printf("\nCreating new '%s'...\n", filenameUp)
 
-	if err := ioutil.WriteFile(filenameUp, []byte("/* MIGRATION UP */"), 0755); err != nil {
+	if err := os.WriteFile(filenameUp, []byte("/* MIGRATION UP */"), 0755); err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Printf("Created new up migration: %s\n", filenameUp)
 	fmt.Printf("Creating new '%s'...\n", filenameDown)
 
-	if err := ioutil.WriteFile(filenameDown, []byte("/* MIGRATION DOWN */"), 0755); err != nil {
+	if err := os.WriteFile(filenameDown, []byte("/* MIGRATION DOWN */"), 0755); err != nil {
 		log.Fatal(err)
 	}
 

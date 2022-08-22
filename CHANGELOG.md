@@ -1,10 +1,20 @@
 # Change Log
 
 All notable changes to the "Go-Web Framework" will be documented in this file.
- 
+
 ## [Unreleased]
 
-## [v0.9.1-rc.1] - 2022-08-22
+## [v0.9.1-rc.2] - 2022-08-22
+
+### Added
+
+- Implemented install and update Alfred commands.
+
+### Fixed
+
+- Removed `strings.Title()` function.
+
+## [v0.9.1-rc.1] - 2022-08-20
 
 ### Removed
 
