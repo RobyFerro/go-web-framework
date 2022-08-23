@@ -4,6 +4,12 @@ All notable changes to the "Go-Web Framework" will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.9.1-rc.3] - 2022-08-23
+
+### Removed
+
+- Controller autoregister command due to complexity
+
 ## [v0.9.1-rc.2] - 2022-08-22
 
 ### Added
