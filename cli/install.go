@@ -37,6 +37,10 @@ func (c *ServiceCreate) Run() {
 		log.Fatalf("Error: %s", err)
 	}
 
+	if err := c.update(); err != nil {
+		log.Fatalf("Error: %s", err)
+	}
+
 	fmt.Println("Service created successfully!")
 }
 
@@ -49,7 +53,7 @@ func (c *ServiceCreate) Help() {
 func (c *ServiceCreate) clone(destination string) error {
 	_, err := git.PlainClone(destination, false, &git.CloneOptions{
 		URL:      "https://github.com/RobyFerro/go-web.git",
-		Progress: os.Stdout,
+		Progress: nil,
 	})
 
 	return err
@@ -69,4 +73,12 @@ func (c *ServiceCreate) reset_git() error {
 	}
 
 	return nil
+}
+
+// Updates Go-Web Framework to the latest minor version
+func (c *ServiceCreate) update() error {
+	cmd := exec.Command("go", "get", "-u", "github.com/RobyFerro/go-web-framework")
+	cmd.Dir = c.Args
+
+	return cmd.Run()
 }
