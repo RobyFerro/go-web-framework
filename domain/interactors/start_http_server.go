@@ -8,10 +8,16 @@ import (
 	"github.com/RobyFerro/go-web-framework/domain/entities"
 )
 
-// StartHTTPServer runs a new HTTP server
-func StartHTTPServer(server http.Server, conf entities.AppConf) error {
-	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Port))
-	if err := server.Serve(webListener); err != nil {
+// StartHTTPServer starts a new HTTP server
+type StartHTTPServer struct {
+	Server http.Server
+	Config entities.Config
+}
+
+// Call executes usecase logic
+func (c StartHTTPServer) Call() error {
+	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(c.Config.Port))
+	if err := c.Server.Serve(webListener); err != nil {
 		return err
 	}
 

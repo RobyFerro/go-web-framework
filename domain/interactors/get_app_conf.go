@@ -2,9 +2,12 @@ package interactors
 
 import "github.com/RobyFerro/go-web-framework/domain/entities"
 
-// GetAppConfig will reuturn a new app configuration structure
-func GetAppConfig() entities.AppConf {
-	return entities.AppConf{
+// GetAppConfig returns an applicazion config structure
+type GetAppConfig struct{}
+
+// Call executes usecase logic
+func (c GetAppConfig) Call() entities.Config {
+	return entities.Config{
 		Port:    8005,
 		SSL:     false,
 		SSLCert: "storage/certs/tls.crt",

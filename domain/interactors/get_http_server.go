@@ -7,12 +7,18 @@ import (
 	"github.com/RobyFerro/go-web-framework/domain/entities"
 )
 
-// GetHTTPServer will return a new GoWeb Http server
-func GetHTTPServer(config entities.AppConf, router http.Handler) *http.Server {
-	serverString := fmt.Sprintf("%s:%d", config.Name, config.Port)
+// GetHTTPServer handles http server
+type GetHTTPServer struct {
+	Config entities.Config
+	Router http.Handler
+}
+
+// Call executes usecase logic
+func (c GetHTTPServer) Call() *http.Server {
+	serverString := fmt.Sprintf("%s:%d", c.Config.Name, c.Config.Port)
 
 	return &http.Server{
 		Addr:    serverString,
-		Handler: router,
+		Handler: c.Router,
 	}
 }

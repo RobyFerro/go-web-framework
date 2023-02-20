@@ -21,9 +21,9 @@ type RouterServiceImpl struct {
 func (r RouterServiceImpl) NewRouter(register []registers.RouterRegister) http.Handler {
 	router := httprouter.New()
 
-	for _, registeredRouter := range register {
-		r.parseSingleRoutes(registeredRouter.Route, router)
-		r.parseGroupRoutes(registeredRouter.Groups, router)
+	for i, registeredRouter := range register {
+		r.parseSingleRoutes(registeredRouter[i].Route, router)
+		r.parseGroupRoutes(registeredRouter[i].Groups, router)
 	}
 
 	return router
@@ -77,19 +77,19 @@ func (r RouterServiceImpl) executeControllerDirective(
 	controllerData := strings.Split(route.Action, "@")
 	item := r.getControllerItem(controllerData[0])
 
-	cc := kernel.RegisterBaseController(res, req, &item.Controller)
+	cc := kernel.RegisterBaseController(res, req, &item)
 	method := reflect.ValueOf(cc).MethodByName(controllerData[1])
 
 	method.Interface()
 }
 
 // GetControllerName returns a ControllerRegisterItem structure
-func (r RouterServiceImpl) getControllerItem(itemName string) registers.ControllerRegisterItem {
-	var result registers.ControllerRegisterItem
-	for _, contr := range r.Controllers {
-		controllerName := reflect.Indirect(reflect.ValueOf(contr.Controller)).Type().Name()
+func (r RouterServiceImpl) getControllerItem(itemName string) interface{} {
+	var result interface{}
+	for _, c := range r.Controllers {
+		controllerName := reflect.Indirect(reflect.ValueOf(c)).Type().Name()
 		if controllerName == itemName {
-			result = contr
+			result = c
 		}
 	}
 

@@ -5,6 +5,7 @@ import (
 	"os"
 	"reflect"
 
+	"github.com/RobyFerro/go-web-framework/config"
 	"github.com/RobyFerro/go-web-framework/domain/interactors"
 	"github.com/RobyFerro/go-web-framework/domain/kernel"
 	"github.com/RobyFerro/go-web-framework/domain/registers"
@@ -12,28 +13,31 @@ import (
 	"github.com/common-nighthawk/go-figure"
 )
 
-type BaseEntities struct {
-	Controllers registers.ControllerRegister
-	Commands    registers.CommandRegister
-	Middlewares registers.MiddlewareRegister
-	Models      registers.ModelRegister
-	Router      []registers.RouterRegister
-}
+// BaseEntities declares all base application entities
 
 // Start will run the HTTP web server
-func Start(e BaseEntities) {
+func Start(e config.BaseEntities) {
 	startup(e)
-	routerService := services.RouterServiceImpl{}
 
-	router := interactors.GetHTTPRouter(routerService, e.Router)
-	conf := interactors.GetAppConfig()
-	server := interactors.GetHTTPServer(conf, router)
+	router := interactors.GetHTTPRouter{
+		Service:  services.RouterServiceImpl{},
+		Register: e.Router,
+	}.Call()
 
-	interactors.StartHTTPServer(*server, conf)
+	config := interactors.GetAppConfig{}.Call()
+	server := interactors.GetHTTPServer{
+		Config: config,
+		Router: router,
+	}.Call()
+
+	interactors.StartHTTPServer{
+		Server: *server,
+		Config: config,
+	}.Call()
 }
 
 // StartCommand method runs specific CLI command
-func StartCommand(args []string, e BaseEntities) {
+func StartCommand(args []string, e config.BaseEntities) {
 	startup(e)
 
 	cmd := kernel.Commands[args[0]]
@@ -50,7 +54,7 @@ func StartCommand(args []string, e BaseEntities) {
 	rc.MethodByName("Run").Interface()
 }
 
-func startup(e BaseEntities) {
+func startup(e config.BaseEntities) {
 	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
 	myFigure.Print()
 	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.it")
@@ -60,7 +64,7 @@ func startup(e BaseEntities) {
 
 // RegisterBaseEntities base entities in Go-Web kernel
 // This method will register: Controllers, Models, CLI commands, Services and middleware
-func RegisterBaseEntities(entities BaseEntities) {
+func RegisterBaseEntities(entities config.BaseEntities) {
 	kernel.Controllers = entities.Controllers
 	kernel.Middlewares = entities.Middlewares
 	kernel.Models = entities.Models

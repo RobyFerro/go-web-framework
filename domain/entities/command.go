@@ -6,5 +6,3 @@ type Command struct {
 	Description string
 	Args        string
 }
-
-

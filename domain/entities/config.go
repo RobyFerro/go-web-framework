@@ -1,7 +1,7 @@
 package entities
 
-// AppConf contains main GoWeb configuration
-type AppConf struct {
+// Config contains main GoWeb configuration
+type Config struct {
 	Name    string
 	Port    int
 	SSL     bool
