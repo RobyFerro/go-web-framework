@@ -10,7 +10,7 @@ import (
 // GetHTTPRouter generates a new application router
 type GetHTTPRouter struct {
 	Service  services.RouterService
-	Register []register.RouterRegister
+	Register register.RouterRegister
 }
 
 // Call executes usecase logic

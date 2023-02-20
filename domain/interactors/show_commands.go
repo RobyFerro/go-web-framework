@@ -1,31 +1,23 @@
-package cli
+package interactors
 
 import (
 	"os"
 	"reflect"
 
-	"github.com/RobyFerro/go-web-framework/domain/entities"
 	"github.com/RobyFerro/go-web-framework/domain/registers"
 	"github.com/olekukonko/tablewriter"
 )
 
-// ShowCommands will show all registered commands
+// ShowCommands prints all available commands
 type ShowCommands struct {
-	entities.Command
+	Commands registers.CommandRegister
 }
 
-// Register this command
-func (c *ShowCommands) Register() {
-	c.Signature = "show:commands"
-	c.Description = "Show Go-Web commands list"
-}
-
-// Run this command
-func (c *ShowCommands) Run(commands registers.CommandRegister) {
-
+// Call executes show commands interactor
+func (c ShowCommands) Call() {
 	var data [][]string
 
-	for _, c := range commands {
+	for _, c := range c.Commands {
 		m := reflect.ValueOf(c).MethodByName("Register")
 		m.Call([]reflect.Value{})
 

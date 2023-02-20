@@ -18,12 +18,12 @@ type RouterServiceImpl struct {
 }
 
 // NewRouter returns a new HTTP Router
-func (r RouterServiceImpl) NewRouter(register []registers.RouterRegister) http.Handler {
+func (r RouterServiceImpl) NewRouter(register registers.RouterRegister) http.Handler {
 	router := httprouter.New()
 
-	for i, registeredRouter := range register {
-		r.parseSingleRoutes(registeredRouter[i].Route, router)
-		r.parseGroupRoutes(registeredRouter[i].Groups, router)
+	for _, registeredRouter := range register {
+		r.parseSingleRoutes(registeredRouter.Route, router)
+		r.parseGroupRoutes(registeredRouter.Groups, router)
 	}
 
 	return router
