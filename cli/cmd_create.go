@@ -9,15 +9,15 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/helpers"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
 // CmdCreate will create a new CLI command.
 type CmdCreate struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -40,7 +40,7 @@ func (c *CmdCreate) Run() {
 	input, _ := os.ReadFile(filepath.Join(path.Dir(filename), "raw/command.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", tool.GetDynamicPath("app/console"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", helpers.GetDynamicPath("app/console"), strings.ToLower(c.Args))
 	if err := os.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		log.Fatal(err)
 	}

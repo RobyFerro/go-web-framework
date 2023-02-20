@@ -6,13 +6,13 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/RobyFerro/go-web-framework/domain/entities"
 	"github.com/go-git/go-git/v5"
 )
 
-// GenerateKey will generate Go-Web application key in main config.yml file
+// ServiceCreate will generate Go-Web application key in main config.yml file
 type ServiceCreate struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -33,7 +33,7 @@ func (c *ServiceCreate) Run() {
 		log.Fatalf("Error: %s", err)
 	}
 
-	if err := c.reset_git(); err != nil {
+	if err := c.resetGit(); err != nil {
 		log.Fatalf("Error: %s", err)
 	}
 
@@ -60,7 +60,7 @@ func (c *ServiceCreate) clone(destination string) error {
 }
 
 // Reset git repository
-func (c *ServiceCreate) reset_git() error {
+func (c *ServiceCreate) resetGit() error {
 	path := fmt.Sprintf("%s/.git", c.Args)
 	if err := os.RemoveAll(path); err != nil {
 		return err

@@ -1,7 +1,4 @@
-package register
-
-// CommandRegister defines all registered commands
-type CommandRegister map[string]interface{}
+package entities
 
 // Command is used to define a CLI command
 type Command struct {
@@ -9,3 +6,5 @@ type Command struct {
 	Description string
 	Args        string
 }
+
+

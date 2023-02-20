@@ -7,14 +7,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/RobyFerro/go-web-framework/register"
-
+	"github.com/RobyFerro/go-web-framework/domain/entities"
 	"github.com/jinzhu/gorm"
 )
 
 // MigrateRollback will rollback some migration in your database
 type MigrateRollback struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command

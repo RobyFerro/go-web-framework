@@ -1,15 +1,17 @@
 package cli
 
 import (
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"reflect"
+
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/domain/registers"
+	"github.com/olekukonko/tablewriter"
 )
 
 // ShowCommands will show all registered commands
 type ShowCommands struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -19,7 +21,7 @@ func (c *ShowCommands) Register() {
 }
 
 // Run this command
-func (c *ShowCommands) Run(commands register.CommandRegister) {
+func (c *ShowCommands) Run(commands registers.CommandRegister) {
 
 	var data [][]string
 

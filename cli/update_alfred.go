@@ -5,12 +5,12 @@ import (
 	"log"
 	"os/exec"
 
-	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/RobyFerro/go-web-framework/domain/entities"
 )
 
 // GenerateKey will generate Go-Web application key in main config.yml file
 type UpdateAlfred struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -25,7 +25,7 @@ func (c *UpdateAlfred) Run() {
 	var answer string
 	fmt.Scanln(&answer)
 	if answer == "y" {
-		if err := c.update_alfred(); err != nil {
+		if err := c.updateAlfred(); err != nil {
 			log.Fatalf("Error: %s", err)
 		}
 	} else {
@@ -38,7 +38,7 @@ func (c *UpdateAlfred) Help() {
 	log.Println("Usage: create-service [service-name]")
 }
 
-func (c *UpdateAlfred) update_alfred() error {
+func (c *UpdateAlfred) updateAlfred() error {
 	cmd := exec.Command("go", "install", "./cmd/alfred/...")
 	return cmd.Run()
 }

@@ -3,10 +3,10 @@ package services
 import (
 	"net/http"
 
-	"github.com/RobyFerro/go-web-framework/domain/entities"
+	register "github.com/RobyFerro/go-web-framework/domain/registers"
 )
 
 // RouterService handles http router method
 type RouterService interface {
-	NewRouter(register entities.RouterRegister) http.Handler
+	NewRouter(register []register.RouterRegister) http.Handler
 }

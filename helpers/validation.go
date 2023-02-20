@@ -1,4 +1,4 @@
-package tool
+package helpers
 
 import (
 	"gopkg.in/asaskevich/govalidator.v4"

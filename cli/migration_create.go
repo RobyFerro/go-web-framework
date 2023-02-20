@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/helpers"
 )
 
 // MigrationCreate will create a new migration
@@ -15,7 +15,7 @@ import (
 // UP: Work only for migrate operation
 // DOWN: Work only for rollback operation
 type MigrationCreate struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -28,7 +28,7 @@ func (c *MigrationCreate) Register() {
 func (c *MigrationCreate) Run() {
 	fmt.Println("Creating new migrations...")
 	date := time.Now().Unix()
-	path := tool.GetDynamicPath("database/migration")
+	path := helpers.GetDynamicPath("database/migration")
 
 	filenameUp := fmt.Sprintf("%s/%d_%s.up.sql", path, date, c.Args)
 	filenameDown := fmt.Sprintf("%s/%d_%s.down.sql", path, date, c.Args)

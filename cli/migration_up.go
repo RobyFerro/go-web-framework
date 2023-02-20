@@ -3,19 +3,20 @@ package cli
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/helpers"
 
 	"github.com/jinzhu/gorm"
 )
 
 // MigrationUp will execute database migration
 type MigrationUp struct {
-	register.Command
+	entities.Command
 }
 
 // Register command
@@ -57,7 +58,7 @@ func (c *MigrationUp) Run(db *gorm.DB) {
 func getAllMigrations() []string {
 	var migrations []string
 
-	err := filepath.Walk(tool.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(helpers.GetDynamicPath("database/migration"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}

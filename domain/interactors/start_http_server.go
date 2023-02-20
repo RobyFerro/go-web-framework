@@ -1,18 +1,19 @@
 package interactors
 
 import (
-	"fmt"
+	"net"
 	"net/http"
+	"strconv"
 
 	"github.com/RobyFerro/go-web-framework/domain/entities"
 )
 
-// StartHTTPServer will return a new GoWeb Http server
-func StartHTTPServer(config entities.AppConf, router http.Handler) *http.Server {
-	serverString := fmt.Sprintf("%s:%d", config.Name, config.Port)
-
-	return &http.Server{
-		Addr:    serverString,
-		Handler: router,
+// StartHTTPServer runs a new HTTP server
+func StartHTTPServer(server http.Server, conf entities.AppConf) error {
+	webListener, _ := net.Listen("tcp4", ":"+strconv.Itoa(conf.Port))
+	if err := server.Serve(webListener); err != nil {
+		return err
 	}
+
+	return nil
 }

@@ -10,15 +10,15 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/helpers"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
 // ModelCreate will create a new Gorm model
 type ModelCreate struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -36,7 +36,7 @@ func (c *ModelCreate) Run() {
 	input, _ := os.ReadFile(filepath.Join(path.Dir(filename), "raw/model.raw"))
 
 	cContent := strings.ReplaceAll(string(input), "@@TMP@@", cName)
-	cFile := fmt.Sprintf("%s/%s.go", tool.GetDynamicPath("database/model"), strings.ToLower(c.Args))
+	cFile := fmt.Sprintf("%s/%s.go", helpers.GetDynamicPath("database/model"), strings.ToLower(c.Args))
 
 	if err := os.WriteFile(cFile, []byte(cContent), 0755); err != nil {
 		log.Fatal(err)

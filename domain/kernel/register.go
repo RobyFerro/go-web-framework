@@ -2,7 +2,7 @@ package kernel
 
 import (
 	"github.com/RobyFerro/go-web-framework/cli"
-	"github.com/RobyFerro/go-web-framework/register"
+	"github.com/RobyFerro/go-web-framework/domain/registers"
 )
 
 var (
@@ -10,7 +10,7 @@ var (
 	// The following map of interfaces expose all available method that can be used by Go-Web CLI tool.
 	// The map index determines the command that you've to run to for use the relative method.
 	// Example: './goweb migration:up' will run '&command.MigrationUp{}' command.
-	Commands = register.CommandRegister{
+	Commands = registers.CommandRegister{
 		"database:seed":      &cli.Seeder{},
 		"show:commands":      &cli.ShowCommands{},
 		"cmd:create":         &cli.CmdCreate{},
@@ -26,9 +26,12 @@ var (
 		"update":             &cli.UpdateAlfred{},
 		// Here is where you've to register your custom controller
 	}
-	CommandServices = register.ServiceRegister{}
-	Models          = register.ModelRegister{}
-	Controllers     = register.ControllerRegister{}
-	Middlewares     = register.MiddlewareRegister{}
-	Router          []register.HTTPRouter
+	// Models defines all registered models
+	Models = registers.ModelRegister{}
+	// Controllers defines all registered applicazion controller
+	Controllers = registers.ControllerRegister{}
+	// Middlewares defines all registered middlewares
+	Middlewares = registers.MiddlewareRegister{}
+	// Router defines all application routers
+	Router []registers.RouterRegister
 )

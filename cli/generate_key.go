@@ -8,13 +8,13 @@ import (
 	"os"
 	"strings"
 
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/RobyFerro/go-web-framework/tool"
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/helpers"
 )
 
 // GenerateKey will generate Go-Web application key in main config.yml file
 type GenerateKey struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -26,7 +26,7 @@ func (c *GenerateKey) Register() {
 // Run this command
 func (c *GenerateKey) Run() {
 	fmt.Println("Generating new application KEY...")
-	path := tool.GetDynamicPath("config/server.go")
+	path := helpers.GetDynamicPath("config/server.go")
 	read, err := os.ReadFile(path)
 
 	if err != nil {

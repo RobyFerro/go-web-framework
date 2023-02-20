@@ -2,14 +2,16 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/register"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"strings"
+
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/domain/registers"
+	"github.com/olekukonko/tablewriter"
 )
 
 type RouterShow struct {
-	register.Command
+	entities.Command
 }
 
 func (c *RouterShow) Register() {
@@ -17,7 +19,7 @@ func (c *RouterShow) Register() {
 	c.Description = "Show all available routes"
 }
 
-func (c *RouterShow) Run(routes []register.HTTPRouter) {
+func (c *RouterShow) Run(routes []registers.RouterRegister) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"PATH", "METHOD", "DESCRIPTION", "MIDDLEWARES"})
 	for _, router := range routes {
@@ -28,13 +30,13 @@ func (c *RouterShow) Run(routes []register.HTTPRouter) {
 	table.Render()
 }
 
-func parseGroups(groups []register.Group, table *tablewriter.Table) {
+func parseGroups(groups []entities.Group, table *tablewriter.Table) {
 	for _, group := range groups {
 		parseRoutes(group.Routes, table, &group.Prefix)
 	}
 }
 
-func parseRoutes(routes []register.Route, table *tablewriter.Table, prefix *string) {
+func parseRoutes(routes []entities.Route, table *tablewriter.Table, prefix *string) {
 	for _, r := range routes {
 		middlewares := getMiddlewareString(&r.Middleware)
 		if prefix != nil {
@@ -45,7 +47,7 @@ func parseRoutes(routes []register.Route, table *tablewriter.Table, prefix *stri
 	}
 }
 
-func getMiddlewareString(middlewares *[]register.Middleware) string {
+func getMiddlewareString(middlewares *[]entities.Middleware) string {
 	var list []string
 	for _, m := range *middlewares {
 		list = append(list, m.GetName())

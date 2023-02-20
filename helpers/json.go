@@ -1,4 +1,4 @@
-package tool
+package helpers
 
 import (
 	"bytes"
@@ -9,8 +9,8 @@ import (
 	"net/http"
 )
 
-// DecodeJsonRequest in a selected struct
-func DecodeJsonRequest(r *http.Request, interfaceRef interface{}) error {
+// DecodeJSONRequest in a selected struct
+func DecodeJSONRequest(r *http.Request, interfaceRef interface{}) error {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return err

@@ -2,16 +2,18 @@ package cli
 
 import (
 	"fmt"
-	"github.com/RobyFerro/go-web-framework/register"
 	"reflect"
 	"strings"
+
+	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/domain/registers"
 
 	"github.com/jinzhu/gorm"
 )
 
 // Seeder will handle database seeding.
 type Seeder struct {
-	register.Command
+	entities.Command
 }
 
 // Register this command
@@ -22,7 +24,7 @@ func (c *Seeder) Register() {
 
 // Run this command
 // Todo: Improve this method to run a single seeder
-func (c *Seeder) Run(db *gorm.DB, models register.ModelRegister) {
+func (c *Seeder) Run(db *gorm.DB, models registers.ModelRegister) {
 	fmt.Println("Execute database seeding...")
 	if len(c.Args) > 0 {
 		extractSpecificModel(c.Args, &models)
@@ -32,8 +34,8 @@ func (c *Seeder) Run(db *gorm.DB, models register.ModelRegister) {
 }
 
 // Extract the specified models from model list
-func extractSpecificModel(name string, models *register.ModelRegister) {
-	var newModels register.ModelRegister
+func extractSpecificModel(name string, models *registers.ModelRegister) {
+	var newModels registers.ModelRegister
 
 	for _, m := range *models {
 		modelName := reflect.TypeOf(m).Name()
