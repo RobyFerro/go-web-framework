@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"net/http"
 	"reflect"
 	"strings"
@@ -80,8 +79,6 @@ func (r RouterServiceImpl) executeControllerDirective(
 
 	kernel.RegisterBaseController(res, req, &item)
 	method := reflect.ValueOf(item).MethodByName(controllerData[1])
-	fmt.Println(method.Interface())
-
 	method.Call([]reflect.Value{})
 }
 
