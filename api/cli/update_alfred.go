@@ -3,12 +3,12 @@ package cli
 import (
 	"fmt"
 	"log"
-	"os/exec"
 
 	"github.com/RobyFerro/go-web-framework/domain/entities"
+	"github.com/RobyFerro/go-web-framework/domain/interactors"
 )
 
-// GenerateKey will generate Go-Web application key in main config.yml file
+// UpdateAlfred will generate Go-Web application key in main config.yml file
 type UpdateAlfred struct {
 	entities.Command
 }
@@ -25,20 +25,11 @@ func (c *UpdateAlfred) Run() {
 	var answer string
 	fmt.Scanln(&answer)
 	if answer == "y" {
-		if err := c.updateAlfred(); err != nil {
-			log.Fatalf("Error: %s", err)
+		err := interactors.UpdateAlfred{}.Call()
+		if err != nil {
+			log.Fatal(err)
 		}
 	} else {
 		fmt.Println("Update aborted!")
 	}
-}
-
-// Help will show help for this command
-func (c *UpdateAlfred) Help() {
-	log.Println("Usage: create-service [service-name]")
-}
-
-func (c *UpdateAlfred) updateAlfred() error {
-	cmd := exec.Command("go", "install", "./cmd/alfred/...")
-	return cmd.Run()
 }
