@@ -8,8 +8,7 @@ import (
 
 // Start will run the HTTP web server
 func Start(e *BaseEntities, config entities.Config) {
-	//startup(e)
-
+	printWelcomeMessage(config)
 	router := interactors.GetHTTPRouter{
 		Service: services.RouterServiceImpl{
 			Controllers: e.Controllers,
@@ -44,14 +43,6 @@ func Start(e *BaseEntities, config entities.Config) {
 // 	}
 
 // 	rc.MethodByName("Run").Interface()
-// }
-
-// func startup(e config.BaseEntities) {
-// 	myFigure := figure.NewFigure("Go-Web", "graffiti", true)
-// 	myFigure.Print()
-// 	fmt.Println("Go-Web CLI tool - Author: roberto.ferro@ikdev.it")
-
-// 	RegisterBaseEntities(e)
 // }
 
 // RegisterBaseEntities base entities in Go-Web kernel
