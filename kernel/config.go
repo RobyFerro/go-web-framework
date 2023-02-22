@@ -49,9 +49,6 @@ func (c BaseEntities) registerCommands() {
 	c.Commands.Add("create:command", &cli.CreateCommand{})
 	c.Commands.Add("create:controller", &cli.CreateCommand{})
 	c.Commands.Add("create:middleware", &cli.CreateMiddleware{})
-	c.Commands.Add("create:model", &cli.CreateModel{})
-	c.Commands.Add("create:app-key", &cli.GenerateKey{})
-	c.Commands.Add("create:migration", &cli.MigrationCreate{})
 	c.Commands.Add("show:routes", &cli.ShowRouters{Routers: c.Router})
 	c.Commands.Add("show:commands", &cli.ShowCommands{Commands: c.Commands})
 }

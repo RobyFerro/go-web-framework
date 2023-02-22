@@ -33,7 +33,7 @@ func (c CommandServiceImpl) SnakeToCamelCase(raw string) string {
 // ReadBlueprint reads cli blueprints
 func (c CommandServiceImpl) ReadBlueprint(name string) string {
 	var _, filename, _, _ = runtime.Caller(0)
-	input, err := os.ReadFile(filepath.Join(path.Dir(filename), fmt.Sprintf("raw/%s.raw", name)))
+	input, err := os.ReadFile(filepath.Join(path.Dir(filename), fmt.Sprintf("templates/%s.tpl", name)))
 	if err != nil {
 		log.Fatal(err)
 	}
