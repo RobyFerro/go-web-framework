@@ -15,7 +15,7 @@ type GetHTTPServer struct {
 
 // Call executes usecase logic
 func (c GetHTTPServer) Call() *http.Server {
-	serverString := fmt.Sprintf("%s:%d", c.Config.Name, c.Config.Port)
+	serverString := fmt.Sprintf("%s:%d", c.Config.Host, c.Config.Port)
 
 	return &http.Server{
 		Addr:    serverString,

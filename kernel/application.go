@@ -1,12 +1,13 @@
 package kernel
 
 import (
+	"github.com/RobyFerro/go-web-framework/lib/domain/entities"
 	"github.com/RobyFerro/go-web-framework/lib/domain/interactors"
 	"github.com/RobyFerro/go-web-framework/lib/infrastructure/services"
 )
 
 // Start will run the HTTP web server
-func Start(e *BaseEntities) {
+func Start(e *BaseEntities, config entities.Config) {
 	//startup(e)
 
 	router := interactors.GetHTTPRouter{
@@ -16,7 +17,6 @@ func Start(e *BaseEntities) {
 		Register: e.Router,
 	}.Call()
 
-	config := interactors.GetAppConfig{}.Call()
 	server := interactors.GetHTTPServer{
 		Config: config,
 		Router: router,

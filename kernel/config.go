@@ -10,17 +10,17 @@ import (
 
 var lock = &sync.Mutex{}
 
-var entities *BaseEntities
+var baseEntities *BaseEntities
 
 // GetBaseEntities initialize application base entities
 // returns a singleton instance
 func GetBaseEntities() *BaseEntities {
-	if entities == nil {
+	if baseEntities == nil {
 		lock.Lock()
 		defer lock.Unlock()
-		if entities == nil {
-			entities = &BaseEntities{}
-			entities.registerCommands()
+		if baseEntities == nil {
+			baseEntities = &BaseEntities{}
+			baseEntities.registerCommands()
 		} else {
 			fmt.Println("BaseEntities instance already created.")
 		}
@@ -28,7 +28,7 @@ func GetBaseEntities() *BaseEntities {
 		fmt.Println("BaseEntities instance already created.")
 	}
 
-	return entities
+	return baseEntities
 }
 
 // BaseEntities declare application base entities
